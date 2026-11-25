@@ -15,6 +15,8 @@ export default defineConfig(
         'src/app/build/**',
         '.storybook/**',
         'storybook-static/**',
+        'playwright-report/**',
+        'test-results/**',
         'src/mocks/mockServiceWorker.js',
     ]),
     {
@@ -43,14 +45,14 @@ export default defineConfig(
             'server/**/*.{js,mjs,cjs}',
             'src/build/**/*.{js,mjs,cjs}',
             '.github/**/*.{js,mjs,cjs}',
-            'cypress/plugins/**/*.{js,mjs,cjs}',
+            'playwright.config.ts',
         ],
         languageOptions: { globals: globals.node },
         settings: { 'import-x/resolver-next': [createNodeResolver()] },
     },
     {
         name: 'browser',
-        files: ['src/**/*.{js,jsx,ts,tsx}', 'cypress/**/*.{js,ts}'],
+        files: ['src/**/*.{js,jsx,ts,tsx}', 'e2e/**/*.{ts,tsx}'],
         languageOptions: { globals: globals.browser },
     },
     {
@@ -99,22 +101,6 @@ export default defineConfig(
         name: 'vitest',
         files: ['src/**/*.spec.{ts,tsx}', 'src/test/**', 'testSetup.js'],
         languageOptions: { globals: globals.vitest },
-    },
-    {
-        name: 'cypress',
-        files: ['cypress/**/*.{js,ts}'],
-        languageOptions: {
-            globals: {
-                ...globals.mocha,
-                cy: 'readonly',
-                Cypress: 'readonly',
-                expect: 'readonly',
-                assert: 'readonly',
-            },
-        },
-        settings: {
-            'import-x/resolver-next': [createTypeScriptImportResolver({ project: './cypress/tsconfig.json' })],
-        },
     },
     prettier,
 );

@@ -19,8 +19,25 @@ jobs:
         uses: ./.github/workflows/lint.yml
     test:
         uses: ./.github/workflows/test.yml
-    test-cypress:
-        uses: ./.github/workflows/cypress-tester.yml
+    test-playwright-shards:
+        uses: ./.github/workflows/playwright-tester.yml
+        permissions:
+            contents: read
+            packages: read
+    test-playwright:
+        name: Playwright
+        needs: test-playwright-shards
+        if: ${{ always() }}
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            packages: read
+        timeout-minutes: 20
+        steps:
+            - name: Kontrollere resultatene fra Playwright-shardene
+              env:
+                  SHARD_RESULT: ${{ needs.test-playwright-shards.result }}
+              run: test "$SHARD_RESULT" = success
     build:
         uses: ./.github/workflows/build.yml
     deploy:
@@ -30,7 +47,7 @@ jobs:
             contents: read
             id-token: write
             packages: read
-        needs: [lint, test, test-cypress, build]
+        needs: [lint, test, test-playwright, build]
         outputs:
             image: ${{ steps.docker-push.outputs.image }}
         steps:

@@ -16,6 +16,7 @@ export interface IPunchPSBFormState {
     isSoknadLoading: boolean;
     error?: IError;
     isAwaitingUpdateResponse?: boolean;
+    updateRequestId?: string;
     isAwaitingSubmitResponse?: boolean;
     isAwaitingValidateResponse?: boolean;
     updateSoknadError?: IError;

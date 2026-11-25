@@ -1,12 +1,12 @@
 ---
 name: Testing Standards
-description: "Testprinsipper for k9-punsj-frontend: Vitest, Testing Library og Cypress."
+description: "Testprinsipper for k9-punsj-frontend: Vitest, Testing Library og Playwright."
 applyTo: "**/*.{spec,test}.{ts,tsx}"
 ---
 
 # Testing standards
 
-Follow `AGENTS.md` and the [TypeScript test patterns](testing-typescript.instructions.md). Unit and component tests use Vitest and Testing Library; end to end tests use Cypress.
+Follow `AGENTS.md` and the [TypeScript test patterns](testing-typescript.instructions.md). Unit and component tests use Vitest and Testing Library; end to end tests use Playwright.
 
 ## Test strategy
 
@@ -16,7 +16,7 @@ Choose the smallest reliable test for the behavior being changed:
 |---|---|
 | Pure functions, validation, and data transformations | Vitest |
 | Component behavior and form interactions | Vitest and Testing Library |
-| Critical user workflows | Cypress with the existing MSW mocks |
+| Critical user workflows | Playwright with the existing MSW mocks |
 
 - Keep unit and component tests in `src/test/` as `*.spec.ts` or `*.spec.tsx`, following adjacent tests.
 - Use Norwegian test descriptions that explain observable behavior.
@@ -28,8 +28,8 @@ Choose the smallest reliable test for the behavior being changed:
 ## Validation
 
 - Run the narrowest relevant tests first with `yarn test <path>`.
-- Use `yarn test:e2e` for headless Cypress checks or `yarn test:e2eUI` for interactive checks when the change needs end to end coverage.
-- Both Cypress commands start the frontend in test mode with MSW mocks; they do not require the backend repository.
+- Use `yarn test:pw` for headless Playwright checks or `yarn test:pw:ui` for interactive checks when the change needs end to end coverage.
+- Both Playwright commands start the frontend in test mode with MSW mocks; they do not require the backend repository.
 - Summarize what was checked and explain any checks that could not be run.
 
 ## Boundaries

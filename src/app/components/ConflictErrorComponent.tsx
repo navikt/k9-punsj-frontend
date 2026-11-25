@@ -61,7 +61,6 @@ export const ConflictErrorComponent: React.FC<Props> = ({
                                 handleLukkDebugg();
                             }
                         }}
-                        data-testid="conflict-error-btn"
                     >
                         <FormattedMessage
                             id={`startPage.feil.ikkeStøttet.${goToLos ? 'gåTilLos' : 'lukkDebugg'}.btn`}

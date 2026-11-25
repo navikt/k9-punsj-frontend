@@ -1,3 +1,6 @@
+import { nanoid } from '@reduxjs/toolkit';
+import type { Dispatch } from 'redux';
+
 import { ApiPath } from 'app/apiConfig';
 import { PunchFormActionKeys } from 'app/models/enums';
 import { IError } from 'app/models/types';
@@ -17,6 +20,7 @@ import { IPSBSoknadUt } from '../../models/types/PSBSoknadUt';
 import { Periode } from '../../models/types/Periode';
 import { ISendSoknad } from '../../models/types/SendSoknad';
 import { IResetStateAction } from './GlobalActions';
+import type { RootStateType } from '../RootState';
 
 interface IResetPunchFormAction {
     type: PunchFormActionKeys.RESET;
@@ -42,16 +46,20 @@ interface IResetSoknadAction {
 
 interface IUpdateSoknadRequestAction {
     type: PunchFormActionKeys.SOKNAD_UPDATE_REQUEST;
+    requestId?: string;
 }
 
 interface IUpdateSoknadSuccessAction {
     type: PunchFormActionKeys.SOKNAD_UPDATE_SUCCESS;
     errors?: IInputError[];
+    requestId?: string;
+    soknad?: Partial<IPSBSoknad>;
 }
 
 interface IUpdateSoknadErrorAction {
     type: PunchFormActionKeys.SOKNAD_UPDATE_ERROR;
     error: IError;
+    requestId?: string;
 }
 
 interface ISubmitSoknadRequestAction {
@@ -215,16 +223,24 @@ export const resetSoknadAction = (): IResetSoknadAction => ({
     type: PunchFormActionKeys.SOKNAD_RESET,
 });
 
-export const updateSoknadRequestAction = (): IUpdateSoknadRequestAction => ({
+export const updateSoknadRequestAction = (requestId?: string): IUpdateSoknadRequestAction => ({
     type: PunchFormActionKeys.SOKNAD_UPDATE_REQUEST,
+    requestId,
 });
-export const updateSoknadSuccessAction = (errors?: IInputError[]): IUpdateSoknadSuccessAction => ({
+export const updateSoknadSuccessAction = (
+    errors?: IInputError[],
+    requestId?: string,
+    soknad?: Partial<IPSBSoknad>,
+): IUpdateSoknadSuccessAction => ({
     type: PunchFormActionKeys.SOKNAD_UPDATE_SUCCESS,
     errors,
+    requestId,
+    soknad,
 });
-export const updateSoknadErrorAction = (error: IError): IUpdateSoknadErrorAction => ({
+export const updateSoknadErrorAction = (error: IError, requestId?: string): IUpdateSoknadErrorAction => ({
     type: PunchFormActionKeys.SOKNAD_UPDATE_ERROR,
     error,
+    requestId,
 });
 
 export function getSoknad(id: string) {
@@ -239,18 +255,29 @@ export function getSoknad(id: string) {
     };
 }
 
-export function updateSoknad(soknad: Partial<IPSBSoknadUt>) {
-    return (dispatch: any) => {
-        dispatch(updateSoknadRequestAction());
-        return put(ApiPath.PSB_SOKNAD_UPDATE, { id: soknad.soeknadId }, soknad, (response) => {
+export function updateSoknad(soknad: Partial<IPSBSoknadUt>, onSaved?: (savedSoknad: IPSBSoknadUt) => void) {
+    return (dispatch: Dispatch<IPunchFormActionTypes>, getState: () => RootStateType) => {
+        const requestId = nanoid();
+        const isCurrentRequest = () =>
+            getState().PLEIEPENGER_SYKT_BARN.punchFormState.updateRequestId === requestId;
+        dispatch(updateSoknadRequestAction(requestId));
+        return put(ApiPath.PSB_SOKNAD_UPDATE, { id: soknad.soeknadId }, soknad, async (response) => {
+            if (!isCurrentRequest()) {
+                return response;
+            }
             switch (response.status) {
-                case 200:
-                    return response.json().then((mappe) => {
-                        dispatch(setSoknadAction(mappe));
-                        dispatch(updateSoknadSuccessAction());
-                    });
+                case 200: {
+                    const mappe = await response.json();
+                    if (!isCurrentRequest()) {
+                        return response;
+                    }
+                    dispatch(updateSoknadSuccessAction(undefined, requestId, mappe));
+                    onSaved?.(mappe);
+                    return response;
+                }
                 default:
-                    return dispatch(updateSoknadErrorAction(convertResponseToError(response)));
+                    dispatch(updateSoknadErrorAction(convertResponseToError(response), requestId));
+                    return response;
             }
         });
     };

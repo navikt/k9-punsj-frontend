@@ -17,7 +17,6 @@ These instructions apply to agents working in this repository.
 - For local or IDE Copilot work, do not change `master` by default. Ask the user to create or switch to a feature branch first unless the user explicitly wants `master`. Branch creation and switching belong to the user in local or IDE sessions.
 - Use `copilot-tasks/` for concrete repo task files and `.github/prompts/` for stable reusable prompts.
 - Keep active or next-up Copilot task files in `copilot-tasks/`.
-- Move completed Copilot task files to `copilot-tasks/completed/` when the user explicitly asks to archive or clean up finished tasks.
 - When following `copilot-tasks/*.md`, update `Plan` first, keep `Progress notes` and `Outcome` short and factual, and do not move, rename or delete task files unless the user explicitly asks.
 - Keep Copilot task files minimal. Prefer short `Goal`, `Scope`, `Validation`, and `Prompt` sections. Avoid long rationale, repeated file lists, or long execution reports inside the task file.
 - In `Prompt for Copilot`, write the full copy paste prompt, not just notes about what a prompt should contain.
@@ -44,7 +43,7 @@ These instructions apply to agents working in this repository.
 - Run lint with `yarn lint`.
 - Run CSS lint with `yarn lint:css`.
 - Run TypeScript checks with `yarn tsc --noEmit`.
-- Run Cypress end to end tests with `yarn test:e2e` when end to end coverage is needed.
+- Run Playwright end to end tests with `yarn test:pw` when end to end coverage is needed.
 
 ## Package updates
 
@@ -56,14 +55,14 @@ These instructions apply to agents working in this repository.
 ## Test setup
 
 - Prefer the narrowest relevant validation before broader or backend dependent test runs.
-- `yarn test:e2e` and `yarn test:e2eUI` run the frontend in test mode with MSW based mocks and do not require the backend repo.
+- `yarn test:pw` and `yarn test:pw:ui` run the frontend in test mode with MSW based mocks and do not require the backend repo.
 - Use the backend integrated local flow only when the task depends on auth, proxy behavior, downstream contracts, or other full stack behavior that mocks do not cover.
 
 ## Testing and validation
 
 - Assess whether each code change needs a test or test update.
 - Prefer the smallest reliable test for the changed behavior or regression risk.
-- Use Vitest or Testing Library for localized logic and Cypress for end to end behavior.
+- Use Vitest or Testing Library for localized logic and Playwright for end to end behavior.
 - Run the most relevant checks before completion. If local checks cannot be run, state that clearly and explain why.
 - If a non trivial change ships without a new or updated test, call that out explicitly.
 - Summarize changed files and likely impact when handing work back.

@@ -143,7 +143,6 @@ const OpprettJournalpost: React.FC = () => {
                         onChange={handleSøkerIdentitetsnummerChange}
                         readOnly={isSubmitSuccessful}
                         disabled={isFetchingFagsaker}
-                        data-testid="opprettJournalpostFnrInput"
                     />
 
                     <div className="fagsakSelectContainer">
@@ -154,7 +153,6 @@ const OpprettJournalpost: React.FC = () => {
                             validate={fagsakIdValidator}
                             readOnly={isSubmitSuccessful}
                             disabled={isFetchingFagsaker}
-                            data-testid="opprettJournalpostFagsakSelect"
                         >
                             <option value="">
                                 {fagsaker.length > 0 && (
@@ -178,7 +176,9 @@ const OpprettJournalpost: React.FC = () => {
                             ))}
                         </TypedFormSelect>
 
-                        {isFetchingFagsaker && <Loader size="small" />}
+                        <div className="fagsakLoader" role="status">
+                            {isFetchingFagsaker && <Loader size="small" title="Henter fagsaker" />}
+                        </div>
                     </div>
 
                     {fetchFagsakErrorStatus !== undefined && (
@@ -211,12 +211,7 @@ const OpprettJournalpost: React.FC = () => {
                     )}
 
                     {visIngenFagsakAlert && (
-                        <Alert
-                            size="small"
-                            variant="warning"
-                            className="mb-4"
-                            data-test-id="opprettJournalpostAlertIngenFagsak"
-                        >
+                        <Alert size="small" variant="warning" className="mb-4">
                             <FormattedMessage id="opprettJournalpost.alert.hentFagsaker.ingenFagsak" />
                         </Alert>
                     )}
@@ -230,7 +225,6 @@ const OpprettJournalpost: React.FC = () => {
                             validate={tittelValidator}
                             autoComplete="off"
                             readOnly={isSubmitSuccessful}
-                            data-testid="opprettJournalpostTittelInput"
                         />
 
                         <TypedFormTextarea
@@ -240,7 +234,6 @@ const OpprettJournalpost: React.FC = () => {
                             maxLength={10000}
                             validate={notatValidator}
                             readOnly={isSubmitSuccessful}
-                            data-testid="opprettJournalpostNotatTextarea"
                         />
                     </div>
 
@@ -275,7 +268,6 @@ const OpprettJournalpost: React.FC = () => {
                                 size="small"
                                 loading={isSubmitting}
                                 disabled={isSubmitting || isFetchingFagsaker}
-                                data-testid="opprettJournalpostSubmitButton"
                             >
                                 <FormattedMessage id="opprettJournalpost.btn" />
                             </Button>
@@ -289,7 +281,6 @@ const OpprettJournalpost: React.FC = () => {
                             onClick={() => navigate(`/journalpost/${opprettetJournalpostId}`)}
                             type="button"
                             size="small"
-                            data-testid="opprettJournalpostGåTilJournalpostButton"
                         >
                             <FormattedMessage id="opprettJournalpost.btn.gåTilJournalpost" />
                         </Button>

@@ -2,7 +2,62 @@ import { HttpResponse, http } from 'msw/http';
 
 import { ApiPath } from 'app/apiConfig';
 
+const PLAYWRIGHT_NEW_APPLICATION_ID = '75aa2113-81f4-4c0d-b9a2-467d4a0b76be';
+const PLAYWRIGHT_CORRECTION_APPLICATION_ID = '35d01229-6f69-4282-86f0-c7e0842c4ac9';
+
+const existingOMPUTPeriods = [
+    { fom: '2022-09-01', tom: '2022-09-02' },
+    { fom: '2022-09-05', tom: '2022-09-09' },
+    { fom: '2022-09-12', tom: '2022-09-16' },
+    { fom: '2022-09-19', tom: '2022-09-23' },
+    { fom: '2022-09-26', tom: '2022-09-29' },
+];
+
+let playwrightStartupScenario: 'new-application' | 'correction' | undefined;
+
+const playwrightApplication = (soeknadId: string) => ({
+    soeknadId,
+    soekerId: '17420373147',
+    k9saksnummer: '1DMU93M',
+    mottattDato: '2020-10-12',
+    klokkeslett: '12:53',
+    barn: [],
+    journalposter: ['200'],
+    bosteder: null,
+    utenlandsopphold: [],
+    opptjeningAktivitet: null,
+    fravaersperioder: null,
+    harInfoSomIkkeKanPunsjes: false,
+    harMedisinskeOpplysninger: false,
+    metadata: null,
+});
+
 const mockHandlersOMPUT = {
+    playwrightScenarioPeriods: http.post(ApiPath.SAKER_PERIODER, ({ request }) => {
+        const isOMPUTCase = new URL(request.url).searchParams.get('saksnummer') === '1DMU93M';
+        if (!isOMPUTCase || playwrightStartupScenario === undefined) return;
+
+        return HttpResponse.json(
+            playwrightStartupScenario === 'correction' ? existingOMPUTPeriods : [],
+        );
+    }),
+
+    playwrightNewApplication: http.get(
+        ApiPath.OMP_UT_SOKNAD_GET.replace('{id}', PLAYWRIGHT_NEW_APPLICATION_ID),
+        () => {
+            playwrightStartupScenario = 'new-application';
+            return HttpResponse.json(playwrightApplication(PLAYWRIGHT_NEW_APPLICATION_ID));
+        },
+    ),
+
+    playwrightCorrectionApplication: http.get(
+        ApiPath.OMP_UT_SOKNAD_GET.replace('{id}', PLAYWRIGHT_CORRECTION_APPLICATION_ID),
+        () => {
+            playwrightStartupScenario = 'correction';
+            return HttpResponse.json(playwrightApplication(PLAYWRIGHT_CORRECTION_APPLICATION_ID));
+        },
+    ),
+
     tomMappe: http.get(ApiPath.OMP_UT_EKSISTERENDE_SOKNADER_FIND, () =>
         HttpResponse.json({
             søker: '17420373147',
@@ -145,50 +200,33 @@ const mockHandlersOMPUT = {
         ),
     ),
 
-    soknad: http.get(ApiPath.OMP_UT_SOKNAD_GET.replace('{id}', 'bc12baac-0f0c-427e-a059-b9fbf9a3adff'), () =>
-        HttpResponse.json({
-            soeknadId: 'a71cdd21-b84c-4fa1-92ae-3ccb45821e5b',
-            soekerId: '17420373147',
-            k9saksnummer: '1DMU93M',
-            mottattDato: '2020-10-12',
-            klokkeslett: '12:53',
-            barn: [],
-            journalposter: ['200'],
-            bosteder: null,
-            utenlandsopphold: [],
-            opptjeningAktivitet: null,
-            fravaersperioder: null,
-            harInfoSomIkkeKanPunsjes: null,
-            harMedisinskeOpplysninger: null,
-            metadata: null,
-        }),
+    soknad: http.get(
+        ApiPath.OMP_UT_SOKNAD_GET.replace('{id}', 'bc12baac-0f0c-427e-a059-b9fbf9a3adff'),
+        () => {
+            playwrightStartupScenario = undefined;
+            return HttpResponse.json({
+                soeknadId: 'a71cdd21-b84c-4fa1-92ae-3ccb45821e5b',
+                soekerId: '17420373147',
+                k9saksnummer: '1DMU93M',
+                mottattDato: '2020-10-12',
+                klokkeslett: '12:53',
+                barn: [],
+                journalposter: ['200'],
+                bosteder: null,
+                utenlandsopphold: [],
+                opptjeningAktivitet: null,
+                fravaersperioder: null,
+                harInfoSomIkkeKanPunsjes: null,
+                harMedisinskeOpplysninger: null,
+                metadata: null,
+            });
+        },
     ),
 
     oppdater: http.put(ApiPath.OMP_UT_SOKNAD_UPDATE, () => HttpResponse.json({})),
     ingenEksisterendePerioder: http.post(ApiPath.SAKER_PERIODER, () => HttpResponse.json([])),
     eksisterendePerioderOmsorgspengeutbetaling: http.post(ApiPath.SAKER_PERIODER, () =>
-        HttpResponse.json([
-            {
-                fom: '2022-09-01',
-                tom: '2022-09-02',
-            },
-            {
-                fom: '2022-09-05',
-                tom: '2022-09-09',
-            },
-            {
-                fom: '2022-09-12',
-                tom: '2022-09-16',
-            },
-            {
-                fom: '2022-09-19',
-                tom: '2022-09-23',
-            },
-            {
-                fom: '2022-09-26',
-                tom: '2022-09-29',
-            },
-        ]),
+        HttpResponse.json(existingOMPUTPeriods),
     ),
 
     sendInn: http.post(ApiPath.OMP_UT_SOKNAD_SUBMIT, () =>

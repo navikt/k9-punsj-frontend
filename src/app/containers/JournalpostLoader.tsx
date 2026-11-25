@@ -18,8 +18,8 @@ interface Props {
     renderOnLoadComplete: () => React.ReactNode;
 }
 
-const renderErrorAlert = (messageId: string, testId?: string) => (
-    <div className="mt-6 mx-auto w-full max-w-3xl" data-testid={testId}>
+const renderErrorAlert = (messageId: string) => (
+    <div className="mt-6 mx-auto w-full max-w-3xl">
         <Alert size="small" variant="error">
             <FormattedMessage id={messageId} />
         </Alert>
@@ -78,11 +78,11 @@ const JournalpostLoader: React.FC<Props> = ({ renderOnLoadComplete }: Props) => 
     }
 
     if (journalpostNotFound) {
-        return renderErrorAlert('startPage.feil.journalpost', 'journalpostNotFound');
+        return renderErrorAlert('startPage.feil.journalpost');
     }
 
     if (journalpostForbidden) {
-        return renderErrorAlert('startPage.feil.ikketilgang', 'journalpostForbidden');
+        return renderErrorAlert('startPage.feil.ikketilgang');
     }
 
     if (lukkOppgaveDone) {
@@ -97,9 +97,12 @@ const JournalpostLoader: React.FC<Props> = ({ renderOnLoadComplete }: Props) => 
                 pendingLukkDebuggJp={pendinglukkDebuggJp}
                 lukkDebuggJpStatus={lukkDebuggJpStatus}
                 handleLukkDebugg={handleLukkDebugg}
-                data-testid="journalpostConflictComponent"
             />
         );
+    }
+
+    if (journalpostConflict) {
+        return renderErrorAlert('startPage.feil.internalServerError');
     }
 
     if (journalpostRequestError) {

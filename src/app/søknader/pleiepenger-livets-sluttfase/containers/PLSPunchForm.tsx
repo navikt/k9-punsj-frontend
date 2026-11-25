@@ -115,7 +115,6 @@ export interface IPunchPLSFormComponentState {
     aapnePaneler: PunchFormPaneler[];
     showSettPaaVentModal: boolean;
     visErDuSikkerModal: boolean;
-    feilmeldingStier: Set<string>;
     harForsoektAaSendeInn: boolean;
 }
 
@@ -127,6 +126,59 @@ type IPunchPLSFormProps = IPunchPLSFormComponentProps &
 type IntlProps = {
     intl: IntlShape;
 };
+
+const PLS_BACKEND_ERROR_FALLBACK = 'Kontroller opplysningene og prøv igjen.';
+
+const getPLSBackendErrorMessageId = (attribute: string, code: string) =>
+    `skjema.feil.${attribute}.${code}`
+        .replace(/\[\d+]/g, '[]')
+        .replace(
+            /^skjema\.feil\..+\.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED$/,
+            'skjema.feil.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED',
+        )
+        .replace(/^skjema\.feil\..+\.fraOgMed\.MAA_SETTES$/, 'skjema.feil.fraOgMed.MAA_SETTES')
+        .replace(
+            /^skjema\.feil\..+\.fraOgMed\.MAA_VAERE_FOER_TIL_OG_MED$/,
+            'skjema.feil.fraOgMed.MAA_VAERE_FOER_TIL_OG_MED',
+        )
+        .replace(/^skjema\.feil\..+\.tilOgMed\.MAA_SETTES$/, 'skjema.feil.tilOgMed.MAA_SETTES');
+
+const getPLSBackendErrorMessage = ({ felt, feilkode, feilmelding }: IInputError, intl: IntlShape): string => {
+    const attribute = felt?.trim() || '';
+    const code = typeof feilkode === 'string' ? feilkode.trim() : '';
+    const message = feilmelding?.trim() || '';
+
+    if (
+        (attribute === 'søknad' && code === 'mottattDato') ||
+        (attribute === 'mottattDato' && (code === 'MAA_SETTES' || message === 'must not be null'))
+    ) {
+        return intlHelper(intl, 'skjema.feil.datoMottatt.MAA_SETTES');
+    }
+
+    if (attribute === 'søknad' && code === 'klokkeslett') {
+        return 'Klokkeslett mangler.';
+    }
+
+    if (message.startsWith('Mangler søknadsperiode')) {
+        return intlHelper(intl, 'skjema.feil.søknadsperiode/endringsperiode');
+    }
+
+    const messageId = [code, message]
+        .map((value) => getPLSBackendErrorMessageId(attribute, value))
+        .find((id) => Object.prototype.hasOwnProperty.call(intl.messages, id));
+
+    return messageId ? intlHelper(intl, messageId) : PLS_BACKEND_ERROR_FALLBACK;
+};
+
+const PLSFormErrorSummary = ({ inputErrors, intl }: { inputErrors: IInputError[]; intl: IntlShape }) => (
+    <>
+        {inputErrors.map((error, index) => {
+            const feilmelding = getPLSBackendErrorMessage(error, intl);
+            const prefixedFeilmelding = nummerPrefiks(feilmelding, index + 1);
+            return <Feilmelding key={`${index}-${prefixedFeilmelding}`} feil={prefixedFeilmelding} />;
+        })}
+    </>
+);
 
 function withHooks<P extends IPunchPLSFormComponentProps>(Component: ComponentType<P>) {
     return (props: Omit<P, keyof IPunchPLSFormComponentProps>) => {
@@ -197,7 +249,6 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
             aapnePaneler: [],
             showSettPaaVentModal: false,
             visErDuSikkerModal: false,
-            feilmeldingStier: new Set(),
             harForsoektAaSendeInn: false,
         };
     }
@@ -589,8 +640,6 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
 
     private getSoknadFromStore = () => new PLSSoknadUt(this.props.punchFormState.soknad as IPLSSoknadUt);
 
-    private getManglerFromStore = () => this.props.punchFormState.inputErrors;
-
     private erFremITidKlokkeslett = (klokkeslett: string) => {
         const { mottattDato } = this.state.soknad;
         const naa = new Date();
@@ -605,38 +654,12 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
         return false;
     };
 
-    private getUhaandterteFeil = (attribute: string): (string | undefined)[] => {
-        const uhaandterteFeilmeldinger = this.getManglerFromStore()?.filter((m: IInputError) => {
-            const felter = m.felt?.split('.') || [];
-            for (let index = felter.length - 1; index >= -1; index--) {
-                const felt = felter.slice(0, index + 1).join('.');
-                const andreFeilmeldingStier = new Set(this.state.feilmeldingStier);
-                andreFeilmeldingStier.delete(attribute);
-                if (attribute === felt) {
-                    return true;
-                }
-                if (andreFeilmeldingStier.has(felt)) {
-                    return false;
-                }
-            }
-            return false;
-        });
-
-        if (uhaandterteFeilmeldinger && uhaandterteFeilmeldinger?.length > 0) {
-            return uhaandterteFeilmeldinger.map((error) => `${error.felt}: ${error.feilmelding}`).filter(Boolean);
-        }
-        return [];
-    };
-
-    private getErrorMessage = (attribute: string, indeks?: number) => {
+    private getErrorMessage = (attribute: string) => {
         const { mottattDato, klokkeslett } = this.state.soknad;
         const erFremITid = (dato: string) => {
             const naa = new Date();
             return naa < new Date(dato);
         };
-        if (!this.state.feilmeldingStier.has(attribute)) {
-            this.setState((prevState) => ({ feilmeldingStier: prevState.feilmeldingStier.add(attribute) }));
-        }
 
         if (attribute === 'mottattDato' && (mottattDato === null || mottattDato === '')) {
             return intlHelper(this.props.intl, 'skjema.feil.ikketom');
@@ -654,36 +677,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
             return intlHelper(this.props.intl, 'skjema.feil.ikkefremitid');
         }
 
-        const errorMsg = this.getManglerFromStore()?.filter((m: IInputError) => m.felt === attribute)?.[indeks || 0]
-            ?.feilmelding;
-
-        if (errorMsg) {
-            if (errorMsg.startsWith('Mangler søknadsperiode')) {
-                return intlHelper(this.props.intl, 'skjema.feil.søknadsperiode/endringsperiode');
-            }
-            if (attribute === 'nattevåk' || attribute === 'beredskap' || attribute === 'lovbestemtFerie') {
-                return errorMsg;
-            }
-        }
-
-        return errorMsg
-            ? intlHelper(
-                  this.props.intl,
-                  `skjema.feil.${attribute}.${errorMsg}`
-                      .replace(/\[\d+]/g, '[]')
-                      .replace(
-                          /^skjema\.feil\..+\.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED$/,
-                          'skjema.feil.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED',
-                      )
-                      .replace(/^skjema\.feil\..+\.fraOgMed\.MAA_SETTES$/, 'skjema.feil.fraOgMed.MAA_SETTES')
-                      .replace(
-                          /^skjema\.feil\..+\.fraOgMed\.MAA_VAERE_FOER_TIL_OG_MED$/,
-                          'skjema.feil.fraOgMed.MAA_VAERE_FOER_TIL_OG_MED',
-                      )
-                      .replace(/^skjema\.feil\..+\.tilOgMed\.MAA_SETTES$/, 'skjema.feil.tilOgMed.MAA_SETTES')
-                      .replace(/^skjema.feil.mottattDato.must not be null$/, 'skjema.feil.datoMottatt.MAA_SETTES'),
-              )
-            : undefined;
+        return undefined;
     };
 
     private updateSoknadState = (soknad: Partial<IPLSSoknad>, showStatus?: boolean) => {
@@ -872,6 +866,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
             return null;
         }
 
+        const getUhaandterteFeil = () => [];
         const initialUtenlandsopphold: IUtenlandsOpphold = { land: '' };
 
         return (
@@ -889,7 +884,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                     updateSoknad={this.updateSoknad}
                     initialPeriode={this.initialPeriode}
                     getErrorMessage={this.getErrorMessage}
-                    getUhaandterteFeil={this.getUhaandterteFeil}
+                    getUhaandterteFeil={getUhaandterteFeil}
                     soknad={soknad}
                     punchFormState={punchFormState}
                 />
@@ -966,7 +961,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                                     className="utenlandsopphold"
                                     panelClassName="utenlandsoppholdpanel"
                                     getErrorMessage={this.getErrorMessage}
-                                    getUhaandterteFeil={this.getUhaandterteFeil}
+                                    getUhaandterteFeil={getUhaandterteFeil}
                                     feilkodeprefiks="ytelse.utenlandsopphold"
                                     kanHaFlere
                                     medSlettKnapp={false}
@@ -1003,7 +998,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                                         this.updateSoknadState({ lovbestemtFerie: perioder }, showStatus)
                                     }
                                     getErrorMessage={this.getErrorMessage}
-                                    getUhaandterteFeil={this.getUhaandterteFeil}
+                                    getUhaandterteFeil={getUhaandterteFeil}
                                     feilkodeprefiks="ytelse.lovbestemtFerie"
                                     kanHaFlere
                                 />
@@ -1040,7 +1035,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                                                         )
                                                     }
                                                     getErrorMessage={() => undefined}
-                                                    getUhaandterteFeil={this.getUhaandterteFeil}
+                                                    getUhaandterteFeil={getUhaandterteFeil}
                                                     feilkodeprefiks="ytelse.lovbestemtFerie"
                                                     kanHaFlere
                                                 />
@@ -1062,7 +1057,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         updateSoknad={this.updateSoknad}
                         updateSoknadState={this.updateSoknadState}
                         getErrorMessage={this.getErrorMessage}
-                        getUhaandterteFeil={this.getUhaandterteFeil}
+                        getUhaandterteFeil={getUhaandterteFeil}
                         handleFrilanserChange={this.handleFrilanserChange}
                         updateVirksomhetstyper={this.updateVirksomhetstyper}
                     />
@@ -1099,7 +1094,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                                     className="bosteder"
                                     panelClassName="bostederpanel"
                                     getErrorMessage={this.getErrorMessage}
-                                    getUhaandterteFeil={this.getUhaandterteFeil}
+                                    getUhaandterteFeil={getUhaandterteFeil}
                                     feilkodeprefiks="ytelse.bosteder"
                                     kanHaFlere
                                     medSlettKnapp={false}
@@ -1145,11 +1140,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
 
                 <VerticalSpacer twentyPx />
 
-                {this.getUhaandterteFeil('')
-                    .map((feilmelding, index) => nummerPrefiks(feilmelding || '', index + 1))
-                    .map((feilmelding) => (
-                        <Feilmelding key={feilmelding} feil={feilmelding} />
-                    ))}
+                <PLSFormErrorSummary inputErrors={punchFormState.inputErrors || []} intl={intl} />
 
                 {punchFormState.isAwaitingValidateResponse && (
                     <div className="loadingSpinner">

@@ -2,9 +2,9 @@ import { HttpResponse, http } from 'msw/http';
 
 import { ApiPath } from 'app/apiConfig';
 
-import olpInstitusjoner from '../../cypress/fixtures/olp/olpInstitusjoner.json';
-import olpSoknad from '../../cypress/fixtures/olp/olpSoknad.json';
-import olpValidering from '../../cypress/fixtures/olp/olpValidering.json';
+import olpInstitusjoner from './fixtures/olp/olpInstitusjoner.json';
+import olpSoknad from './fixtures/olp/olpSoknad.json';
+import olpValidering from './fixtures/olp/olpValidering.json';
 
 const mockHandlersOLP = {
     tomMappe: http.get(ApiPath.OLP_EKSISTERENDE_SOKNADER_FIND, () =>

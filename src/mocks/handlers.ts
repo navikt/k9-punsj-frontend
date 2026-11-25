@@ -10,6 +10,8 @@ import mockHandlersOMPMA from './mockHandlersOMPMA';
 import mockHandlersOLP from './mockHandlersOLP';
 import mockHandlersOMPUT from './mockHandlersOMPUT';
 import mockHandlersOMPUTKorrigering from './mockHandlersOMPUTKorrigering';
+import mockHandlersJournalpostLoader from './mockHandlersJournalpostLoader';
+import mockHandlersFordelingPsb from './mockHandlersFordelingPsb';
 import mockHandlersTest from './mockHandlersTest';
 
 let handlers = [
@@ -518,13 +520,9 @@ let handlers = [
         ),
     ),
 
-    /* This is commented out because it is causing the 'should send brev' cypress test to fail because
-     * in cypress test uses intercept to check if the request is made correctly and the intercept is not
-     * working as expected if msw is used for the request.
-     * if app starts for development by running 'yarn test:e2eUI' and you need to test send brev visually
-     * you can uncomment this, but you must comment it back before committing and running the cypress tests.
-     *
-     * TODO: Fix this, maybe
+    /* Håndtereren er deaktivert og svarer ellers med 400 ved bestilling av brev. Den ble opprinnelig
+     * deaktivert på grunn av en Cypress-test som ikke lenger finnes. Aktiver den bare midlertidig lokalt
+     * for å se feilvisningen, og kommenter den ut igjen før commit.
      */
     // http.post(ApiPath.BREV_BESTILL, () => new HttpResponse(null, { status: 400 })),
 
@@ -574,6 +572,8 @@ if (process.env.MSW_MODE === 'test') {
         .concat(Object.values(mockHandlersOMPKS))
         .concat(Object.values(mockHandlersOLP))
         .concat(Object.values(mockHandlersOMPUTKorrigering))
+        .concat(Object.values(mockHandlersJournalpostLoader))
+        .concat(mockHandlersFordelingPsb)
         .concat(Object.values(mockHandlersTest));
 }
 
