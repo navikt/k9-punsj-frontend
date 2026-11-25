@@ -762,7 +762,19 @@ Ingen krav ble blokkert av en produksjonsfeil. Eksisterende fixtures gir React-a
 | 174–202: Reservert sak, Fortsett | `avbryter Fortsett for reservert OMPUT-sak` kontrollerer Fortsett-overskrift og bekreftelsesetikett, reservert saksoppsummering, advarsel, fravær av LOS, aktive knapper og lukket modal etter avbrudd. Valgt sak og handlinger består uten klassifisering, Vent, behandlingsår- eller søknadsskriving. |
 | 204–233: Reservert sak, Vent | `avbryter Vent for reservert OMPUT-sak` kontrollerer Vent-overskrift og bekreftelsesetikett, tilsvarende saksoppsummering, advarsel, fravær av LOS, aktive knapper og lukket modal etter avbrudd. Valgt sak og handlinger består uten klassifisering, Vent, behandlingsår- eller søknadsskriving. |
 
-De to Cypress-valgblokkene er beholdt som oppsett for den stateful resten av testen. Dermed består også kontrollene for åpning, ny sak og behandlingsår, søkerbytte, tomt oppslag og to søkere. Playwright avbryter alle fire modalene; den utfører ikke bekreftelseshandlingene. MSW dekker frontendflyten, ikke backendens faktiske skriving.
+De to Cypress-valgblokkene og alle kontroller for åpning, søkerbytte og to søkere er beholdt. Ny-sak-blokken beholder bare reservasjon og valg av et ledig tilgjengelig år som stateful oppsett for søkerresetten. Playwright avbryter de fire sak-modalene; den utfører ikke bekreftelseshandlingene. MSW dekker frontendflyten, ikke backendens faktiske skriving.
+
+### Ny sak og tomt saksoppslag (baseline `aa9c39a3`)
+
+Playwright erstatter ny-sak-årskontrollen, begge avbrutte modalene uten fagsak og tomt OMPUT-oppslag. De eksisterende saksvalgsreisene og øvrige Cypress-kontroller er fortsatt beholdt i `cypress/e2e/fordeling/OMPUT.cy.js`.
+
+| Cypress-blokk ved `aa9c39a3` | Playwright-dekning |
+| --- | --- |
+| 113–140: Reserver ny sak og velg behandlingsår | `reserverer ny OMPUT-sak med ledig behandlingsår` starter med valgt reservert sak, sjekker at saksnummeret fjernes og handlingene er deaktivert uten år. Et tilgjengelig år med fagsak viser konflikt og holder handlingene deaktivert; et ledig tilgjengelig år viser meldingen om reservasjon og aktiverer handlingene. Fixture-år følger nettleserens inneværende år. |
+| 142–200: Avbryt Fortsett- og Vent-modal uten fagsak | `avbryter Fortsett og Vent for ny OMPUT-sak uten fagsak` kontrollerer hvert sitt modalhode og bekreftelsesetikett, Omsorgspenger og søker, fravær av saksnummer/periode og LOS, irreversibilitetsvarsel og aktive knapper. Avbryt lukker modalene, beholder valgt år og handlinger og sender ingen klassifiserings-, Vent-, behandlingsår- eller søknadsskriving. |
+| 284–313: Tomt fagsaksoppslag | `fordeling-entry.spec.ts`, `viser tomt fagsaksoppslag og behandlingsår for direkte utbetaling` beholder kontroll av søkeravgrenset 200-svar med `[]`, ingen saksvelger og synlig årskontroll. Handlingene er først deaktivert, og blir aktive med reservasjonsteksten etter valg av et faktisk tilgjengelig år. |
+
+Cypress beholder bare reservasjon og valg av et ledig år i ny-sak-blokken fordi den senere stateful søkerresetten avhenger av denne tilstanden. Søkerresetten og den etterfølgende nye søkeren, begge saksvalgsblokkene, åpning og to-søkerkontrollene er urørt.
 
 ## Fordeling PSB med to søkere
 

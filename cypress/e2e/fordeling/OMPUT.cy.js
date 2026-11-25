@@ -1,5 +1,3 @@
-import { ApiPath } from 'app/apiConfig';
-import { http, HttpResponse } from 'msw/http';
 import { getFagsakNavnForSelect } from '../../utils/utils';
 import journalpost from '../../fixtures/jpOMPUT305.json';
 import fagsaker from '../../fixtures/fagsaker.json';
@@ -113,89 +111,13 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false, viewportWidth: 128
     it('Test Reserver saksnummer til ny fagsak', () => {
         cy.findByLabelText('Reserver saksnummer til ny fagsak').check();
 
-        cy.get('.journalpostpanel').within(() => {
-            cy.findByText(/Saksnummer/i).should('not.exist');
-            cy.findByText(fagsakReservert.fagsakId).should('not.exist');
+        cy.get('[data-test-id="valgAvbehandlingsÅr"]').then(($select) => {
+            const freeYear = Array.from($select[0].options)
+                .map((option) => option.value)
+                .find((year) => year && year !== String(fagsakReservert.behandlingsår));
+            if (!freeYear) throw new Error('Et ledig behandlingsår mangler i valgene.');
+            cy.wrap($select).select(freeYear);
         });
-
-        cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
-        cy.get('[data-test-id="journalførOgVent"]').should('be.disabled');
-
-        cy.findByText(/Hvilket år gjelder dokumentet?/i).should('exist');
-
-        cy.get('[data-test-id="valgAvbehandlingsÅr"]').select('2024').should('have.value', '2024');
-
-        cy.get('[data-test-id="alertFagsakMedValgtBehandlingsår"]').should('exist');
-        cy.get('[data-test-id="jornalførUtenFagsak"]').should('not.exist');
-
-        cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
-        cy.get('[data-test-id="journalførOgVent"]').should('be.disabled');
-
-        cy.get('[data-test-id="valgAvbehandlingsÅr"]').select('2023').should('have.value', '2023');
-
-        cy.get('[data-test-id="jornalførUtenFagsak"]').should('exist');
-
-        cy.get('[data-test-id="journalførOgFortsett"]').should('not.be.disabled');
-        cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
-    });
-
-    it('Åpne klassifiser modal uten fagsak - fortsett', () => {
-        cy.get('[data-test-id="journalførOgFortsett"]').click();
-
-        cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderFortsett);
-        cy.get('[data-test-id="klassifiseringInfo"]')
-            .should('exist')
-            .within(() => {
-                cy.findByText(/Sakstype/i).should('exist');
-                cy.findByText(dokumenttype).should('exist');
-                cy.findByText(/Søkers ID/i).should('exist');
-                cy.findByText(norskIdent).should('exist');
-                cy.findByText(/Saksnummer/i).should('not.exist');
-                cy.findByText(/Periode/i).should('not.exist');
-            });
-
-        cy.get('[data-test-id="klassifiserModalAlertBlokk"]')
-            .should('exist')
-            .within(() => {
-                cy.findByText(klassifiserModalAlertInfoKanIkkeEndres).should('exist');
-            });
-
-        cy.get('[data-test-id="klassifiserModalGåTilLos"]').should('not.exist');
-
-        cy.get('[data-test-id="klassifiserModalJournalfør"]').should('not.be.disabled');
-        cy.get('[data-test-id="klassifiserModalJournalfør"]').should('contain', 'Journalfør journalposten');
-        cy.get('[data-test-id="klassifiserModalAvbryt"]').should('not.be.disabled').click();
-        cy.get('[data-test-id="klassifiserModal"]').should('not.exist');
-    });
-
-    it('Åpne klassifiser modal uten fagsak - sett på vent', () => {
-        cy.get('[data-test-id="journalførOgVent"]').click();
-
-        cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderVent);
-        cy.get('[data-test-id="klassifiseringInfo"]')
-            .should('exist')
-            .within(() => {
-                cy.findByText(/Sakstype/i).should('exist');
-                cy.findByText(dokumenttype).should('exist');
-                cy.findByText(/Søkers ID/i).should('exist');
-                cy.findByText(norskIdent).should('exist');
-                cy.findByText(/Saksnummer/i).should('not.exist');
-                cy.findByText(/Periode/i).should('not.exist');
-            });
-
-        cy.get('[data-test-id="klassifiserModalAlertBlokk"]')
-            .should('exist')
-            .within(() => {
-                cy.findByText(klassifiserModalAlertInfoKanIkkeEndres).should('exist');
-            });
-
-        cy.get('[data-test-id="klassifiserModalGåTilLos"]').should('not.exist');
-
-        cy.get('[data-test-id="klassifiserModalJournalfør"]').should('not.be.disabled');
-        cy.get('[data-test-id="klassifiserModalJournalfør"]').should('contain', 'Journalfør og sett på vent');
-        cy.get('[data-test-id="klassifiserModalAvbryt"]').should('not.be.disabled').click();
-
-        cy.get('[data-test-id="klassifiserModal"]').should('not.exist');
     });
 
     it('Test at state fjernet etter avbekreft søker', () => {
@@ -278,37 +200,6 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false, viewportWidth: 128
         cy.get('[data-test-id="klassifiserModalAvbryt"]').should('not.be.disabled').click();
 
         cy.get('[data-test-id="klassifiserModal"]').should('not.exist');
-    });
-});
-
-describe(`Fordeling ${dokumenttype} søker uten fagsaker`, { testIsolation: false, viewportWidth: 1280, viewportHeight: 1450 }, () => {
-    it('Intercept hent fagsaker', () => {
-        cy.visit(`/journalpost/${journalpostId}`);
-
-        cy.findByText(valgteDokumentType).should('exist').click();
-        cy.findByText(/Skjul/i).should('exist').click();
-
-        cy.window().then((window) => {
-            const { worker } = window.msw;
-            worker.use(http.get(ApiPath.HENT_FAGSAK_PÅ_IDENT, () => HttpResponse.json([], { status: 200 })));
-        });
-    });
-
-    it('Test uten fagsaker', () => {
-        cy.findByText(/Ja/i).should('exist').click();
-
-        cy.findByLabelText('Velg fagsak').should('not.exist');
-        cy.findByLabelText('Hvilket år gjelder dokumentet?').should('exist');
-
-        cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
-        cy.get('[data-test-id="journalførOgVent"]').should('be.disabled');
-
-        cy.get('[data-test-id="valgAvbehandlingsÅr"]').select('2023').should('have.value', '2023');
-
-        cy.get('[data-test-id="jornalførUtenFagsak"]').should('exist');
-
-        cy.get('[data-test-id="journalførOgFortsett"]').should('not.be.disabled');
-        cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
     });
 });
 

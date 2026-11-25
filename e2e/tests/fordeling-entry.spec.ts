@@ -323,7 +323,20 @@ test.describe('Inngang til Fordeling', () => {
         expect(await lookup.json()).toEqual([]);
 
         await expect(page.getByLabel('Velg fagsak')).toHaveCount(0);
-        await expect(page.getByLabel('Hvilket år gjelder dokumentet?')).toBeVisible();
+        const yearSelect = page.getByLabel('Hvilket år gjelder dokumentet?');
+        await expect(yearSelect).toBeVisible();
+        await expect(page.locator('[data-test-id="jornalførUtenFagsak"]')).toHaveCount(0);
+        await expect(page.locator('[data-test-id="journalførOgFortsett"]')).toBeDisabled();
+        await expect(page.locator('[data-test-id="journalførOgVent"]')).toBeDisabled();
+
+        const freeYear = await yearSelect.locator('option').nth(1).getAttribute('value');
+        if (!freeYear) throw new Error('Et tilgjengelig behandlingsår mangler i valgene.');
+        await yearSelect.selectOption(freeYear);
+
+        await expect(yearSelect).toHaveValue(freeYear);
+        await expect(page.locator('[data-test-id="jornalførUtenFagsak"]')).toBeVisible();
+        await expect(page.locator('[data-test-id="journalførOgFortsett"]')).toBeEnabled();
+        await expect(page.locator('[data-test-id="journalførOgVent"]')).toBeEnabled();
         await expectJournalpostRoute(page);
     });
 

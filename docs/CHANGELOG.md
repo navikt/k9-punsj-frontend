@@ -68,6 +68,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-25 — OMPUT ny sak, modalavbrudd og tomt oppslag
+
+- Migrerte ny-sak-årsgating, avbrudd av Fortsett- og Vent-modal uten fagsak og tomt OMPUT-oppslag til Playwright. Fjernet bare de erstattede Cypress-modalene og tomt-oppslag-describen; reservasjon og valg av ledig år står igjen som stateful oppsett for søkerresetten.
+- Validering: `yarn test:pw e2e/tests/fordeling-omput-case-selection.spec.ts e2e/tests/fordeling-entry.spec.ts` bestod med 19 tester; `yarn test:e2e --spec cypress/e2e/fordeling/OMPUT.cy.js` bestod med 16 tester; `yarn lint` og `git diff --check` bestod. Alle fire Cypress-spesifikasjonene står igjen. `sif-code-scan` kjøres i CI.
+
 #### 2026-11-25 — Kjørte gjenværende Cypress-tester i én jobb
 
 - Fjernet Cypress-sharding og splitter-skriptet. Den gjenbrukbare workflowen kjører nå alle gjenværende spesifikasjoner gjennom den eksisterende wrapperen; PR- og produksjonsportene er uendret.

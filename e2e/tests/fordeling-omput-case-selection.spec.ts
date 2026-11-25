@@ -10,7 +10,8 @@ const DOKUMENTTYPE = 'Omsorgspenger';
 const SAKSTYPEVALG = 'Omsorgspenger: direkte utbetaling av omsorgspenger';
 const ORDINÆR_SAK = fagsaker[1];
 const RESERVERT_SAK = fagsaker[9];
-const OMPUT_SAKER = [ORDINÆR_SAK, RESERVERT_SAK];
+type OmputSak = { fagsakId: string; reservert: boolean; behandlingsår?: number | null };
+const OMPUT_SAKER: OmputSak[] = [ORDINÆR_SAK, RESERVERT_SAK];
 const JOURNALPOST_PATH = ApiPath.JOURNALPOST_GET.replace('{journalpostId}', JOURNALPOST_ID);
 const VENT_PATH = ApiPath.JOURNALPOST_SETT_PAA_VENT.replace('{journalpostId}', JOURNALPOST_ID);
 const BEHANDLINGSÅR_PATH = ApiPath.JOURNALPOST_SETT_BEHANDLINGSÅR.replace(
@@ -65,7 +66,7 @@ const openJournalpost = async (page: Page) => {
     await expect(subtype).toBeChecked();
 };
 
-const installCaseLookupHandler = async (page: Page) => {
+const installCaseLookupHandler = async (page: Page, fagsakerForOppslag = OMPUT_SAKER) => {
     await page.evaluate(
         ({ casesPath, applicantId, cases }) => {
             const msw = window.msw;
@@ -81,13 +82,13 @@ const installCaseLookupHandler = async (page: Page) => {
         {
             casesPath: ApiPath.HENT_FAGSAK_PÅ_IDENT,
             applicantId: SØKER_ID,
-            cases: OMPUT_SAKER,
+            cases: fagsakerForOppslag,
         },
     );
 };
 
-const selectApplicantAndLoadCases = async (page: Page) => {
-    await installCaseLookupHandler(page);
+const selectApplicantAndLoadCases = async (page: Page, cases = OMPUT_SAKER) => {
+    await installCaseLookupHandler(page, cases);
     const lookupPromise = page.waitForResponse(
         (response) =>
             isResponse(response, 'GET', ApiPath.HENT_FAGSAK_PÅ_IDENT) &&
@@ -98,7 +99,7 @@ const selectApplicantAndLoadCases = async (page: Page) => {
 
     expect(response.status()).toBe(200);
     expect(response.fromServiceWorker()).toBe(true);
-    expect(await response.json()).toEqual(OMPUT_SAKER);
+    expect(await response.json()).toEqual(cases);
     await expect(page.getByLabel('Velg fagsak')).toBeEnabled();
 };
 
@@ -110,7 +111,7 @@ const expectPanelField = async (page: Page, label: string, value: string) => {
 
 const expectSelectedCase = async (
     page: Page,
-    sak: (typeof OMPUT_SAKER)[number],
+    sak: OmputSak,
     staleCaseId?: string,
 ) => {
     const caseSelect = page.getByLabel('Velg fagsak');
@@ -141,7 +142,7 @@ const expectSelectedCase = async (
 
 type ModalScenario = {
     action: 'Fortsett' | 'Vent';
-    sak: (typeof OMPUT_SAKER)[number];
+    sak: OmputSak;
 };
 
 const modalScenarios: ModalScenario[] = [
@@ -151,10 +152,82 @@ const modalScenarios: ModalScenario[] = [
     { action: 'Vent', sak: RESERVERT_SAK },
 ];
 
-const selectCase = async (page: Page, sak: (typeof OMPUT_SAKER)[number]) => {
+const selectCase = async (page: Page, sak: OmputSak) => {
     const caseSelect = page.getByLabel('Velg fagsak');
     await caseSelect.selectOption(sak.fagsakId);
     await expectSelectedCase(page, sak);
+};
+
+const prepareNewCase = async (page: Page) => {
+    const currentYear = await page.evaluate(() => new Date().getFullYear());
+    const cases = OMPUT_SAKER.map((sak) => ({ ...sak, behandlingsår: currentYear }));
+    await selectApplicantAndLoadCases(page, cases);
+
+    const reservedCase = cases.find((sak) => sak.reservert);
+    if (!reservedCase) throw new Error('En reservert OMPUT-sak mangler i testdataene.');
+    await selectCase(page, reservedCase);
+    await page.getByLabel('Reserver saksnummer til ny fagsak').check();
+
+    const yearSelect = page.getByLabel('Hvilket år gjelder dokumentet?');
+    await expect(yearSelect).toBeVisible();
+    const availableYears = await yearSelect.locator('option').evaluateAll((options) =>
+        options.map((option) => (option as HTMLOptionElement).value).filter(Boolean),
+    );
+    const occupiedYear = String(currentYear);
+    const freeYear = String(currentYear - 1);
+    expect(availableYears).toContain(occupiedYear);
+    expect(availableYears).toContain(freeYear);
+
+    return { reservedCase, yearSelect, occupiedYear, freeYear };
+};
+
+const expectNoCaseReady = async (page: Page, year: string) => {
+    await expect(page.getByLabel('Hvilket år gjelder dokumentet?')).toHaveValue(year);
+    await expect(page.locator('[data-test-id="jornalførUtenFagsak"]')).toBeVisible();
+    await expect(fortsett(page)).toBeEnabled();
+    await expect(vent(page)).toBeEnabled();
+};
+
+const expectAndCancelNoCaseModal = async (
+    page: Page,
+    action: 'Fortsett' | 'Vent',
+    year: string,
+    mutations: string[],
+) => {
+    const continueAction = action === 'Fortsett';
+    await (continueAction ? fortsett(page) : vent(page)).click();
+
+    const dialog = page.locator('[data-test-id="klassifiserModal"]');
+    const info = dialog.locator('[data-test-id="klassifiseringInfo"]');
+    const heading = continueAction
+        ? 'Vil du lagre følgende informasjon til journalposten?'
+        : 'Vil du lagre følgende informasjon til journalposten og sett på vent?';
+    const confirmLabel = continueAction ? 'Journalfør journalposten' : 'Journalfør og sett på vent';
+
+    await expect(dialog).toBeVisible();
+    await expect(dialog.getByRole('heading', { name: heading, exact: true })).toBeVisible();
+    await expect(info.getByText('Sakstype:', { exact: true })).toBeVisible();
+    await expect(info.getByText(DOKUMENTTYPE, { exact: true })).toBeVisible();
+    await expect(info.getByText('Søkers ID:', { exact: true })).toBeVisible();
+    await expect(info.getByText(SØKER_ID, { exact: true })).toBeVisible();
+    await expect(info.getByText('Saksnummer:', { exact: true })).toHaveCount(0);
+    await expect(info.getByText('Periode:', { exact: true })).toHaveCount(0);
+    await expect(
+        dialog
+            .locator('[data-test-id="klassifiserModalAlertBlokk"]')
+            .getByText('Informasjonen kan ikke endres etter journalposten er journalført.', {
+                exact: true,
+            }),
+    ).toBeVisible();
+    await expect(dialog.getByRole('button', { name: 'Gå til LOS', exact: true })).toHaveCount(0);
+    await expect(dialog.locator('[data-test-id="klassifiserModalGåTilLos"]')).toHaveCount(0);
+    await expect(dialog.getByRole('button', { name: confirmLabel, exact: true })).toBeEnabled();
+    await expect(dialog.getByRole('button', { name: 'Avbryt', exact: true })).toBeEnabled();
+
+    await dialog.getByRole('button', { name: 'Avbryt', exact: true }).click();
+    await expect(dialog).toHaveCount(0);
+    await expectNoCaseReady(page, year);
+    expect(mutations).toEqual([]);
 };
 
 const expectAndCancelModal = async (
@@ -208,6 +281,37 @@ test('velger ordinær og reservert OMPUT-sak uten foreldede detaljer', async ({ 
     await selectCase(page, ORDINÆR_SAK);
     await selectCase(page, RESERVERT_SAK);
     await expectSelectedCase(page, RESERVERT_SAK, ORDINÆR_SAK.fagsakId);
+});
+
+test('reserverer ny OMPUT-sak med ledig behandlingsår', async ({ page }) => {
+    await openJournalpost(page);
+    const { reservedCase, yearSelect, occupiedYear, freeYear } = await prepareNewCase(page);
+
+    await expect(journalpostpanel(page).getByText('Saksnummer:', { exact: true })).toHaveCount(0);
+    await expect(journalpostpanel(page)).not.toContainText(reservedCase.fagsakId);
+    await expect(fortsett(page)).toBeDisabled();
+    await expect(vent(page)).toBeDisabled();
+
+    await yearSelect.selectOption(occupiedYear);
+    await expect(page.locator('[data-test-id="alertFagsakMedValgtBehandlingsår"]')).toBeVisible();
+    await expect(page.locator('[data-test-id="jornalførUtenFagsak"]')).toHaveCount(0);
+    await expect(fortsett(page)).toBeDisabled();
+    await expect(vent(page)).toBeDisabled();
+
+    await yearSelect.selectOption(freeYear);
+    await expect(page.locator('[data-test-id="alertFagsakMedValgtBehandlingsår"]')).toHaveCount(0);
+    await expectNoCaseReady(page, freeYear);
+});
+
+test('avbryter Fortsett og Vent for ny OMPUT-sak uten fagsak', async ({ page }) => {
+    const mutations = recordMutations(page);
+    await openJournalpost(page);
+    const { yearSelect, freeYear } = await prepareNewCase(page);
+    await yearSelect.selectOption(freeYear);
+    await expectNoCaseReady(page, freeYear);
+
+    await expectAndCancelNoCaseModal(page, 'Fortsett', freeYear, mutations);
+    await expectAndCancelNoCaseModal(page, 'Vent', freeYear, mutations);
 });
 
 for (const scenario of modalScenarios) {
