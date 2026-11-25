@@ -13,11 +13,6 @@ jobs:
         permissions:
             contents: read
             packages: read
-        strategy:
-            fail-fast: false
-            matrix:
-                ci_index: [0, 1, 2, 3]
-                ci_total: [4]
         steps:
             - name: Hente kode
               uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -43,11 +38,9 @@ jobs:
               run: npx cypress install
 
             - name: Kjør Cypress tester
-              run: node src/build/scripts/run-e2e.mjs cypress:headless --spec "$(node split.mjs)"
+              run: node src/build/scripts/run-e2e.mjs cypress:headless
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  CI_TOTAL: ${{ matrix.ci_total }}
-                  CI_INDEX: ${{ matrix.ci_index }}
                   CI: true
                   TERM: xterm
                   DBUS_SESSION_BUS_ADDRESS: /dev/null

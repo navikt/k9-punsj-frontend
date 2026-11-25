@@ -68,6 +68,10 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-25 — Kjørte gjenværende Cypress-tester i én jobb
+
+- Fjernet Cypress-sharding og splitter-skriptet. Den gjenbrukbare workflowen kjører nå alle gjenværende spesifikasjoner gjennom den eksisterende wrapperen; PR- og produksjonsportene er uendret.
+
 #### 2026-11-25 — OMPUT-saksvalg og modalavbrudd
 
 - La til fem Playwright-tester for ordinært/reservert OMPUT-saksvalg og avbrudd av Fortsett- og Vent-modalene. Overgangen fra ordinær til reservert sak kontrollerer at foreldede detaljer forsvinner.
