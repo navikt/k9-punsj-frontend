@@ -15,49 +15,10 @@ jobs:
         uses: ./.github/workflows/test.yml
 
     test-playwright-shards:
-        name: Playwright shard ${{ matrix.shard }}/2
-        runs-on: ubuntu-latest
+        uses: ./.github/workflows/playwright-tester.yml
         permissions:
             contents: read
             packages: read
-        timeout-minutes: 20
-        strategy:
-            fail-fast: false
-            matrix:
-                shard: [1, 2]
-        steps:
-            - name: Hente kode
-              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-            - name: Sette opp Node
-              uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-              with:
-                  node-version: 26.12.1
-                  registry-url: https://npm.pkg.github.com/
-                  scope: '@navikt'
-            - name: Configure Yarn for GitHub Packages
-              uses: ./.github/actions/configure-yarn
-              with:
-                  token: ${{ secrets.GITHUB_TOKEN }}
-            - name: Installere moduler
-              run: yarn install --immutable
-              env:
-                  NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            - name: Installere Chromium med Linux-avhengigheter
-              run: yarn exec playwright install --with-deps chromium
-            - name: Kjøre Playwright-tester
-              run: yarn test:pw --workers=2 --shard=${{ matrix.shard }}/2
-              env:
-                  CI: true
-            - name: Laste opp Playwright-rapporter
-              if: ${{ !cancelled() }}
-              uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-              with:
-                  name: playwright-${{ github.run_id }}-${{ github.run_attempt }}-shard-${{ matrix.shard }}
-                  path: |
-                      playwright-report/
-                      test-results/
-                  if-no-files-found: ignore
-                  retention-days: 7
 
     test-playwright:
         name: Playwright
@@ -115,7 +76,5 @@ jobs:
                   if-no-files-found: ignore
                   retention-days: 7
 
-    test-cypress:
-        uses: ./.github/workflows/cypress-tester.yml
     build:
         uses: ./.github/workflows/build.yml

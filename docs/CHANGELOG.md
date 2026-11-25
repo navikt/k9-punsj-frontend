@@ -68,6 +68,13 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-25 — Playwright i PR- og produksjons-CI
+
+- Delte den eksisterende Playwright-kjøringen med to shards og to workers mellom PR og produksjon. Begge caller-workflowene beholder `Playwright`-sjekken som krever vellykkede shards; produksjonsdeploy krever også at sjekken lykkes.
+- Fjernet Cypress-kjøringene i CI, den ubrukte workflowen og den siste paritetskontrollerte spesifikasjonen `OMPKS.cy.js` sammen. Ingen Cypress-spesifikasjoner gjenstår.
+- Beholdt delte fixtures, Cypress-infrastruktur og livssyklustestene. Fjerning av infrastrukturen og endelig revisjon av dekning og overlapp gjenstår.
+- Validering: Begge fulle Playwright-shards bestod med henholdsvis 93 og 89 tester; inventarene dekker alle 182 tester nøyaktig én gang. `yarn lint`, YAML- og gatekontroller og whitespace-kontroller bestod. `actionlint` var ikke tilgjengelig; gjenkjenning av påkrevd sjekk og kjøring i GitHub Actions må verifiseres i CI. `sif-code-scan` er beholdt i CI.
+
 #### 2026-11-25 — Endelig paritet for OMPKS
 
 - Fylte de gjenstående hullene i OMPKS-dekningen i Playwright: startpanelet, dokumentvalgene, avkryssingsboksen for to søkere på papirsøknad, deaktiverte handlinger og skjuling av PDF i en eksisterende saksvalgsreise.

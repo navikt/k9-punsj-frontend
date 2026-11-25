@@ -2,7 +2,9 @@
 
 The Chromium Playwright suite runs the frontend with its existing MSW test handlers. It does not call the backend.
 
-The PR workflow runs the full suite in two Playwright shards with two workers each when a pull request is opened or synchronized. The `Playwright` check succeeds only if both shards succeed. Each runner repeats installation and server startup, so splitting the suite does not guarantee halving CI time.
+PR- og produksjons-workflowene kjører hele suiten gjennom den samme gjenbrukbare Playwright-workflowen med to shards og to workers per shard. PR-kjøringen starter når en pull request åpnes eller oppdateres. Begge caller-workflowene beholder en egen `Playwright`-sjekk som bare lykkes når shardene lykkes; feil, avbrudd eller hoppet over kjøring gir ikke en vellykket sjekk. Produksjonsdeploy krever at denne sjekken og lint, enhetstester og bygg lykkes. Hver runner gjentar installasjon og serveroppstart, så oppdelingen garanterer ikke halvert CI-tid.
+
+Ingen Cypress-spesifikasjoner gjenstår, og CI starter ikke lenger Cypress. Delte fixtures brukes fortsatt av Playwright, MSW, Vitest og Storybook. Cypress-konfigurasjon, support, verktøy, avhengigheter og `run-e2e`-skript med livssyklustester er beholdt til senere infrastrukturfjerning. Den endelige revisjonen av dekning og overlapp gjenstår. Paritetskartene nedenfor dokumenterer tidligere migreringssteg; antall gjenværende Cypress-filer i disse stegene er historiske.
 
 To inspect a shard, download its `playwright-<run-id>-<attempt>-shard-<index>` artifact from the Actions run summary. Each artifact contains that shard's HTML report and failure results, including traces and screenshots when available. Extract the artifacts into separate directories and run `yarn exec playwright show-report <extracted-directory>/playwright-report` for each report.
 
@@ -1107,7 +1109,7 @@ De siste 11 blokkene i `cypress/e2e/fordeling/OMPKS.cy.js` ved baseline `e21cd95
 | 104–125: Reservert sak med barn | `velger reservert OMPKS-sak med barn` kontrollerer valgt sak, barnets navn og ID fra fixturen, manglende K9-lenke, panelverdier og at begge handlingene er aktive. |
 | 127–146: Reservert sak uten barn | `velger reservert OMPKS-sak uten barn og fjerner foreldede barnedetaljer` kontrollerer `ikke satt`, manglende K9-lenke, panelverdier, at foreldede barnedetaljer fjernes og handlingsgatingen. |
 
-Dette lukker avvikene i kontrollene for de 11 blokkene. Ingen uoverensstemmelser gjenstår i de kartlagte kontrollene. `OMPKS.cy.js` er uendret og er fortsatt det eneste treffet for den uendrede Cypress-verdien `specPattern`. Ikke slett filen før den samordnede CI-overgangen endrer Cypress-kjøringene og produksjons-workflowen.
+Dette lukker avvikene i kontrollene for de 11 blokkene. Ingen uoverensstemmelser gjenstår i de kartlagte kontrollene. Den siste filen, `OMPKS.cy.js`, ble fjernet sammen med Cypress-kjøringene i CI da PR- og produksjons-workflowene gikk over til den delte Playwright-workflowen. Den uendrede Cypress-verdien `specPattern` matcher nå ingen filer. Delte fixtures og utsatt infrastruktur er beholdt; endelig revisjon av dekning og overlapp gjenstår.
 
 ## Fordeling PSB med to søkere
 
