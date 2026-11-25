@@ -1857,7 +1857,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@k9-punsj-frontend/server@workspace:server"
   dependencies:
-    "@navikt/oasis": "npm:4.2.2"
+    "@navikt/oasis": "npm:4.2.3"
     connect-timeout: "npm:1.9.1"
     cors: "npm:2.8.6"
     dotenv: "npm:18.0.10"
@@ -2038,22 +2038,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/oasis@npm:4.2.2":
-  version: 4.2.2
-  resolution: "@navikt/oasis@npm:4.2.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Foasis%2F4.2.2%2F3c43e1e89bb2d46646a9a2aaf27972a024377a6f"
+"@navikt/oasis@npm:4.2.3":
+  version: 4.2.3
+  resolution: "@navikt/oasis@npm:4.2.3::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Foasis%2F4.2.3%2F2b6f6ff6ac6c82e6ea93f5ec4e041cf5a93b4302"
   dependencies:
-    "@navikt/texas": "npm:^4.2.2"
+    "@navikt/texas": "npm:^4.2.3"
     "@opentelemetry/api": "npm:^1.9.1"
     "@prometheus-io/client": "npm:^0.16.1"
-    jose: "npm:^6.2.10"
-  checksum: 10/ff6c0ff545e39c7f358077de97f19e2e9d04045cfa948093d2cd1b7417b38fd4d35ee202894ef984257d1c74b19560345eafbd7620602aa159d42a36bbef8ab6
+    jose: "npm:^6.2.17"
+  checksum: 10/2ea4ce6c70f51936fa1c9ff42028a2e4ec661868b88906d926511b6073cc5a0d897277c396acefc2f6a79f9af8dffded9c635f5bbf629d3876b5a45df618bd64
   languageName: node
   linkType: hard
 
-"@navikt/texas@npm:^4.2.2":
-  version: 4.2.2
-  resolution: "@navikt/texas@npm:4.2.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Ftexas%2F4.2.2%2F862d743a1df21630a007a0d2d2a36a74dd8b5187"
-  checksum: 10/ee1067aa92437e688d1c035d028ae472e9eb0b554e41e739bac953a38adea125ada81dcf6eb2d215be076790d1bfa2157d3b9bead27920a42c917491929c2fb4
+"@navikt/texas@npm:^4.2.3":
+  version: 4.2.3
+  resolution: "@navikt/texas@npm:4.2.3::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Ftexas%2F4.2.3%2Ff694ea2082a8f801322606ffd3e5998d95a7133a"
+  checksum: 10/09f6b10556ce19b2783885bd7fec474eaf195d74b53d962137c0101e964843096a6cb0cf564bd6bd3924b8ea4a8f9c320497fa4d1a980232a0e9aff53f53ed23
   languageName: node
   linkType: hard
 
@@ -7340,7 +7340,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jose@npm:6.2.17, jose@npm:^6.2.10":
+"jose@npm:6.2.17, jose@npm:^6.2.17":
   version: 6.2.17
   resolution: "jose@npm:6.2.17"
   checksum: 10/df6ae5da42e71a4c3bd1483534c5579ed32f5806ec362ea472f309e8e57aef42afa1dbac62289596975d3587f7ac38deefe4313e1434ce76972ea0f029070bc9
