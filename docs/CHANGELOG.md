@@ -73,6 +73,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 - La til en isolert Playwright-reise for nullstilling, søkerbytte og avbrudd av Fortsett- og Vent-modalene. Fjernet bare de fire dekkede Cypress-blokkene og deres ubrukte reservasjon/år-oppsett; de øvrige OMPUT-kontrollene og alle fire Cypress-spesifikasjonene står igjen.
 - Validering: `yarn test:pw e2e/tests/fordeling-omput-case-selection.spec.ts` bestod med 8 tester før opprydding og på endelig testkode; `yarn test:e2e --spec cypress/e2e/fordeling/OMPUT.cy.js` bestod med 11 tester; `yarn lint` og `git diff --check` bestod. `sif-code-scan` kjøres i CI.
 
+#### 2026-11-25 — OMPUT-gating og modalavbrudd med to søkere
+
+- La til en isolert Playwright-reise for søkeroppslag, manglende-data-gating og avbrudd av Fortsett og Vent for ny OMPUT-sak. Klassifisering og kopiering for to søkere forblir i de eksisterende inngangsreisene. Fjernet bare den erstattede Cypress-gruppen og konstanter som ikke lenger brukes; hovedbeskrivelsens sju blokker og alle fire Cypress-spesifikasjonene står igjen.
+- Validering: `yarn test:pw e2e/tests/fordeling-omput-case-selection.spec.ts e2e/tests/fordeling-entry.spec.ts` bestod to ganger med 21 tester hver; `yarn test:e2e --spec cypress/e2e/fordeling/OMPUT.cy.js` bestod med 7 tester; `yarn lint` og `git diff --check` bestod. Fire Cypress-spesifikasjoner står igjen. `sif-code-scan` kjøres i CI.
+
 #### 2026-11-25 — OMPUT ny sak, modalavbrudd og tomt oppslag
 
 - Migrerte ny-sak-årsgating, avbrudd av Fortsett- og Vent-modal uten fagsak og tomt OMPUT-oppslag til Playwright. Fjernet bare de erstattede Cypress-modalene og tomt-oppslag-describen; reservasjon og valg av ledig år står igjen som stateful oppsett for søkerresetten.

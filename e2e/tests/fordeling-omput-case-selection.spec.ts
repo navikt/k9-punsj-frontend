@@ -6,15 +6,25 @@ import { ApiPath } from '../../src/app/apiConfig';
 
 const JOURNALPOST_ID = jpOMPUT305.journalpostId;
 const SØKER_ID = jpOMPUT305.norskIdent;
+const ANNEN_SØKER_ID = '02918496664';
 const NY_SØKER_ID = '12448325820';
 const DOKUMENTTYPE = 'Omsorgspenger';
 const SAKSTYPEVALG = 'Omsorgspenger: direkte utbetaling av omsorgspenger';
 const ORDINÆR_SAK = fagsaker[1];
 const RESERVERT_SAK = fagsaker[9];
+const ANNEN_SØKER_PERSON = {
+    etternavn: 'KAKE',
+    fornavn: 'TUNGSINDIG',
+    fødselsdato: '1981-12-18',
+    identitetsnummer: ANNEN_SØKER_ID,
+    mellomnavn: null,
+    sammensattNavn: 'TUNGSINDIG KAKE',
+};
 type OmputSak = { fagsakId: string; reservert: boolean; behandlingsår?: number | null };
 const OMPUT_SAKER: OmputSak[] = [ORDINÆR_SAK, RESERVERT_SAK];
 const JOURNALPOST_PATH = ApiPath.JOURNALPOST_GET.replace('{journalpostId}', JOURNALPOST_ID);
 const VENT_PATH = ApiPath.JOURNALPOST_SETT_PAA_VENT.replace('{journalpostId}', JOURNALPOST_ID);
+const COPY_PATH = ApiPath.JOURNALPOST_KOPIERE.replace('{journalpostId}', JOURNALPOST_ID);
 const BEHANDLINGSÅR_PATH = ApiPath.JOURNALPOST_SETT_BEHANDLINGSÅR.replace(
     '{journalpostId}',
     JOURNALPOST_ID,
@@ -22,6 +32,7 @@ const BEHANDLINGSÅR_PATH = ApiPath.JOURNALPOST_SETT_BEHANDLINGSÅR.replace(
 const MUTATION_PATHS = new Set([
     ApiPath.JOURNALPOST_MOTTAK,
     VENT_PATH,
+    COPY_PATH,
     BEHANDLINGSÅR_PATH,
     ApiPath.OMP_UT_SOKNAD_CREATE,
     ApiPath.OMP_UT_SOKNAD_UPDATE,
@@ -88,6 +99,27 @@ const installCaseLookupHandler = async (
             casesPath: ApiPath.HENT_FAGSAK_PÅ_IDENT,
             applicantId: lookupApplicantId,
             cases: fagsakerForOppslag,
+        },
+    );
+};
+
+const installPersonLookupHandler = async (page: Page) => {
+    await page.evaluate(
+        ({ personPath, applicantId, person }) => {
+            const msw = window.msw;
+            if (!msw) throw new Error('MSW-testarbeideren er ikke tilgjengelig.');
+
+            msw.worker.use(
+                msw.http.get(personPath, ({ request }) => {
+                    if (request.headers.get('X-Nav-NorskIdent') !== applicantId) return;
+                    return msw.HttpResponse.json(person, { status: 200 });
+                }),
+            );
+        },
+        {
+            personPath: ApiPath.PERSON,
+            applicantId: ANNEN_SØKER_ID,
+            person: ANNEN_SØKER_PERSON,
         },
     );
 };
@@ -197,11 +229,20 @@ const expectNoCaseReady = async (
     applicantId = SØKER_ID,
     previousApplicantId?: string,
     previousCaseId?: string,
+    secondApplicantId?: string,
 ) => {
     const yearSelect = page.getByLabel('Hvilket år gjelder dokumentet?');
     await expect(yearSelect).toHaveValue(year);
     await expect(page.getByLabel('Velg fagsak')).toBeDisabled();
     await expect(page.getByLabel('Reserver saksnummer til ny fagsak')).toBeChecked();
+    if (secondApplicantId) {
+        await expect(
+            page.getByLabel(
+                'Det finnes informasjon om to søkere i journalposten (gjelder kun papirsøknad)',
+            ),
+        ).toBeChecked();
+        await expect(page.getByLabel('Fødselsnummer annen søker:')).toHaveValue(secondApplicantId);
+    }
     await expectPanelField(page, 'Søkers ID:', applicantId);
     if (previousApplicantId) {
         await expect(journalpostpanel(page)).not.toContainText(previousApplicantId);
@@ -222,6 +263,7 @@ const expectAndCancelNoCaseModal = async (
     applicantId = SØKER_ID,
     previousApplicantId?: string,
     previousCaseId?: string,
+    secondApplicantId?: string,
 ) => {
     const continueAction = action === 'Fortsett';
     await (continueAction ? fortsett(page) : vent(page)).click();
@@ -258,7 +300,14 @@ const expectAndCancelNoCaseModal = async (
 
     await dialog.getByRole('button', { name: 'Avbryt', exact: true }).click();
     await expect(dialog).toHaveCount(0);
-    await expectNoCaseReady(page, year, applicantId, previousApplicantId, previousCaseId);
+    await expectNoCaseReady(
+        page,
+        year,
+        applicantId,
+        previousApplicantId,
+        previousCaseId,
+        secondApplicantId,
+    );
     expect(mutations).toEqual([]);
 };
 
@@ -333,6 +382,95 @@ test('reserverer ny OMPUT-sak med ledig behandlingsår', async ({ page }) => {
     await yearSelect.selectOption(freeYear);
     await expect(page.locator('[data-test-id="alertFagsakMedValgtBehandlingsår"]')).toHaveCount(0);
     await expectNoCaseReady(page, freeYear);
+});
+
+test('avbryter Fortsett og Vent med to OMPUT-søkere og ny sak', async ({ page }) => {
+    const mutations = recordMutations(page);
+    await openJournalpost(page);
+
+    const pdf = page.getByTitle('pdf');
+    await expect(pdf).toBeVisible();
+    await page.getByRole('button', { name: 'Skjul', exact: true }).click();
+    await expect(pdf).toBeHidden();
+
+    const currentYear = await page.evaluate(() => new Date().getFullYear());
+    const controlledCases = OMPUT_SAKER.map((sak) => ({ ...sak, behandlingsår: currentYear }));
+    await installCaseLookupHandler(page, controlledCases);
+    const primaryLookup = page.waitForResponse(
+        (response) =>
+            isResponse(response, 'GET', ApiPath.HENT_FAGSAK_PÅ_IDENT) &&
+            response.request().headers()['x-nav-norskident'] === SØKER_ID,
+    );
+    await page.getByRole('radio', { name: 'Ja', exact: true }).check();
+    const primaryResponse = await primaryLookup;
+    expect(primaryResponse.status()).toBe(200);
+    expect(primaryResponse.fromServiceWorker()).toBe(true);
+    expect(primaryResponse.request().headers()['x-nav-norskident']).toBe(SØKER_ID);
+    expect(await primaryResponse.json()).toEqual(controlledCases);
+    await expectPanelField(page, 'Søkers ID:', SØKER_ID);
+
+    const twoApplicants = page.getByLabel(
+        'Det finnes informasjon om to søkere i journalposten (gjelder kun papirsøknad)',
+    );
+    await twoApplicants.check();
+    await expect(twoApplicants).toBeChecked();
+    await expect(page.locator('[data-test-id="infoOmRegisteringAvToSokere"]')).toContainText(
+        'Du skal registrere informasjon for en søker av gangen i Punsj.',
+    );
+    await expect(page.locator('[data-test-id="toSøkereIngenAnnenSøker"]')).toBeVisible();
+
+    await installPersonLookupHandler(page);
+    const personLookup = page.waitForResponse(
+        (response) =>
+            isResponse(response, 'GET', ApiPath.PERSON) &&
+            response.request().headers()['x-nav-norskident'] === ANNEN_SØKER_ID,
+    );
+    const secondApplicantInput = page.getByLabel('Fødselsnummer annen søker:');
+    await secondApplicantInput.fill(ANNEN_SØKER_ID);
+    const personResponse = await personLookup;
+    expect(personResponse.status()).toBe(200);
+    expect(personResponse.fromServiceWorker()).toBe(true);
+    expect(personResponse.request().headers()['x-nav-norskident']).toBe(ANNEN_SØKER_ID);
+    expect(await personResponse.json()).toEqual(ANNEN_SØKER_PERSON);
+    await expect(secondApplicantInput).toHaveValue(ANNEN_SØKER_ID);
+    await expect(page.locator('[data-test-id="toSøkereIngenAnnenSøker"]')).toHaveCount(0);
+    await expect(page.locator('[data-test-id="toSøkereIngenBehandlingÅr"]')).toBeVisible();
+    await expect(fortsett(page)).toBeDisabled();
+    await expect(vent(page)).toBeDisabled();
+
+    const reservation = page.getByLabel('Reserver saksnummer til ny fagsak');
+    await reservation.check();
+    await expect(reservation).toBeChecked();
+    const yearSelect = page.getByLabel('Hvilket år gjelder dokumentet?');
+    const availableYears = await yearSelect.locator('option').evaluateAll((options) =>
+        options.map((option) => (option as HTMLOptionElement).value).filter(Boolean),
+    );
+    const freeYear = availableYears.find((year) => year !== String(currentYear));
+    if (!freeYear) throw new Error('Et ledig behandlingsår mangler i valgene.');
+    await yearSelect.selectOption(freeYear);
+    await expect(page.locator('[data-test-id="toSøkereIngenBehandlingÅr"]')).toHaveCount(0);
+    await expectNoCaseReady(page, freeYear, SØKER_ID, undefined, undefined, ANNEN_SØKER_ID);
+
+    await expectAndCancelNoCaseModal(
+        page,
+        'Fortsett',
+        freeYear,
+        mutations,
+        SØKER_ID,
+        undefined,
+        undefined,
+        ANNEN_SØKER_ID,
+    );
+    await expectAndCancelNoCaseModal(
+        page,
+        'Vent',
+        freeYear,
+        mutations,
+        SØKER_ID,
+        undefined,
+        undefined,
+        ANNEN_SØKER_ID,
+    );
 });
 
 test('avbryter Fortsett og Vent for ny OMPUT-sak uten fagsak', async ({ page }) => {

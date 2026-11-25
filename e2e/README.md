@@ -776,6 +776,19 @@ Playwright erstatter ny-sak-årskontrollen, begge avbrutte modalene uten fagsak 
 
 Søkerresetten i Playwright er en isolert reise som selv velger reservert sak, reserverer ny sak og velger et ledig år. Dermed er det stateful Cypress-oppsettet og de fire etterfølgende søkerbytte-/modalblokkene fjernet. Oppstart, ordinært og reservert saksvalg, samt den separate to-søker-reisen er beholdt.
 
+### OMPUT med to søkere (baseline `376fbc18`)
+
+`fordeling-omput-case-selection.spec.ts`, `avbryter Fortsett og Vent med to OMPUT-søkere og ny sak`, erstatter de fire blokkene i `Fordeling Omsorgspenger 2 søkere i journalpost`. Reisen åpner journalposten og direkte OMPUT-undertype gjennom UI-et. Saksoppslagene bruker lokale, søkeravgrensede MSW-svar med behandlingsår fra inneværende år; testen velger deretter et ledig år fra kontrollene i UI-et.
+
+| Cypress-blokk ved `376fbc18` | Playwright-dekning |
+| --- | --- |
+| 112–117: Åpne journalpost og velg OMPUT | Journalpost og subtype velges gjennom UI-et. Testen kontrollerer at PDF-en vises, og at **Skjul** skjuler den. |
+| 119–145: To søkere og årsgating | Bekrefter primærsøker med et kontrollert fagsaksoppslag, slår på papirvalget og sjekker informasjonen og varselet om manglende søker nummer to. Et lokalt personoppslag for søker nummer to kontrollerer ident-header, 200-svar, responsinnhold, beholdt ident og at varselet forsvinner. Manglende behandlingsår holder Fortsett og Vent deaktivert. Reservasjon og et ledig UI-år fjerner årvarselet, viser meldingen om ny sak og aktiverer handlingene. |
+| 147–174: Avbryt Fortsett | Kontrollerer overskrift, Omsorgspenger, primærsøker, fravær av saksnummer og periode, irreversibilitetsvarsel, fravær av LOS og aktive bekreftelses- og avbrytknapper. Avbryt lukker dialogen og beholder begge søker-ID-er, papirvalget, reservasjonen, året og aktive handlinger uten skriving. |
+| 176–203: Avbryt Vent | Kontrollerer den separate Vent-overskriften og bekreftelsesetiketten, samme saksoppsummering og advarsel. Avbryt lukker dialogen og beholder valgene uten klassifiserings-, Vent-, behandlingsår-, kopierings- eller søknadsskriving. |
+
+Dette er bare gating og avbrudd; testen bekrefter ingen handling. Klassifisering og kopiering for to søkere er fortsatt dekket av `fordeling-entry.spec.ts`: `journalfører fosterbarn og kopierer til søker nummer to` og `journalfører uten fosterbarn og kopierer til søker nummer to`. Disse eksisterende reisene fortsetter å utføre og kontrollere klassifisering og kopiering, uten å bli gjentatt her.
+
 ### OMPUT søkerbytte (baseline `dd0431cc`)
 
 `nullstiller OMPUT-valg og avbryter begge modalene for ny søker` starter med valgt reservert sak, reserverer et nytt saksnummer og velger et ledig år fra de tilgjengelige valgene. Etter Nei installerer testen et lokalt, søkeravgrenset MSW-svar for den nye søkeren og kontrollerer status, service worker og faktisk svarinnhold.
