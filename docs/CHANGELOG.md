@@ -68,6 +68,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-25 — Fjernet siste OMPUT-Fordeling-Cypress
+
+- Kartla de sju gjenværende blokkene mot faktiske Playwright-assertions, la til manglende starttilstandskontroller i den eksisterende to-søkerreisen og fjernet bare `OMPUT.cy.js`. Delte fixtures og de tre andre Fordeling-spesifikasjonene er beholdt.
+- Validering: de to berørte Playwright-spesifikasjonene bestod med 21 tester før sletting; `yarn lint` og `git diff --check` bestod. Cypress-mønsteret matcher nøyaktig OMPMA, OMPAO og OMPKS. Cypress ble ikke kjørt fordi målspesifikasjonen er slettet; `sif-code-scan` kjøres i CI.
+
 #### 2026-11-25 — Delte Playwright i to CI-sharder
 
 - PR-workflowen kjører hele Playwright-suiten i to sharder med separate rapporter og en felles `Playwright`-kontroll. CI-tidsbesparelsen er ikke målt.

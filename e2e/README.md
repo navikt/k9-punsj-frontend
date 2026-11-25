@@ -814,6 +814,22 @@ Dette er bare gating og avbrudd; testen bekrefter ingen handling. Klassifisering
 
 Bare disse fire Cypress-blokkene og det ubrukte reservasjon/år-oppsettet er fjernet. Begge saksvalgsblokkene og den separate to-søker-reisen er urørt.
 
+### Fullført opprydding av OMPUT-Cypress (baseline `a09000b8`)
+
+De sju gjenværende blokkene i `cypress/e2e/fordeling/OMPUT.cy.js` er erstattet av de eksisterende Playwright-reisene. Papirreisen kontrollerer 201-svaret fra MSW mot hele `jpOMPUT305`-fixturen, URL-ens `pathname`, skjuling av PDF-en og OMPUT-undertypen. Cypress-filen ble slettet etter at de to berørte Playwright-spesifikasjonene bestod med 21 tester.
+
+| Cypress-blokk ved `a09000b8` | Playwright-dekning |
+| --- | --- |
+| 13–17: Åpne journalpost, skjul PDF og velg dokumenttype | `fordeling-omput-case-selection.spec.ts`, `avbryter Fortsett og Vent med to OMPUT-søkere og ny sak`: `openJournalpost` åpner journalposten, kontrollerer 201, service worker og hele fixturen, sjekker URL-ens `pathname`, velger OMPUT-undertype og kontrollerer synlig/skjult PDF. |
+| 19–28: Journalpostpanel | Samme reise kontrollerer journalpostnummer, søker-ID og sakstype med eksakte fixturverdier før søkerbekreftelse. |
+| 30–36: Dokumentvalg | Samme reise kontrollerer overskriften **Dette gjelder:** og de fire synlige valgene: Pleiepenger sykt barn, Omsorgspenger/omsorgsdager, Pleiepenger i livets sluttfase og Annet. |
+| 38–40: Checkbox for to søkere | Samme reise kontrollerer at checkboxen er synlig før søkerbekreftelse. |
+| 42–45: Deaktiverte handlinger ved start | Samme reise kontrollerer at Fortsett og Vent er deaktivert før søkerbekreftelse. |
+| 47–74: Bekreft søker og velg ordinær sak | `fordeling-omput-case-selection.spec.ts`, `velger ordinær og reservert OMPUT-sak uten foreldede detaljer`: det lokale oppslaget kontrollerer 200, søkerheader og den konkrete saklisten. Valgt ID, behandlingsår, journalpostpanel, K9-lenke med saks-ID og aktive handlinger kontrolleres. |
+| 76–102: Velg reservert sak | Samme valgreise kontrollerer reservert ID, behandlingsår, panel og aktive handlinger, fravær av K9-lenke og at ordinære saksdetaljer er fjernet. |
+
+`OMPUT.cy.js` er slettet etter at alle sju blokkene er mappet. Delt fixtures og de øvrige Cypress-spesifikasjonene er beholdt. Det konfigurerte Cypress-mønsteret treffer nøyaktig `cypress/e2e/fordeling/OMPMA.cy.js`, `cypress/e2e/fordeling/OMPAO.cy.js` og `cypress/e2e/fordeling/OMPKS.cy.js`.
+
 ## Fordeling PSB med to søkere
 
 `fordeling-psb-two-applicants.spec.ts` har to selvstendige reiser for scenario `930317`: avbrudd med to søkere og ny sak, og journalføring med kopiering til en annen søker. Personoppslaget for annen søker er lokalt i nettleserkonteksten. Bare kopieringsreisen installerer en blokkert kopieringsrespons.

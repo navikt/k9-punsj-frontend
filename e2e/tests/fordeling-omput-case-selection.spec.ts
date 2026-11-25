@@ -68,6 +68,7 @@ const openJournalpost = async (page: Page) => {
     await page.goto(`/journalpost/${JOURNALPOST_ID}`);
     const response = await responsePromise;
 
+    await expect(page).toHaveURL((url) => url.pathname === `/journalpost/${JOURNALPOST_ID}`);
     expect(response.status()).toBe(201);
     expect(response.fromServiceWorker()).toBe(true);
     expect(await response.json()).toEqual(jpOMPUT305);
@@ -387,6 +388,28 @@ test('reserverer ny OMPUT-sak med ledig behandlingsår', async ({ page }) => {
 test('avbryter Fortsett og Vent med to OMPUT-søkere og ny sak', async ({ page }) => {
     const mutations = recordMutations(page);
     await openJournalpost(page);
+
+    await expectPanelField(page, 'Journalpostnummer:', JOURNALPOST_ID);
+    await expectPanelField(page, 'Søkers ID:', SØKER_ID);
+    await expectPanelField(page, 'Sakstype:', DOKUMENTTYPE);
+
+    const documentHeading = page.getByRole('heading', { name: 'Dette gjelder:', exact: true });
+    await expect(documentHeading).toBeVisible();
+    const documentChoices = documentHeading.locator('../..').getByRole('radiogroup');
+    for (const name of [
+        'Pleiepenger sykt barn',
+        'Omsorgspenger/omsorgsdager',
+        'Pleiepenger i livets sluttfase',
+        'Annet',
+    ]) {
+        await expect(documentChoices.getByRole('radio', { name, exact: true })).toBeVisible();
+    }
+
+    await expect(
+        page.getByLabel('Det finnes informasjon om to søkere i journalposten (gjelder kun papirsøknad)'),
+    ).toBeVisible();
+    await expect(fortsett(page)).toBeDisabled();
+    await expect(vent(page)).toBeDisabled();
 
     const pdf = page.getByTitle('pdf');
     await expect(pdf).toBeVisible();
