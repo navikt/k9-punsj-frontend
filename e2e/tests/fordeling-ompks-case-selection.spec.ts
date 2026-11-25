@@ -154,7 +154,12 @@ const openJournalpost = async (page: Page) => {
     await expect(page.locator('input[type="radio"][value="OMSORGSPENGER_KS"]')).toBeChecked();
 };
 
-const installApplicantHandlers = async (page: Page, applicantId = SØKER_ID) => {
+const installApplicantHandlers = async (
+    page: Page,
+    applicantId = SØKER_ID,
+    caseResponse: Fagsak[] = FAGSAKER,
+    childrenResponse: typeof barnFixture = barnFixture,
+) => {
     await page.evaluate(
         ({ casesPath, childPath, applicantId: requestedApplicantId, cases, children }) => {
             const msw = window.msw;
@@ -175,8 +180,8 @@ const installApplicantHandlers = async (page: Page, applicantId = SØKER_ID) => 
             casesPath: ApiPath.HENT_FAGSAK_PÅ_IDENT,
             childPath: ApiPath.BARN_GET,
             applicantId,
-            cases: FAGSAKER,
-            children: barnFixture,
+            cases: caseResponse,
+            children: childrenResponse,
         },
     );
 };
@@ -331,12 +336,26 @@ const expectNewCaseWithListedChild = async (page: Page, childId: string, applica
     await expect(vent(page)).toBeEnabled();
 };
 
-const expectManualChild = async (page: Page) => {
-    await expect(page.getByLabel('Reserver saksnummer til ny fagsak')).toBeChecked();
-    await expect(page.getByLabel('Velg fagsak')).toBeDisabled();
-    await expect(page.getByLabel('Velg fagsak')).toHaveValue('');
-    await expect(page.getByLabel('Velg hvilket barn det gjelder')).toBeDisabled();
-    await expect(page.getByLabel('Det gjelder et annet barn')).toBeChecked();
+type ListMode = 'normal' | 'empty-cases' | 'empty-both' | 'empty-children';
+
+const expectListControls = async (page: Page, mode: ListMode) => {
+    if (mode === 'empty-cases' || mode === 'empty-both') {
+        await expect(page.getByLabel('Velg fagsak')).toHaveCount(0);
+    } else {
+        await expect(page.getByLabel('Reserver saksnummer til ny fagsak')).toBeChecked();
+        await expect(page.getByLabel('Velg fagsak')).toBeDisabled();
+        await expect(page.getByLabel('Velg fagsak')).toHaveValue('');
+    }
+    if (mode === 'empty-both' || mode === 'empty-children') {
+        await expect(page.getByLabel('Velg hvilket barn det gjelder')).toHaveCount(0);
+    } else {
+        await expect(page.getByLabel('Velg hvilket barn det gjelder')).toBeDisabled();
+        await expect(page.getByLabel('Det gjelder et annet barn')).toBeChecked();
+    }
+};
+
+const expectManualChild = async (page: Page, mode: ListMode = 'normal') => {
+    await expectListControls(page, mode);
     await expect(page.getByLabel('Pleietrengendes fødselsnummer:', { exact: true })).toHaveValue(MANUELT_BARN_ID);
     await expectPanelField(page, 'Søkers ID:', SØKER_ID);
     await expectPanelField(page, 'Sakstype:', DOKUMENTTYPE);
@@ -348,12 +367,8 @@ const expectManualChild = async (page: Page) => {
     await expect(vent(page)).toBeEnabled();
 };
 
-const expectMissingChildId = async (page: Page) => {
-    await expect(page.getByLabel('Reserver saksnummer til ny fagsak')).toBeChecked();
-    await expect(page.getByLabel('Velg fagsak')).toBeDisabled();
-    await expect(page.getByLabel('Velg fagsak')).toHaveValue('');
-    await expect(page.getByLabel('Velg hvilket barn det gjelder')).toBeDisabled();
-    await expect(page.getByLabel('Det gjelder et annet barn')).toBeChecked();
+const expectMissingChildId = async (page: Page, mode: ListMode = 'normal') => {
+    await expectListControls(page, mode);
     await expect(page.getByLabel('Pleietrengendes fødselsnummer:', { exact: true })).toBeDisabled();
     await expect(page.getByLabel('Pleietrengendes fødselsnummer:', { exact: true })).toHaveValue('');
     await expect(page.getByLabel('Pleietrengende har ikke fødselsnummer')).toBeChecked();
@@ -452,6 +467,85 @@ const startCaseSelection = async (page: Page) => {
     await selectApplicantAndLoadCases(page);
     return mutations;
 };
+
+const enterManualChild = async (page: Page, mode: ListMode) => {
+    const input = page.getByLabel('Pleietrengendes fødselsnummer:', { exact: true });
+    await expect(input).toBeVisible();
+    await expect(input).toBeEnabled();
+    await expect(input).toHaveValue('');
+    await expect(fortsett(page)).toBeDisabled();
+    await expect(vent(page)).toBeDisabled();
+    await installPersonHandler(page, MANUELT_BARN_PERSON);
+    const response = waitForLookup(page, ApiPath.PERSON, MANUELT_BARN_ID);
+    await input.fill(MANUELT_BARN_ID);
+    await expectLookup(await response, MANUELT_BARN_ID, MANUELT_BARN_PERSON);
+    await expectManualChild(page, mode);
+};
+
+test('dekker tom OMPKS-fagsaksliste og refetch av tom barneliste etter Nei og Ja', async ({ page }) => {
+    const mutations = recordMutations(page);
+    await openJournalpost(page);
+    await installApplicantHandlers(page, SØKER_ID, [], barnFixture);
+    const cases = waitForLookup(page, ApiPath.HENT_FAGSAK_PÅ_IDENT, SØKER_ID);
+    const children = waitForLookup(page, ApiPath.BARN_GET, SØKER_ID);
+    await page.getByRole('radio', { name: 'Ja', exact: true }).check();
+    await expectLookup(await cases, SØKER_ID, []);
+    await expectLookup(await children, SØKER_ID, barnFixture);
+    await expect(page.getByLabel('Velg fagsak')).toHaveCount(0);
+
+    const childSelect = page.getByLabel('Velg hvilket barn det gjelder');
+    await childSelect.selectOption(BARN_UTEN_FAGSAK.identitetsnummer);
+    await expect(childSelect).toHaveValue(BARN_UTEN_FAGSAK.identitetsnummer);
+    await expectPanelField(page, 'Barnets ID:', BARN_UTEN_FAGSAK.identitetsnummer);
+    await expect(page.locator('[data-test-id="jornalførUtenFagsak"]')).toBeVisible();
+    await expect(fortsett(page)).toBeEnabled();
+    await expect(vent(page)).toBeEnabled();
+
+    await page.getByLabel('Det gjelder et annet barn').check();
+    await expect(journalpostpanel(page).getByText('Barnets ID:', { exact: true })).toHaveCount(0);
+    await expect(journalpostpanel(page)).not.toContainText(BARN_UTEN_FAGSAK.identitetsnummer);
+    await enterManualChild(page, 'empty-cases');
+    await page.getByLabel('Pleietrengende har ikke fødselsnummer').check();
+    await expectMissingChildId(page, 'empty-cases');
+
+    await installApplicantHandlers(page, SØKER_ID, [], { barn: [] });
+    await page.getByRole('radio', { name: 'Nei', exact: true }).check();
+    await expect(page.getByLabel('Pleietrengende har ikke fødselsnummer')).toHaveCount(0);
+    await expect(page.locator('[data-test-id="pleietrengendeHarIkkeFnrInformasjon"]')).toHaveCount(0);
+    await expect(journalpostpanel(page)).not.toContainText(MANUELT_BARN_ID);
+    const refetchedCases = waitForLookup(page, ApiPath.HENT_FAGSAK_PÅ_IDENT, SØKER_ID);
+    const refetchedChildren = waitForLookup(page, ApiPath.BARN_GET, SØKER_ID);
+    await page.getByRole('radio', { name: 'Ja', exact: true }).check();
+    await expectLookup(await refetchedCases, SØKER_ID, []);
+    await expectLookup(await refetchedChildren, SØKER_ID, { barn: [] });
+    await expect(page.getByLabel('Velg fagsak')).toHaveCount(0);
+    await expect(page.getByLabel('Velg hvilket barn det gjelder')).toHaveCount(0);
+    await expect(page.getByLabel('Pleietrengende har ikke fødselsnummer')).not.toBeChecked();
+    await expect(page.locator('[data-test-id="pleietrengendeHarIkkeFnrInformasjon"]')).toHaveCount(0);
+    await enterManualChild(page, 'empty-both');
+    await page.getByLabel('Pleietrengende har ikke fødselsnummer').check();
+    await expectMissingChildId(page, 'empty-both');
+    expect(mutations).toEqual([]);
+});
+
+test('dekker OMPKS med fagsaker og tom barneliste ved reservasjon av ny sak', async ({ page }) => {
+    const mutations = recordMutations(page);
+    await openJournalpost(page);
+    await installApplicantHandlers(page, SØKER_ID, FAGSAKER, { barn: [] });
+    const cases = waitForLookup(page, ApiPath.HENT_FAGSAK_PÅ_IDENT, SØKER_ID);
+    await page.getByRole('radio', { name: 'Ja', exact: true }).check();
+    await expectLookup(await cases, SØKER_ID, FAGSAKER);
+    await expect(page.getByLabel('Velg fagsak')).toBeEnabled();
+
+    const children = waitForLookup(page, ApiPath.BARN_GET, SØKER_ID);
+    await page.getByLabel('Reserver saksnummer til ny fagsak').check();
+    await expectLookup(await children, SØKER_ID, { barn: [] });
+    await expect(page.getByLabel('Velg hvilket barn det gjelder')).toHaveCount(0);
+    await enterManualChild(page, 'empty-children');
+    await page.getByLabel('Pleietrengende har ikke fødselsnummer').check();
+    await expectMissingChildId(page, 'empty-children');
+    expect(mutations).toEqual([]);
+});
 
 test('velger ordinær OMPKS-sak uten barn og fjerner foreldede barnedetaljer', async ({ page }) => {
     const mutations = await startCaseSelection(page);

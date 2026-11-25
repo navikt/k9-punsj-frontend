@@ -68,6 +68,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-25 — OMPKS tomme saks- og barnelister
+
+- Migrerte tomlisteflytene med manuell ID, manglende fødselsnummer og Nei → Ja-refetch til Playwright.
+- Fjernet de to erstattede Cypress-beskrivelsene; elleve oppstarts- og saksvalgsblokker og CI-konfigurasjonen er beholdt.
+
 #### 2026-11-25 — OMPKS med to søkere
 
 - Migrerte kontrollene for to søkere, barn og avbrudd av begge modalene til en isolert Playwright-reise.

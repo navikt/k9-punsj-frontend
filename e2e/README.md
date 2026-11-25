@@ -1070,6 +1070,25 @@ De fem blokkene og det ubrukte manuelle oppsettet er fjernet. Cypress beholder o
 
 Ingen modal bekreftes, og testen observerer ingen klassifiserings-, Vent-, kopierings-, behandlingsårs- eller OMPKS-søknadsskriving. De tre erstattede blokkene og reservasjonsoppsettet er fjernet. De elleve første blokkene og begge tomlistebeskrivelsene er beholdt. `OMPKS.cy.js` er fortsatt eneste treff i uendret Cypress-konfigurasjon; endelig fjerning krever et separat CI-steg.
 
+### Task 83 mapping at baseline `71b7534a`
+
+`dekker tom OMPKS-fagsaksliste og refetch av tom barneliste etter Nei og Ja` erstatter de sju blokkene i «søker uten fagsaker». `dekker OMPKS med fagsaker og tom barneliste ved reservasjon av ny sak` erstatter de tre blokkene i «søker uten liste med barn». Begge starter fra `jpOMPKS302` med søkeravgrensede handlere og kontrollerer ident, status, service worker og hele svaret for saks-, barne- og personoppslag.
+
+| Cypress-blokk ved baseline | Playwright-dekning |
+| --- | --- |
+| 154–167: Intercept hent fagsaker | Oppsett med tomt sakssvar `[]`; kontrollerer også at saksvelgeren mangler. |
+| 169–183: Uten fagsaker med barn fra liste | Velger `barn[0]`, kontrollerer valgt verdi, panel, informasjon om journalføring uten sak og begge aktive handlinger. |
+| 185–207: Uten fagsaker med annet barn | Fjerner listebarnet, kontrollerer deaktiverte handlinger og registrerer manuell ID; panel, informasjon og handlinger kontrolleres. |
+| 209–221: Uten fagsaker og manglende fødselsnummer | Kontrollerer tømt ID, informasjon, deaktivert Fortsett og aktivert Vent. |
+| 223–232: Intercept hent barn | Oppsettet erstattes av tomt barnesvar `{barn: []}` og Nei → Ja etter manglende-ID-tilstand; faktiske saks- og barnesvar samt nullstilling kontrolleres. |
+| 234–247: Uten fagsaker og barneliste med annet barn | Kontrollerer fraværende barnvelger, tomt aktivt input, manuell ID, panel, informasjon og aktive handlinger. |
+| 249–262: Uten fagsaker og barneliste med manglende fødselsnummer | Kontrollerer tømt ID, informasjon og handlingsgating etter refetch. |
+| 265–282: Intercept hent barn | Oppsett med ikke-tomme saker og tom barneliste; kontrollerer saksvelger, reservasjon og fraværende barnvelger. |
+| 284–294: Uten barneliste med annet barn | Kontrollerer manuell ID, panel og aktive handlinger etter reservasjon. |
+| 296–307: Uten barneliste og manglende fødselsnummer | Kontrollerer tømt ID, informasjon, deaktivert Fortsett og aktivert Vent. |
+
+Reisene observerer ingen klassifiserings-, Vent-, kopierings-, behandlingsårs- eller OMPKS-søknadsskriving. De to tomlistebeskrivelsene er fjernet etter at erstatningene bestod; alle elleve opprinnelige oppstarts- og saksvalgsblokker er beholdt. `OMPKS.cy.js` er fortsatt eneste Cypress-spesifikasjon; endelig fjerning krever separat koordinering med CI.
+
 ## Fordeling PSB med to søkere
 
 `fordeling-psb-two-applicants.spec.ts` har to selvstendige reiser for scenario `930317`: avbrudd med to søkere og ny sak, og journalføring med kopiering til en annen søker. Personoppslaget for annen søker er lokalt i nettleserkonteksten. Bare kopieringsreisen installerer en blokkert kopieringsrespons.
