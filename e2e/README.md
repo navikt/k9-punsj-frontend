@@ -184,6 +184,19 @@ Existing frontend gap: validation sends the application ID in `X-Nav-NorskIdent`
 | Go back | Uses **Tilbake** and checks the registration choice and journalpost panel without a form GET or writes. |
 | Create from an empty list | Verifies the successful lookup response precedes one automatic create POST, checks the same request and full response DTO, then verifies the matching form GET and visible loaded values. |
 
+## OMPMA Fordeling case selection
+
+`fordeling-ompma-case-selection.spec.ts` opens `jpOMPMA304` through the journalpost UI, selects the OMPMA subtype and uses applicant-scoped page-local MSW data from `fagsaker.json[18]` and `[19]`. The response, status, service worker and URL pathname are checked. The two fixtures have the same related person, so the reserved-case transition verifies that the ordinary case ID and K9 link disappear while the correct related-person details remain.
+
+| Cypress block at baseline `e659c507` | Playwright coverage |
+| --- | --- |
+| 65–90: Confirm applicant and select ordinary case | `velger ordinær og reservert OMPMA-sak og fjerner foreldede detaljer` checks the applicant-scoped lookup response, selected case ID, related-person name and ID, K9 link, journalpost-panel case and related-person ID, manual-input absence, and enabled actions. |
+| 92–154: Cancel Fortsett and Vent for ordinary case | `avbryter Fortsett for ordinær OMPMA-sak` and `avbryter Vent for ordinær OMPMA-sak` check the distinct headings and confirm labels, OMPMA type, applicant, related person, case number, period, irreversible-information warning, no LOS action, enabled buttons, retained selection and no writes. |
+| 156–177: Select reserved case | The selection journey verifies the reserved case ID and related-person details, absence of the K9 link, removal of ordinary-case details, and enabled actions. |
+| 179–241: Cancel Fortsett and Vent for reserved case | `avbryter Fortsett for reservert OMPMA-sak` and `avbryter Vent for reservert OMPMA-sak` verify the corresponding reserved-case modal contents and cancel without writes or losing the selected case. |
+
+Only the four mapped modal blocks were removed from `OMPMA.cy.js`. Both case-selection blocks remain in its `testIsolation: false` journey as stateful setup for the existing new-case, manual other-party, applicant-switch, empty-lookup and two-applicant checks.
+
 ## OMPMA form saving and submission
 
 `ompma-punch-form.spec.ts` replaces the abandoned checks in `cypress/e2e/omsorgspenger-midlertidig-alene/omsorgspengerMidlertidigAlene.cy.js`. The former Cypress file was commented out. B46's `ompma-existing-applications.spec.ts` continues to cover the journalpost and application-list journeys.
