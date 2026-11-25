@@ -68,6 +68,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-25 — OMPAO søkerbytte og bekreftelse
+
+- La til en isolert Playwright-reise for reset fra manglende-ID-modus, ny søker og listebarn, avbrudd av begge modalene og bekreftelse av opprinnelig søker. Saks- og barnesvar bruker ikke-tomme OMPAO-fixtures; begge avbruddene skriver ikke data. Fjernet bare de erstattede Cypress-blokkene og oppsettet for barn/manuell ID/manglende ID. Reservasjonen står igjen for den senere to-søker-flyten.
+- Validering: `yarn test:pw e2e/tests/fordeling-ompao-case-selection.spec.ts` bestod med 9 tester før opprydding og 9 tester etterpå; `yarn test:e2e --spec cypress/e2e/fordeling/OMPAO.cy.js` bestod med 25 tester (0 hoppet over); `yarn lint` og `git diff --check` bestod. Cypress-konfigurasjonens uendrede `specPattern` er `cypress/e2e/**/*.{js,jsx,ts,tsx}`; Fordeling-mønsteret `OMP*.cy.js` treffer `OMPAO.cy.js` og `OMPKS.cy.js`. `sif-code-scan` kjøres i CI.
+
 #### 2026-11-25 — OMPAO manuell barneregistrering
 
 - La til Playwright-dekning for manuell OMPAO-barneregistrering, det faktiske søkeravgrensede PERSON-oppslaget og manglende fødselsnummer. Testen avbryter Fortsett og Vent med manuell ID og Vent uten ID, og kontrollerer at modalene ikke skriver data. Fjernet bare de tre erstattede Cypress-modalblokkene; manuell-ID- og manglende-ID-oppsettet står igjen for søkerreseten.

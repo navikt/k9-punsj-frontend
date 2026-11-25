@@ -935,7 +935,18 @@ Barnelisten kommer fra `barn.json`. `barn[2]` kobles til en av de fire OMPAO-sak
 | 255–267: Velg «Pleietrengende har ikke fødselsnummer» | Samme reise kontrollerer at barnets ID fjernes fra panelet, informasjonen vises og bare Vent er aktivert. Cypress beholder bare avkryssingen som oppsett for den påfølgende søkerreseten. |
 | 269–297: Avbryt Vent uten fødselsnummer | Samme reise kontrollerer Vent-overskrift og bekreftelsesetikett, OMPAO-type og søker, fravær av sak/periode og barn-ID, irreversibilitetsvarsel, fravær av LOS og aktive knapper. Avbryt beholder manglende-ID-modus, informasjon og handlingsgating uten skriving. Cypress-blokken er fjernet. |
 
-Reset-blokken fra linje 299 er beholdt og kontrollerer at «Nei» fjerner søker-, sak-, manuell-ID- og manglende-ID-kontroller. Den tidligere Task 71/72-mappingen for reservasjon, barnevalg og modalene uten valgt sak står uendret.
+### Task 74 mapping at baseline `988a6494`
+
+| Cypress-blokk | Playwright-dekning |
+| --- | --- |
+| 164–177: Velg barn, bytt til manuell ID og velg manglende ID som stateful oppsett | Den nye isolerte reisen bygger opp samme tilstand fra reservert ny sak. Cypress-oppsettet er fjernet; reservasjonen fra 160–162 beholdes for den påfølgende to-søker-flyten. |
+| 178–187: Nullstill etter «Nei» | `nullstiller OMPAO og bytter tilbake til opprinnelig søker` starter med manuell ID og manglende-ID-modus, og kontrollerer at saksvelger, reservasjon, manuell-ID-felt, manglende-ID-valg og informasjon forsvinner, at barnets gamle ID fjernes fra panelet, og at begge handlingene deaktiveres. |
+| 189–208: Erstatt søker og velg listebarn | Samme reise kontrollerer PERSON-, ikke-tomme saks- og barnesvar med søkerheader, 200-status, MSW-service worker og response body. Erstatningssøker `12448325820` vises i felt og panel uten opprinnelig søker, tidligere sak eller manuell barn-ID. Den reserverte ny-sak-tilstanden beholdes; `barn[0]` velges og gir barnets ID, varsel om ny sak uten fagsak og aktiverte handlinger. |
+| 210–239: Avbryt Fortsett for erstattet søker | Samme reise bruker den lokale modalhjelperen til å kontrollere Fortsett-overskrift og bekreftelsesetikett, OMPAO-type, erstatningssøker og listebarn, fravær av sak/periode og LOS, irreversibilitetsvarsel og aktive knapper. Avbryt beholder valg og panel uten skriving. |
+| 241–270: Avbryt Vent for erstattet søker | Samme kontroller med Vent-overskrift og «Journalfør og sett på vent». Avbryt beholder valg og panel; ingen klassifiserings-, Vent-, kopierings-, behandlingsårs- eller søknadsskriving skjer. |
+| 272–288: Bekreft opprinnelig søker på nytt | Samme reise klikker «Ja» og kontrollerer at panelet igjen viser opprinnelig søker, men ikke erstattet søker eller valgt listebarn; begge handlinger er deaktivert. Kildekoden bruker samme `journalførKnapperDisabled` for begge knapper, og ugyldig manglende barn-ID deaktiverer knappen når manglende-ID-valget er av. Vent-påstanden er derfor dekket av Playwright, ikke gjeninnført i Cypress. |
+
+Etter oppryddingen starter den påfølgende Cypress-blokken for to søkere med opprinnelig søker bekreftet, reservasjon valgt og ingen valgt barn. Reservasjonen og barnelasten beholdes; blokken velger barnet etter at listen er tilgjengelig. OMPAO- og OMPKS-filene er fortsatt de eneste som treffes av det uendrede `OMP*.cy.js`-mønsteret.
 
 ## Fordeling PSB med to søkere
 
