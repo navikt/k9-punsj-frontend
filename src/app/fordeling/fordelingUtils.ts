@@ -32,6 +32,11 @@ export const isJournalførKnapperDisabled = (
     behandlingsÅr?: string,
     barnMedFagsak?: FagsakForSelect,
 ) => {
+    // Kopiering til annen søker krever gyldig ident uavhengig av ytelse
+    if (!!journalpost?.kanKopieres && toSokereIJournalpost && IdentRules.erUgyldigIdent(identState.annenSokerIdent)) {
+        return true;
+    }
+
     if (isDokumenttypeMedPleietrengende) {
         if (journalpost.erFerdigstilt && journalpost.sak?.reservertSaksnummer) {
             return true;

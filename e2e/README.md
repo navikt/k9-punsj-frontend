@@ -190,6 +190,8 @@ Existing frontend gap: validation sends the application ID in `X-Nav-NorskIdent`
 
 `fordeling-ompma-case-selection.spec.ts` opens `jpOMPMA304` through the journalpost UI, selects the OMPMA subtype and uses applicant-scoped page-local MSW data from `fagsaker.json[18]` and `[19]`. The response, status, service worker and URL pathname are checked. The two fixtures have the same related person, so the reserved-case transition verifies that the ordinary case ID and K9 link disappear while the correct related-person details remain.
 
+The two-applicant journey also checks that Fortsett and Vent stay disabled with the second applicant missing while all other requirements are valid (new case and valid other party), with no dialog opened, and that both become enabled only after the second applicant is entered. The missing other-party gate is re-checked after the second applicant is entered.
+
 ### Task 66 mapping at baseline `e659c507`
 
 | Cypress block | Playwright coverage |
@@ -829,6 +831,8 @@ Ingen krav ble blokkert av en produksjonsfeil. Eksisterende fixtures gir React-a
 ## Fordeling OMPUT-saksvalg og modalavbrudd
 
 `fordeling-omput-case-selection.spec.ts` erstatter de fire modalblokkene i `cypress/e2e/fordeling/OMPUT.cy.js` ved baseline `d8029a32`. Reisen går gjennom journalposten og direkte OMPUT-undertype, og installerer lokale MSW-svar for ordinær og reservert sak før oppslaget.
+
+To-søkere-reisen kontrollerer også at Fortsett og Vent er sperret når annen søker mangler og alle andre krav er gyldige (ny sak og ledig år), at ingen dialog åpnes, og at begge handlingene åpnes først etter at annen søker er fylt ut. Årssperren kontrolleres på nytt etter at annen søker er fylt ut.
 
 | Baselineblokk | Playwright-dekning |
 | --- | --- |

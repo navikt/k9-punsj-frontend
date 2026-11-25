@@ -68,6 +68,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-25 — Krever annen søker ved kopiering for alle ytelser
+
+- Fortsett og Vent er nå sperret når journalposten kan kopieres, to søkere er valgt og annen søker mangler eller er ugyldig, uavhengig av ytelse. Tidligere gjaldt kontrollen bare ytelser med pleietrengende, så OMPUT og OMPMA kunne åpne dialogene uten annen søker.
+- Enhetstester dekker UT og MA, og de eksisterende to-søkere-reisene for OMPUT og OMPMA kontrollerer sperren med alle andre krav gyldige. Dialogtekst og kopierings-API er uendret; ingen dialog bekreftes.
+
 #### 2026-11-25 — Styrket tre brevkontroller i Vitest
 
 - Tilbake-knappen på behandlet journalpost testes nå med en reell forrige historikkoppføring og eksakte stier før og etter klikket.

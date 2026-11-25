@@ -209,6 +209,76 @@ describe('isJournalførKnapperDisabled', () => {
         ).toBeFalsy();
     });
 
+    describe.each([
+        [
+            'omsorgspenger direkte utbetaling med gyldig behandlingsår',
+            {
+                isDokumenttypeMedPleietrengende: false,
+                isDokumenttypeMedBehandlingsårValg: true,
+                reserverSaksnummerTilNyFagsak: true,
+                behandlingsÅr: '2023',
+            },
+            {},
+        ],
+        [
+            'midlertidig alene med gyldig annen part',
+            {
+                isDokumenttypeMedPleietrengende: false,
+                isDokumenttypeMedAnnenPart: true,
+                reserverSaksnummerTilNyFagsak: true,
+            },
+            { annenPart: gyldigAnnenPartId },
+        ],
+    ])('krever annen søker uten pleietrengende: %s', (_navn, input, identEndringer) => {
+        const kopierbar = { ...journalpostUtenSak, kanKopieres: true };
+        const klarTilstand = (annenSokerIdent: string | null) =>
+            identStateMed({ ...identEndringer, annenSokerIdent });
+
+        it('er klar uten to søkere og uten annen søker', () => {
+            expect(
+                journalførKnapperErDeaktivert({ ...input, journalpost: kopierbar, identState: klarTilstand(null) }),
+            ).toBe(false);
+        });
+
+        it.each([
+            ['mangler', null],
+            ['er tom', ''],
+            ['er ugyldig', ugyldigId],
+        ])('deaktiverer når annen søker %s i kopierbar to-søkere-modus', (_beskrivelse, annenSokerIdent) => {
+            expect(
+                journalførKnapperErDeaktivert({
+                    ...input,
+                    journalpost: kopierbar,
+                    toSokereIJournalpost: true,
+                    identState: klarTilstand(annenSokerIdent),
+                }),
+            ).toBe(true);
+        });
+
+        it('er klar når annen søker er gyldig', () => {
+            expect(
+                journalførKnapperErDeaktivert({
+                    ...input,
+                    journalpost: kopierbar,
+                    toSokereIJournalpost: true,
+                    identState: klarTilstand(gyldigAnnenSøkerId),
+                }),
+            ).toBe(false);
+        });
+
+        it.each([
+            ['to søkere er ikke valgt', { journalpost: kopierbar, toSokereIJournalpost: false }],
+            [
+                'journalposten kan ikke kopieres',
+                { journalpost: { ...journalpostUtenSak, kanKopieres: false }, toSokereIJournalpost: true },
+            ],
+        ])('krever ikke annen søker når %s', (_beskrivelse, modus) => {
+            expect(journalførKnapperErDeaktivert({ ...input, ...modus, identState: klarTilstand(null) })).toBe(
+                false,
+            );
+        });
+    });
+
     it('deaktiverer kopiering når pleietrengende-ident mangler selv om barnet ikke har fødselsnummer', () => {
         expect(
             journalførKnapperErDeaktivert({

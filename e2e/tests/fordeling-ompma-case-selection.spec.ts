@@ -186,7 +186,7 @@ const installReplacementApplicantPersonHandler = async (page: Page) => {
     );
 };
 
-const enterManualOtherParty = async (page: Page) => {
+const enterManualOtherParty = async (page: Page, expectReady = true) => {
     await installPersonLookupHandler(page);
     const personResponsePromise = page.waitForResponse(
         (response) =>
@@ -206,6 +206,7 @@ const enterManualOtherParty = async (page: Page) => {
     });
     await expect(input).toHaveValue(MANUELL_ANNEN_PART_ID);
     await expectPanelField(page, 'Annen part ID:', MANUELL_ANNEN_PART_ID);
+    if (!expectReady) return;
     await expect(page.locator('[data-test-id="jornalførUtenFagsak"]')).toBeVisible();
     await expect(fortsett(page)).toBeEnabled();
     await expect(vent(page)).toBeEnabled();
@@ -467,13 +468,32 @@ test('avbryter Fortsett og Vent for OMPMA med to søkere og manuell annen part',
     await expect(fortsett(page)).toBeDisabled();
     await expect(vent(page)).toBeDisabled();
 
+    const secondApplicant = page.getByLabel('Fødselsnummer annen søker:', { exact: true });
+    const reservation = page.getByLabel('Reserver saksnummer til ny fagsak');
+    await reservation.check();
+    await expect(reservation).toBeChecked();
+    await enterManualOtherParty(page, false);
+    await expect(page.locator('[data-test-id="toSøkereIngenAnnenPartMA"]')).toHaveCount(0);
+
+    // Alt annet er gyldig, men annen søker mangler: begge handlingene skal være sperret
+    await expect(secondApplicant).toHaveValue('');
+    await expect(page.locator('[data-test-id="toSøkereIngenAnnenSøker"]')).toBeVisible();
+    await expect(fortsett(page)).toBeDisabled();
+    await expect(vent(page)).toBeDisabled();
+    await expect(page.locator('[data-test-id="klassifiserModal"]')).toHaveCount(0);
+
+    // Fjerner annen part igjen for å bevare den opprinnelige sperren for manglende annen part
+    const otherParty = page.getByLabel('Fødselsnummer annen part:', { exact: true });
+    await otherParty.fill('');
+    await expect(otherParty).toHaveValue('');
+    await expect(journalpostpanel(page).getByText('Annen part ID:', { exact: true })).toHaveCount(0);
+
     await installSecondApplicantPersonHandler(page);
     const secondApplicantResponsePromise = page.waitForResponse(
         (response) =>
             isResponse(response, 'GET', ApiPath.PERSON) &&
             response.request().headers()['x-nav-norskident'] === ANNEN_SØKER_ID,
     );
-    const secondApplicant = page.getByLabel('Fødselsnummer annen søker:', { exact: true });
     await secondApplicant.fill(ANNEN_SØKER_ID);
     const secondApplicantResponse = await secondApplicantResponsePromise;
     expect(secondApplicantResponse.status()).toBe(200);
@@ -490,9 +510,6 @@ test('avbryter Fortsett og Vent for OMPMA med to søkere og manuell annen part',
     await expect(fortsett(page)).toBeDisabled();
     await expect(vent(page)).toBeDisabled();
 
-    const reservation = page.getByLabel('Reserver saksnummer til ny fagsak');
-    await reservation.check();
-    await expect(reservation).toBeChecked();
     await enterManualOtherParty(page);
     await expect(page.locator('[data-test-id="toSøkereIngenAnnenPartMA"]')).toHaveCount(0);
 

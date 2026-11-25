@@ -442,13 +442,37 @@ test('avbryter Fortsett og Vent med to OMPUT-søkere og ny sak', async ({ page }
     );
     await expect(page.locator('[data-test-id="toSøkereIngenAnnenSøker"]')).toBeVisible();
 
+    const reservation = page.getByLabel('Reserver saksnummer til ny fagsak');
+    await reservation.check();
+    await expect(reservation).toBeChecked();
+    const yearSelect = page.getByLabel('Hvilket år gjelder dokumentet?');
+    const availableYears = await yearSelect.locator('option').evaluateAll((options) =>
+        options.map((option) => (option as HTMLOptionElement).value).filter(Boolean),
+    );
+    const freeYear = availableYears.find((year) => year !== String(currentYear));
+    if (!freeYear) throw new Error('Et ledig behandlingsår mangler i valgene.');
+    await yearSelect.selectOption(freeYear);
+    await expect(yearSelect).toHaveValue(freeYear);
+    await expect(page.locator('[data-test-id="alertFagsakMedValgtBehandlingsår"]')).toHaveCount(0);
+
+    // Alt annet er gyldig, men annen søker mangler: begge handlingene skal være sperret
+    const secondApplicantInput = page.getByLabel('Fødselsnummer annen søker:');
+    await expect(secondApplicantInput).toHaveValue('');
+    await expect(page.locator('[data-test-id="toSøkereIngenAnnenSøker"]')).toBeVisible();
+    await expect(fortsett(page)).toBeDisabled();
+    await expect(vent(page)).toBeDisabled();
+    await expect(page.locator('[data-test-id="klassifiserModal"]')).toHaveCount(0);
+
+    // Gjeninnfører manglende år for å bevare den opprinnelige årssperren
+    await yearSelect.selectOption('');
+    await expect(yearSelect).toHaveValue('');
+
     await installPersonLookupHandler(page);
     const personLookup = page.waitForResponse(
         (response) =>
             isResponse(response, 'GET', ApiPath.PERSON) &&
             response.request().headers()['x-nav-norskident'] === ANNEN_SØKER_ID,
     );
-    const secondApplicantInput = page.getByLabel('Fødselsnummer annen søker:');
     await secondApplicantInput.fill(ANNEN_SØKER_ID);
     const personResponse = await personLookup;
     expect(personResponse.status()).toBe(200);
@@ -461,15 +485,6 @@ test('avbryter Fortsett og Vent med to OMPUT-søkere og ny sak', async ({ page }
     await expect(fortsett(page)).toBeDisabled();
     await expect(vent(page)).toBeDisabled();
 
-    const reservation = page.getByLabel('Reserver saksnummer til ny fagsak');
-    await reservation.check();
-    await expect(reservation).toBeChecked();
-    const yearSelect = page.getByLabel('Hvilket år gjelder dokumentet?');
-    const availableYears = await yearSelect.locator('option').evaluateAll((options) =>
-        options.map((option) => (option as HTMLOptionElement).value).filter(Boolean),
-    );
-    const freeYear = availableYears.find((year) => year !== String(currentYear));
-    if (!freeYear) throw new Error('Et ledig behandlingsår mangler i valgene.');
     await yearSelect.selectOption(freeYear);
     await expect(page.locator('[data-test-id="toSøkereIngenBehandlingÅr"]')).toHaveCount(0);
     await expectNoCaseReady(page, freeYear, SØKER_ID, undefined, undefined, ANNEN_SØKER_ID);
