@@ -994,6 +994,25 @@ Alle tre reisene kontrollerer at de ikke sender klassifiserings-, Vent-, kopieri
 
 Alle elleve blokkene er mappet. Playwright-spesifikasjonene `fordeling-ompao-case-selection.spec.ts` og `fordeling-entry.spec.ts` bestod samlet med 25 tester før sletting. Deretter ble bare `OMPAO.cy.js` fjernet; delte Cypress-fixtures og -verktøy samt `OMPKS.cy.js` er beholdt. Det uendrede Cypress-mønsteret er kontrollert etter sletting.
 
+## Fordeling OMPKS-saksvalg og modalavbrudd
+
+`fordeling-ompks-case-selection.spec.ts` åpner `jpOMPKS302` gjennom journalposten, kontrollerer 201-svaret fra MSW mot hele fixturen, URL-ens `pathname` og automatisk valgt OMPKS-undertype. Før søkerbekreftelsen installerer testen et søkeravgrenset MSW-svar med de fire eksisterende sakene fra `fagsaker.json[10]`–`[13]`.
+
+| Cypress-blokk ved baseline `07733149` | Playwright-dekning |
+| --- | --- |
+| 70–92: Velg ordinær sak uten barn | `velger ordinær OMPKS-sak uten barn og fjerner foreldede barnedetaljer` velger først ordinær sak med barn, deretter saken uten barn. Den kontrollerer valgt ID, «Barn: ikke satt», fravær av barnedata i panel og valginformasjon, K9-lenke med saks-ID, deaktivert Fortsett og aktivert Vent. |
+| 93–124: Avbryt Vent for ordinær sak uten barn | `avbryter Vent-modal for ordinær sak uten barn` kontrollerer særskilt Vent-overskrift og bekreftelsesetikett, OMPKS-type, søker, saksnummer, periode, fravær av barn og LOS, irreversibilitetsvarsel og aktive knapper. Avbryt lukker modalvinduet og beholder sak og handlingsgating uten skriving. |
+| 125–148: Velg ordinær sak med barn | `velger ordinær OMPKS-sak med barn` kontrollerer valgt ID, barnets navn og ID, K9-lenke, journalpostpanel med saksnummer og barnets ID, samt aktive Fortsett- og Vent-knapper. |
+| 149–180: Avbryt Fortsett for ordinær sak med barn | `avbryter Fortsett-modal for ordinær sak med barn` kontrollerer Fortsett-overskrift og bekreftelsesetikett, OMPKS-type, søker, saksnummer, periode og barnets ID, irreversibilitetsvarsel, fravær av LOS og aktive knapper. Avbryt beholder valget uten skriving. |
+| 181–212: Avbryt Vent for ordinær sak med barn | `avbryter Vent-modal for ordinær sak med barn` kontrollerer Vent-overskrift og bekreftelsesetikett med samme saksoppsummering. Avbryt beholder valget uten skriving. |
+| 213–235: Velg reservert sak med barn | `velger reservert OMPKS-sak med barn` kontrollerer valgt ID, barnets navn og ID, fravær av K9-lenke, journalpostpanel og aktive handlinger. |
+| 236–267: Avbryt Fortsett for reservert sak med barn | `avbryter Fortsett-modal for reservert sak med barn` kontrollerer Fortsett-overskrift og bekreftelsesetikett, OMPKS-type, søker, saksnummer, periode og barnets ID, irreversibilitetsvarsel, fravær av LOS og aktive knapper. Avbryt beholder valget uten skriving. |
+| 268–299: Avbryt Vent for reservert sak med barn | `avbryter Vent-modal for reservert sak med barn` kontrollerer Vent-overskrift og bekreftelsesetikett med samme saksoppsummering. Avbryt beholder valget uten skriving. |
+| 300–320: Velg reservert sak uten barn | `velger reservert OMPKS-sak uten barn og fjerner foreldede barnedetaljer` velger først reservert sak med barn, deretter saken uten barn. Den kontrollerer «Barn: ikke satt», fravær av K9-lenke og barnets ID i panelet, deaktivert Fortsett og aktivert Vent. |
+| 321–351: Avbryt Vent for reservert sak uten barn | `avbryter Vent-modal for reservert sak uten barn` kontrollerer Vent-overskrift og bekreftelsesetikett, OMPKS-type, søker, saksnummer, periode, fravær av barn og LOS, irreversibilitetsvarsel og aktive knapper. Avbryt beholder sak og handlingsgating uten skriving. |
+
+Alle seks Playwright-modalreisene avbryter og kontrollerer at klassifisering, Vent, kopiering, behandlingsår og OMPKS-søknader ikke skrives. Fortsett testes bare for saker med barn; ingen modal bekreftes. I Cypress er de fire saksvalgsblokkene og all øvrig flyt beholdt. Med `testIsolation: false` gir saksvalget uten barn fortsatt oppsett for reservasjon av ny sak og etterfølgende barnvalg. Testfilen `OMPKS.cy.js` og Cypress-konfigurasjonen er beholdt.
+
 ## Fordeling PSB med to søkere
 
 `fordeling-psb-two-applicants.spec.ts` har to selvstendige reiser for scenario `930317`: avbrudd med to søkere og ny sak, og journalføring med kopiering til en annen søker. Personoppslaget for annen søker er lokalt i nettleserkonteksten. Bare kopieringsreisen installerer en blokkert kopieringsrespons.

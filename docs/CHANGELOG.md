@@ -68,6 +68,12 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-25 — OMPKS-saksvalg og modalavbrudd
+
+- La til `fordeling-ompks-case-selection.spec.ts` med dekning for ordinære og reserverte OMPKS-saker med og uten barn, foreldede saks-/barnedetaljer og de seks modalavbruddene.
+- Fjernet bare de seks erstattede modalblokkene fra `OMPKS.cy.js`. Beholdt alle fire saksvalgsblokkene og den øvrige stateful Cypress-flyten.
+- Validering før opprydding: `yarn test:pw e2e/tests/fordeling-ompks-case-selection.spec.ts e2e/tests/ompks-existing-applications.spec.ts e2e/tests/ompks-punch-form.spec.ts` bestod med 16 tester (0 feil, 0 hoppet over). Etter siste testendring bestod `yarn test:pw e2e/tests/fordeling-ompks-case-selection.spec.ts` med 10 tester (0 feil, 0 hoppet over). Etter opprydding bestod `yarn test:e2e --spec cypress/e2e/fordeling/OMPKS.cy.js` med 39 tester (0 feil, 0 hoppet over), `yarn lint` og `git diff --check`. Det uendrede Cypress-mønsteret `cypress/e2e/**/*.{js,jsx,ts,tsx}` matcher nå bare `cypress/e2e/fordeling/OMPKS.cy.js`.
+
 #### 2026-11-25 — Fjernet siste OMPAO-Fordeling-Cypress
 
 - Mappet alle elleve gjenstående blokkene til eksisterende OMPAO-reise. La til manglende kontroller for synlig og skjult PDF, dokumentvalg, avkryssing for to søkere og deaktiverte handlinger før søkerbekreftelse.
