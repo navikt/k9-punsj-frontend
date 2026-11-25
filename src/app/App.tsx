@@ -50,10 +50,13 @@ const prepare = async () => {
 
     if (process.env.NODE_ENV !== 'production') {
         try {
-            const { worker } = await import('../mocks/browser');
+            const [{ worker }, { createUnhandledFramePolicy }] = await Promise.all([
+                import('../mocks/browser'),
+                import('../mocks/unhandledFramePolicy'),
+            ]);
 
             await worker.start({
-                onUnhandledFrame: 'bypass',
+                onUnhandledFrame: createUnhandledFramePolicy(process.env.MSW_MODE),
                 serviceWorker: {
                     url: '/mockServiceWorker.js',
                     options: {

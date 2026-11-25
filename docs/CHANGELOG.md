@@ -68,6 +68,12 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-25 — Avviste ubehandlede API-kall i Playwright-testmodus
+
+- MSW 3.0.4-policyen bruker `HttpNetworkFrame` fra `msw/experimental`. `defaults.error()` skriver metode- og stidiagnostikk; `frame.errorWith(Response.error())` avviser forespørselen som en nettverksfeil. Testmodus avviser ubehandlede `/api/`-kall, med unntak for GET og HEAD på den lokale mock-PDF-ruten. Vanlig utvikling og ikke-API-ressurser bruker fortsatt bypass; produksjon starter ikke MSW.
+- Nettleserprøven verifiserer nettverksfeil for ukjent API-kall og POST til mock-PDF-ruten, vellykket GET av PDF, håndterte 403/500-svar, `/apiConfig.ts` og side-lokale `worker.use`-handlere. Applikasjonskode kan fange nettverksfeilen; testene må fortsatt kontrollere brukerutfallet.
+- Validering: policytester bestod med 8 tester, nettleserprøven med 1 og slutt-shardene med 88 og 84 tester (172 totalt, ingen hoppet over eller retries). `yarn lint`, `yarn build` og `git diff --check` bestod. Bygget viser fortsatt varselet om en JavaScript-chunk over 500 kB.
+
 #### 2026-11-25 — Samlet OMPAO-kontroller for tom fagsaksliste
 
 - Reisen med Nei → Ja og refetch av tom barneliste kontrollerer også listebarn, manuell ID og manglende ID før refetch. Den separate duplikatreisen er fjernet; svar, handlingsgating og fravær av skrivekall beholdes.

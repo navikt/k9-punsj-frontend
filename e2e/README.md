@@ -2,6 +2,8 @@
 
 The Chromium Playwright suite runs the frontend with its existing MSW test handlers. It does not call the backend.
 
+In `MSW_MODE=test`, unhandled HTTP requests whose parsed pathname starts with `/api/` fail as browser network errors and print MSW's method/path diagnostic. The existing local mock-PDF route at `/api/k9-punsj/journalpost/:journalpostId/dokument/:dokumentId` remains served by the Vite test server for `GET` and `HEAD`; other methods are rejected. Handled API responses, `/apiConfig.ts`, other assets, fonts, and HMR are unaffected. Application code may catch a failed request, so Playwright tests must still assert the expected user-visible outcome.
+
 PR- og produksjons-workflowene kjører hele suiten gjennom den samme gjenbrukbare Playwright-workflowen med to shards og to workers per shard. PR-kjøringen starter når en pull request åpnes eller oppdateres. Begge caller-workflowene beholder en egen `Playwright`-sjekk som bare lykkes når shardene lykkes; feil, avbrudd eller hoppet over kjøring gir ikke en vellykket sjekk. Produksjonsdeploy krever at denne sjekken og lint, enhetstester og bygg lykkes. Hver runner gjentar installasjon og serveroppstart, så oppdelingen garanterer ikke halvert CI-tid.
 
 Ingen Cypress-spesifikasjoner gjenstår, og Cypress-oppsett, avhengigheter og `run-e2e`-skript er fjernet. Delte fixtures ligger i `src/mocks/fixtures` og brukes av Playwright, MSW, Vitest og Storybook. Den endelige revisjonen av dekning og overlapp gjenstår. Paritetskartene nedenfor dokumenterer tidligere migreringssteg; antall gjenværende Cypress-filer i disse stegene er historiske.
