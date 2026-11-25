@@ -976,6 +976,24 @@ De ti blokkene for tomme lister er erstattet av de tre reisene i Task 76-mapping
 
 Alle tre reisene kontrollerer at de ikke sender klassifiserings-, Vent-, kopierings-, behandlingsårs- eller søknadsskriving. `OMPAO.cy.js` beholdes med de elleve tidligere blokkene; OMPKS er uendret.
 
+### Task 77 mapping at baseline `402b7eec`
+
+| Cypress-blokk | Playwright-dekning |
+| --- | --- |
+| 16–18: Åpne journalpost fra LOS | `velger OMPAO-saker med og uten barn og fjerner foreldede detaljer` bruker `openJournalpost`, som kontrollerer journalpostruten, 201-svar fra MSW og hele `jpOMPAO303`-fixtureen. |
+| 20–22: Skjul dokumentvindu | Samme reise kontrollerer at PDF-en er synlig, klikker **Skjul** og kontrollerer at PDF-en skjules. |
+| 24–33: Journalpostpanel med grunnopplysninger | Samme reise kontrollerer journalpostnummer, søker-ID og sakstype. `expectSelectedCase` kontrollerer også saksnummer og barnets ID eller fravær. |
+| 35–41: Dokumentvalg | Samme reise kontrollerer overskriften **Dette gjelder:** og at alle fire dokumentvalg er synlige. |
+| 43–46: Automatisk valgt dokumenttype | `openJournalpost` kontrollerer at **Ekstra omsorgsdager når du er alene om omsorgen** er valgt; testen velger ikke undertypen i oppsettet. |
+| 48–50: Avkryssing for to søkere | Saksvalgsreisen kontrollerer at avkryssingen er synlig før søkerbekreftelsen. |
+| 52–55: Deaktiverte handlinger ved start | Samme reise kontrollerer at **Fortsett** og **Vent** er deaktivert før «Ja» og saksoppslag. |
+| 57–78: Ordinær sak uten barn | `expectSelectedCase` kontrollerer sakens ID, «ikke satt», fravær av barn-ID og barnedetaljer, K9-lenke med samme saks-ID, samt deaktivert **Fortsett** og aktivert **Vent**. |
+| 80–102: Ordinær sak med barn | `expectSelectedCase` kontrollerer sakens ID, barnets navn og ID, journalpostpanel, K9-lenke med samme saks-ID og begge aktive handlinger. |
+| 104–126: Reservert sak med barn | Samme hjelpefunksjon bruker barnets navn og ID fra den reserverte saken, kontrollerer panelet, fravær av K9-lenke og begge aktive handlinger. |
+| 127–146: Reservert sak uten barn | `expectSelectedCase` kontrollerer sakens ID, «ikke satt», fravær av barn-ID og barnedetaljer, fravær av K9-lenke, deaktivert **Fortsett** og aktivert **Vent**. |
+
+Alle elleve blokkene er mappet. Playwright-spesifikasjonene `fordeling-ompao-case-selection.spec.ts` og `fordeling-entry.spec.ts` bestod samlet med 25 tester før sletting. Deretter ble bare `OMPAO.cy.js` fjernet; delte Cypress-fixtures og -verktøy samt `OMPKS.cy.js` er beholdt. Det uendrede Cypress-mønsteret er kontrollert etter sletting.
+
 ## Fordeling PSB med to søkere
 
 `fordeling-psb-two-applicants.spec.ts` har to selvstendige reiser for scenario `930317`: avbrudd med to søkere og ny sak, og journalføring med kopiering til en annen søker. Personoppslaget for annen søker er lokalt i nettleserkonteksten. Bare kopieringsreisen installerer en blokkert kopieringsrespons.
