@@ -24,6 +24,15 @@ const BARN_MED_FAGSAK = barnFixture.barn[2];
 const BARN_UTEN_FAGSAK = barnFixture.barn[0];
 const MANUELT_BARN_ID = '53488838241';
 const NY_SØKER_ID = '12448325820';
+const ANNEN_SØKER_ID = '02918496664';
+const ANNEN_SØKER_PERSON = {
+    etternavn: 'Test',
+    fornavn: 'Annen søker',
+    fødselsdato: '1984-01-02',
+    identitetsnummer: ANNEN_SØKER_ID,
+    mellomnavn: '',
+    sammensattNavn: 'Annen søker Test',
+};
 const NY_SØKER_PERSON = {
     etternavn: 'Test',
     fornavn: 'Ny søker',
@@ -644,5 +653,58 @@ test('nullstiller OMPKS, bytter søker og bekrefter opprinnelig søker på nytt'
     await expect(journalpostpanel(page)).not.toContainText(BARN_UTEN_FAGSAK.identitetsnummer);
     await expect(fortsett(page)).toBeDisabled();
     await expect(vent(page)).toBeDisabled();
+    expect(mutations).toEqual([]);
+});
+
+test('kontrollerer OMPKS-gating med to søkere og avbryter begge modalene', async ({ page }) => {
+    const mutations = await startCaseSelection(page);
+    const reservation = page.getByLabel('Reserver saksnummer til ny fagsak');
+    const childSelect = page.getByLabel('Velg hvilket barn det gjelder');
+    const twoApplicants = page.getByLabel(
+        'Det finnes informasjon om to søkere i journalposten (gjelder kun papirsøknad)',
+    );
+    const secondApplicant = page.getByLabel('Fødselsnummer annen søker:', { exact: true });
+
+    await expect(page.getByRole('radio', { name: 'Ja', exact: true })).toBeChecked();
+    const childrenResponse = waitForLookup(page, ApiPath.BARN_GET, SØKER_ID);
+    await reservation.check();
+    await expectLookup(await childrenResponse, SØKER_ID, barnFixture);
+    await expect(reservation).toBeChecked();
+    await expect(childSelect).toHaveValue('');
+    await expectPanelField(page, 'Søkers ID:', SØKER_ID);
+    await expect(journalpostpanel(page).getByText('Barnets ID:', { exact: true })).toHaveCount(0);
+    await expect(fortsett(page)).toBeDisabled();
+    await expect(vent(page)).toBeDisabled();
+
+    await twoApplicants.check();
+    await expect(twoApplicants).toBeChecked();
+    await expect(page.locator('[data-test-id="infoOmRegisteringAvToSokere"]')).toBeVisible();
+    await expect(page.locator('[data-test-id="toSøkereIngenAnnenSøker"]')).toBeVisible();
+
+    await installPersonHandler(page, ANNEN_SØKER_PERSON);
+    const personResponse = waitForLookup(page, ApiPath.PERSON, ANNEN_SØKER_ID);
+    await secondApplicant.fill(ANNEN_SØKER_ID);
+    await expectLookup(await personResponse, ANNEN_SØKER_ID, ANNEN_SØKER_PERSON);
+    await expect(secondApplicant).toHaveValue(ANNEN_SØKER_ID);
+    await expect(page.getByText('Navn: Annen søker Test', { exact: true })).toBeVisible();
+    await expect(page.locator('[data-test-id="toSøkereIngenAnnenSøker"]')).toHaveCount(0);
+    await expect(page.locator('[data-test-id="toSøkereIngenPleietrengende"]')).toBeVisible();
+    await expect(fortsett(page)).toBeDisabled();
+    await expect(vent(page)).toBeDisabled();
+
+    await childSelect.selectOption(BARN_UTEN_FAGSAK.identitetsnummer);
+    await expectNewCaseWithListedChild(page, BARN_UTEN_FAGSAK.identitetsnummer);
+    await expect(page.locator('[data-test-id="toSøkereIngenPleietrengende"]')).toHaveCount(0);
+
+    for (const handling of ['Fortsett', 'Vent'] as const) {
+        await expectAndCancelModal(
+            page,
+            { kind: 'new-case', handling, childId: BARN_UTEN_FAGSAK.identitetsnummer },
+            mutations,
+        );
+        await expect(twoApplicants).toBeChecked();
+        await expect(secondApplicant).toHaveValue(ANNEN_SØKER_ID);
+        await expect(reservation).toBeChecked();
+    }
     expect(mutations).toEqual([]);
 });

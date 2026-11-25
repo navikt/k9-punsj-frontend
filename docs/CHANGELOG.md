@@ -68,6 +68,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-25 — OMPKS med to søkere
+
+- Migrerte kontrollene for to søkere, barn og avbrudd av begge modalene til en isolert Playwright-reise.
+- Fjernet de erstattede Cypress-blokkene og reservasjonsoppsettet. Saksvalg og tomlisteflytene er beholdt.
+
 #### 2026-11-25 — OMPKS søkerbytte
 
 - Migrerte nullstilling, søkerbytte, modalavbrudd og ny bekreftelse til en isolert Playwright-reise.

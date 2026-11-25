@@ -1057,6 +1057,19 @@ Ingen modal bekreftes, og testen observerer ingen klassifiserings-, Vent-, kopie
 
 De fem blokkene og det ubrukte manuelle oppsettet er fjernet. Cypress beholder opprinnelig bekreftet søker og reserverer ny sak, venter på listebarnet og kontrollerer at ingen barn er valgt før to-søkerflyten. Saksvalg, to søkere og tomme lister er beholdt. `OMPKS.cy.js` er fortsatt eneste treff i uendret Cypress-konfigurasjon; endelig fjerning krever et separat CI-steg.
 
+### Task 82 mapping at baseline `b219a5c3`
+
+`kontrollerer OMPKS-gating med to søkere og avbryter begge modalene` starter med opprinnelig søker bekreftet og ny sak reservert uten valgt barn. Saks-, barne- og personoppslag er ID-avgrenset og kontrolleres med ident, status, service worker og hele svaret. Testen bruker fire OMPKS-saker og et listebarn uten tilhørende sak.
+
+| Cypress-blokk ved baseline | Playwright-dekning |
+| --- | --- |
+| 159–171: Reservasjon og barneliste | Kontrollerer reservasjon, opprinnelig søker, innlastet barneliste og at barn ikke er valgt. |
+| 173–203: To søkere | Kontrollerer papirsøknadsvalg, informasjon og manglende annen søker. Etter personoppslag kontrolleres manglende barn og deaktiverte handlinger; valg av fritt barn viser barnets ID og informasjon om journalføring uten sak og aktiverer handlingene. |
+| 205–234: Avbryt Fortsett | Kontrollerer Fortsett-overskrift og bekreftelsesetikett, OMPKS-type, opprinnelig søker og barn, fravær av sak, periode og LOS, varsel og aktive knapper. Avbryt beholder begge søkerne, reservasjon, barn og aktive handlinger. |
+| 236–265: Avbryt Vent | Kontrollerer tilsvarende innhold og tilstand med egen Vent-overskrift og bekreftelsesetikett. |
+
+Ingen modal bekreftes, og testen observerer ingen klassifiserings-, Vent-, kopierings-, behandlingsårs- eller OMPKS-søknadsskriving. De tre erstattede blokkene og reservasjonsoppsettet er fjernet. De elleve første blokkene og begge tomlistebeskrivelsene er beholdt. `OMPKS.cy.js` er fortsatt eneste treff i uendret Cypress-konfigurasjon; endelig fjerning krever et separat CI-steg.
+
 ## Fordeling PSB med to søkere
 
 `fordeling-psb-two-applicants.spec.ts` har to selvstendige reiser for scenario `930317`: avbrudd med to søkere og ny sak, og journalføring med kopiering til en annen søker. Personoppslaget for annen søker er lokalt i nettleserkonteksten. Bare kopieringsreisen installerer en blokkert kopieringsrespons.
