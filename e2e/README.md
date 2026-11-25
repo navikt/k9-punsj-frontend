@@ -892,7 +892,26 @@ De sju gjenværende blokkene i `cypress/e2e/fordeling/OMPUT.cy.js` er erstattet 
 | 47–74: Bekreft søker og velg ordinær sak | `fordeling-omput-case-selection.spec.ts`, `velger ordinær og reservert OMPUT-sak uten foreldede detaljer`: det lokale oppslaget kontrollerer 200, søkerheader og den konkrete saklisten. Valgt ID, behandlingsår, journalpostpanel, K9-lenke med saks-ID og aktive handlinger kontrolleres. |
 | 76–102: Velg reservert sak | Samme valgreise kontrollerer reservert ID, behandlingsår, panel og aktive handlinger, fravær av K9-lenke og at ordinære saksdetaljer er fjernet. |
 
-`OMPUT.cy.js` er slettet etter at alle sju blokkene er mappet. Delt fixtures og de øvrige Cypress-spesifikasjonene er beholdt. Det konfigurerte Cypress-mønsteret treffer nøyaktig `cypress/e2e/fordeling/OMPMA.cy.js`, `cypress/e2e/fordeling/OMPAO.cy.js` og `cypress/e2e/fordeling/OMPKS.cy.js`.
+`OMPUT.cy.js` er slettet etter at alle sju blokkene er mappet. Delt fixtures og de øvrige Cypress-spesifikasjonene er beholdt. De gjenværende `OMP*.cy.js`-spesifikasjonene i `cypress/e2e/fordeling/` er `OMPAO.cy.js` og `OMPKS.cy.js`.
+
+## Fordeling OMPAO-saksvalg og modalavbrudd
+
+`fordeling-ompao-case-selection.spec.ts` åpner `jpOMPAO303` gjennom journalposten, kontrollerer 201-svar fra MSW mot hele fixturen, URL-ens `pathname` og valgt OMPAO-undertype. Før oppslaget installerer reisen et søkeravgrenset MSW-svar med de fire eksisterende sakene fra `fagsaker.json[14]`–`[17]`.
+
+| Cypress-blokk ved baseline `205ce67c` | Playwright-dekning |
+| --- | --- |
+| 70–91: Bekreft søker og velg ordinær sak uten barn | `velger OMPAO-saker med og uten barn og fjerner foreldede detaljer` kontrollerer 200-svaret, søkerheaderen, saklisten, valgt ID, «Barn: ikke satt», K9-lenke med ordinær ID, journalpostpanel uten barnets ID og deaktivert Fortsett/aktivert Vent. |
+| 93–124: Avbryt Vent for ordinær sak uten barn | `avbryter Vent for ordinær OMPAO-sak uten barn` kontrollerer Vent-overskrift og bekreftelsesetikett, OMPAO-type, søker, saksnummer, periode, fravær av barn og LOS, irreversibilitetsvarsel og aktive knapper. Avbryt lukker modalvinduet og beholder sak og handlingsgating uten skriving. |
+| 125–147: Velg ordinær sak med barn | Valgreisen kontrollerer valgt ID, barnets navn og ID, K9-lenke, journalpostpanel med saksnummer og barnets ID, samt aktive Fortsett- og Vent-knapper. |
+| 149–180: Avbryt Fortsett for ordinær sak med barn | `avbryter Fortsett for ordinær OMPAO-sak med barn` kontrollerer Fortsett-overskrift og bekreftelsesetikett, OMPAO-type, søker, saksnummer, periode og barnets ID, advarsel, fravær av LOS og aktive knapper. Avbryt beholder valgt sak og handlinger uten skriving. |
+| 181–212: Avbryt Vent for ordinær sak med barn | `avbryter Vent for ordinær OMPAO-sak med barn` kontrollerer Vent-overskrift og bekreftelsesetikett med samme saksoppsummering. Avbryt lukker modalvinduet og beholder valgt sak og handlinger uten skriving. |
+| 213–234: Velg reservert sak med barn | Valgreisen kontrollerer reservert ID, barnets navn og ID, fravær av K9-lenke, journalpostpanel og aktive handlinger; ordinære saksdetaljer fjernes. |
+| 236–267: Avbryt Fortsett for reservert sak med barn | `avbryter Fortsett for reservert OMPAO-sak med barn` kontrollerer Fortsett-overskrift og bekreftelsesetikett, OMPAO-type, søker, saksnummer, periode og barnets ID, advarsel, fravær av LOS og aktive knapper. Avbryt beholder valgt sak og handlinger uten skriving. |
+| 268–299: Avbryt Vent for reservert sak med barn | `avbryter Vent for reservert OMPAO-sak med barn` kontrollerer Vent-overskrift og bekreftelsesetikett med samme saksoppsummering. Avbryt lukker modalvinduet og beholder valgt sak og handlinger uten skriving. |
+| 300–319: Velg reservert sak uten barn | Valgreisen kontrollerer «Barn: ikke satt», fravær av K9-lenke og barnets ID i panelet, deaktivert Fortsett og aktivert Vent. Overgangen fra reservert sak med barn fjerner barnedetaljene. |
+| 321–351: Avbryt Vent for reservert sak uten barn | `avbryter Vent for reservert OMPAO-sak uten barn` kontrollerer Vent-overskrift og bekreftelsesetikett, OMPAO-type, søker, saksnummer, periode, fravær av barn og LOS, advarsel og aktive knapper. Avbryt beholder valgt sak og handlingsgating uten skriving. |
+
+Barnesakene i `fagsaker.json[15]` og `[16]` har samme navn og identitetsnummer; testen leser barnedata fra hver sak separat. Den nye reisen avbryter alle seks modalene og verifiserer fravær av klassifisering, Vent, kopiering, behandlingsår og søknadsskriving. Bare modalblokkene er fjernet fra `OMPAO.cy.js`. De fire saksvalgsblokkene og alt øvrig stateful oppsett, inkludert ny sak, barn fra liste, manglende ID, søkerbytte, tomt oppslag og to søkere, er beholdt. De eksisterende OMPAO-applikasjons- og skjema-spesifikasjonene er uendret.
 
 ## Fordeling PSB med to søkere
 

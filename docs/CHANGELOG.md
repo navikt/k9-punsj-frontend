@@ -68,6 +68,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-25 — OMPAO-saksvalg og modalavbrudd
+
+- La til Playwright-dekning for ordinære og reserverte OMPAO-saker med og uten barn, og avbrøt de seks tilhørende modalbanene. Fjernet bare de seks erstattede Cypress-modalblokkene; saksvalgene og øvrige stateful kontroller står igjen.
+- Validering: `yarn test:pw e2e/tests/fordeling-ompao-case-selection.spec.ts e2e/tests/ompao-existing-applications.spec.ts e2e/tests/ompao-punch-form.spec.ts` bestod med 14 tester før Cypress-opprydding; den endelige fokuserte spesifikasjonen bestod på nytt med 7 tester. `yarn test:e2e --spec cypress/e2e/fordeling/OMPAO.cy.js` bestod med 39 tester etter opprydding; `yarn lint` og `git diff --check` bestod. Den brede Cypress-konfigurasjonen er uendret; de gjenværende Fordeling `OMP*.cy.js`-filene er OMPAO og OMPKS.
+
 #### 2026-11-25 — Fjernet siste OMPMA-Fordeling-Cypress
 
 - Mappet alle ni gjenværende OMPMA-blokker til eksisterende Playwright-reiser og la til manglende starttilstandskontroller før søkerbekreftelse. Testen bekrefter automatisk valgt OMPMA-undertype uten å velge den i oppsettet. Fjernet bare `OMPMA.cy.js`; delte fixtures og de to øvrige Fordeling-Cypress-spesifikasjonene er beholdt.
