@@ -188,14 +188,27 @@ Existing frontend gap: validation sends the application ID in `X-Nav-NorskIdent`
 
 `fordeling-ompma-case-selection.spec.ts` opens `jpOMPMA304` through the journalpost UI, selects the OMPMA subtype and uses applicant-scoped page-local MSW data from `fagsaker.json[18]` and `[19]`. The response, status, service worker and URL pathname are checked. The two fixtures have the same related person, so the reserved-case transition verifies that the ordinary case ID and K9 link disappear while the correct related-person details remain.
 
-| Cypress block at baseline `e659c507` | Playwright coverage |
+### Task 66 mapping at baseline `e659c507`
+
+| Cypress block | Playwright coverage |
 | --- | --- |
 | 65–90: Confirm applicant and select ordinary case | `velger ordinær og reservert OMPMA-sak og fjerner foreldede detaljer` checks the applicant-scoped lookup response, selected case ID, related-person name and ID, K9 link, journalpost-panel case and related-person ID, manual-input absence, and enabled actions. |
 | 92–154: Cancel Fortsett and Vent for ordinary case | `avbryter Fortsett for ordinær OMPMA-sak` and `avbryter Vent for ordinær OMPMA-sak` check the distinct headings and confirm labels, OMPMA type, applicant, related person, case number, period, irreversible-information warning, no LOS action, enabled buttons, retained selection and no writes. |
 | 156–177: Select reserved case | The selection journey verifies the reserved case ID and related-person details, absence of the K9 link, removal of ordinary-case details, and enabled actions. |
 | 179–241: Cancel Fortsett and Vent for reserved case | `avbryter Fortsett for reservert OMPMA-sak` and `avbryter Vent for reservert OMPMA-sak` verify the corresponding reserved-case modal contents and cancel without writes or losing the selected case. |
 
-Only the four mapped modal blocks were removed from `OMPMA.cy.js`. Both case-selection blocks remain in its `testIsolation: false` journey as stateful setup for the existing new-case, manual other-party, applicant-switch, empty-lookup and two-applicant checks.
+Task 66 removed only the four mapped modal blocks; both case-selection blocks remained in `OMPMA.cy.js`.
+
+### Task 67 mapping at baseline `95f62424`
+
+| Cypress block | Playwright coverage |
+| --- | --- |
+| 65–90: Confirm applicant and select ordinary case; 92–113: select reserved case | `velger ordinær og reservert OMPMA-sak og fjerner foreldede detaljer` checks the applicant-scoped lookup response, selected case IDs, related-person name and ID, K9 link, journalpost-panel values, removal of the ordinary case after selecting the reserved case, manual-input absence, and enabled actions. |
+| 115–144: Reserve a new case and enter a manual other party | `reserverer ny OMPMA-sak og registrerer manuell annen part` checks that the reserved case and related-person ID leave the panel, manual input appears, actions are disabled until entry, and the `GET /person` response and resulting panel, no-case notice and enabled actions. Cypress retains the reservation check and ID entry as stateful setup for applicant-switch tests. |
+| 146–175: Cancel Fortsett without a selected case; 177–206: cancel Vent | `avbryter Fortsett for OMPMA uten valgt sak` and `avbryter Vent for OMPMA uten valgt sak` check distinct headings and confirm labels, OMPMA type, applicant and manual other party, absent case and period, irreversible-information warning, no LOS action, enabled buttons, retained reservation and input after cancel, and no writes. |
+| 299–328: Empty case lookup | `viser manuell annen part når OMPMA-oppslaget ikke finner saker` checks the applicant-scoped 200 response with `[]`, service worker and request header, absence of the case selector, and the manual other-party panel, no-case notice and enabled actions. |
+
+Task 67 removed the two mapped no-case modal blocks and empty-lookup describe. The reservation and manual-entry actions remain for applicant-switch tests. `OMPMA.cy.js` remains, and the configured Cypress pattern still matches `OMPMA.cy.js`, `OMPAO.cy.js` and `OMPKS.cy.js`.
 
 ## OMPMA form saving and submission
 

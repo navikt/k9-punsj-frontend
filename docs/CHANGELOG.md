@@ -73,6 +73,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 - La til Playwright-dekning for ordinært og reservert OMPMA-saksvalg og avbrudd av Fortsett- og Vent-modalene. Fjernet bare de fire erstattede modalblokkene fra `OMPMA.cy.js`; saksvalg og gjenværende stateful Cypress-dekning står igjen.
 - Validering: de tre berørte Playwright-spesifikasjonene bestod med 12 tester før Cypress-opprydding; `yarn test:e2e --spec cypress/e2e/fordeling/OMPMA.cy.js` bestod med 23 tester; `yarn lint` og `git diff --check` bestod. `sif-code-scan` kjøres i CI.
 
+#### 2026-11-25 — OMPMA ny sak og tomt oppslag
+
+- Migrerte ny-sak-reservasjon, manuell annen part, Fortsett/Vent-avbrudd uten valgt sak og tomt fagsakoppslag til Playwright. Fjernet bare de to dekkede modalblokkene, tomt-oppslag-describen og erstattede påstander; beholdt reservasjon og ID-inntasting som oppsett for søkerskifte-testene.
+- Validering: `yarn test:pw e2e/tests/fordeling-ompma-case-selection.spec.ts` bestod med 9 tester; `yarn test:e2e --spec cypress/e2e/fordeling/OMPMA.cy.js` bestod med 19 tester etter oppryddingen; `yarn lint` og `git diff --check` bestod. `sif-code-scan` kjøres i CI.
+
 #### 2026-11-25 — Fjernet siste OMPUT-Fordeling-Cypress
 
 - Kartla de sju gjenværende blokkene mot faktiske Playwright-assertions, la til manglende starttilstandskontroller i den eksisterende to-søkerreisen og fjernet bare `OMPUT.cy.js`. Delte fixtures og de tre andre Fordeling-spesifikasjonene er beholdt.

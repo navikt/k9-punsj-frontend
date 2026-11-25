@@ -6,6 +6,7 @@ import { ApiPath } from '../../src/app/apiConfig';
 
 const JOURNALPOST_ID = jpOMPMA304.journalpostId;
 const SØKER_ID = jpOMPMA304.norskIdent;
+const MANUELL_ANNEN_PART_ID = '24420167209';
 const ORDINÆR_SAK = fagsaker[18];
 const RESERVERT_SAK = fagsaker[19];
 const OMPMA_SAKER = [ORDINÆR_SAK, RESERVERT_SAK];
@@ -105,6 +106,86 @@ const expectPanelField = async (page: Page, label: string, value: string) => {
     await expect(field.locator('..').getByText(value, { exact: true })).toBeVisible();
 };
 
+const installPersonLookupHandler = async (page: Page) => {
+    await page.evaluate(
+        ({ personPath, personId }) => {
+            const msw = window.msw;
+            if (!msw) throw new Error('MSW-testarbeideren er ikke tilgjengelig.');
+
+            msw.worker.use(
+                msw.http.get(personPath, ({ request }) => {
+                    if (request.headers.get('X-Nav-NorskIdent') !== personId) return;
+                    return msw.HttpResponse.json({
+                        etternavn: 'Test',
+                        fornavn: 'Annen part',
+                        fødselsdato: '1981-12-18',
+                        identitetsnummer: personId,
+                        mellomnavn: '',
+                        sammensattNavn: 'Annen part Test',
+                    });
+                }),
+            );
+        },
+        { personPath: ApiPath.PERSON, personId: MANUELL_ANNEN_PART_ID },
+    );
+};
+
+const enterManualOtherParty = async (page: Page) => {
+    await installPersonLookupHandler(page);
+    const personResponsePromise = page.waitForResponse(
+        (response) =>
+            isResponse(response, 'GET', ApiPath.PERSON) &&
+            response.request().headers()['x-nav-norskident'] === MANUELL_ANNEN_PART_ID,
+    );
+    const input = page.getByLabel('Fødselsnummer annen part:', { exact: true });
+    await input.fill(MANUELL_ANNEN_PART_ID);
+
+    const personResponse = await personResponsePromise;
+    expect(personResponse.status()).toBe(200);
+    expect(personResponse.fromServiceWorker()).toBe(true);
+    expect(personResponse.request().headers()['x-nav-norskident']).toBe(MANUELL_ANNEN_PART_ID);
+    expect(await personResponse.json()).toMatchObject({
+        identitetsnummer: MANUELL_ANNEN_PART_ID,
+        sammensattNavn: 'Annen part Test',
+    });
+    await expect(input).toHaveValue(MANUELL_ANNEN_PART_ID);
+    await expectPanelField(page, 'Annen part ID:', MANUELL_ANNEN_PART_ID);
+    await expect(page.locator('[data-test-id="jornalførUtenFagsak"]')).toBeVisible();
+    await expect(fortsett(page)).toBeEnabled();
+    await expect(vent(page)).toBeEnabled();
+};
+
+const selectApplicantWithNoCases = async (page: Page) => {
+    await page.evaluate(
+        ({ casesPath, applicantId }) => {
+            const msw = window.msw;
+            if (!msw) throw new Error('MSW-testarbeideren er ikke tilgjengelig.');
+
+            msw.worker.use(
+                msw.http.get(casesPath, ({ request }) => {
+                    if (request.headers.get('X-Nav-NorskIdent') !== applicantId) return;
+                    return msw.HttpResponse.json([], { status: 200 });
+                }),
+            );
+        },
+        { casesPath: ApiPath.HENT_FAGSAK_PÅ_IDENT, applicantId: SØKER_ID },
+    );
+
+    const lookupResponsePromise = page.waitForResponse(
+        (response) =>
+            isResponse(response, 'GET', ApiPath.HENT_FAGSAK_PÅ_IDENT) &&
+            response.request().headers()['x-nav-norskident'] === SØKER_ID,
+    );
+    await page.getByRole('radio', { name: 'Ja', exact: true }).check();
+    const lookupResponse = await lookupResponsePromise;
+
+    expect(lookupResponse.status()).toBe(200);
+    expect(lookupResponse.fromServiceWorker()).toBe(true);
+    expect(lookupResponse.request().headers()['x-nav-norskident']).toBe(SØKER_ID);
+    expect(await lookupResponse.json()).toEqual([]);
+    await expect(page.getByLabel('Velg fagsak')).toHaveCount(0);
+};
+
 const expectSelectedCase = async (page: Page, sak: (typeof OMPMA_SAKER)[number]) => {
     await expect(page.getByLabel('Velg fagsak')).toHaveValue(sak.fagsakId);
     await expect(selectedInfo(page).getByText('Annen part:', { exact: true })).toBeVisible();
@@ -193,6 +274,55 @@ const expectAndCancelModal = async (
     expect(mutations).toEqual([]);
 };
 
+type NoCaseModalAction = 'Fortsett' | 'Vent';
+
+const expectAndCancelNoCaseModal = async (page: Page, action: NoCaseModalAction, mutations: string[]) => {
+    const isFortsett = action === 'Fortsett';
+    await (isFortsett ? fortsett(page) : vent(page)).click();
+
+    const dialog = page.locator('[data-test-id="klassifiserModal"]');
+    const info = dialog.locator('[data-test-id="klassifiseringInfo"]');
+    const heading = isFortsett
+        ? 'Vil du lagre følgende informasjon til journalposten?'
+        : 'Vil du lagre følgende informasjon til journalposten og sett på vent?';
+    const confirmLabel = isFortsett ? 'Journalfør journalposten' : 'Journalfør og sett på vent';
+
+    await expect(dialog).toBeVisible();
+    await expect(dialog.getByRole('heading', { name: heading, exact: true })).toBeVisible();
+    await expect(info.getByText('Sakstype:', { exact: true })).toBeVisible();
+    await expect(info.getByText(DOKUMENTTYPE, { exact: true })).toBeVisible();
+    await expect(info.getByText('Søkers ID:', { exact: true })).toBeVisible();
+    await expect(info.getByText(SØKER_ID, { exact: true })).toBeVisible();
+    await expect(info.getByText('Annen part ID:', { exact: true })).toBeVisible();
+    await expect(info.getByText(MANUELL_ANNEN_PART_ID, { exact: true })).toBeVisible();
+    await expect(info.getByText('Saksnummer:', { exact: true })).toHaveCount(0);
+    await expect(info.getByText('Periode:', { exact: true })).toHaveCount(0);
+    await expect(
+        dialog
+            .locator('[data-test-id="klassifiserModalAlertBlokk"]')
+            .getByText('Informasjonen kan ikke endres etter journalposten er journalført.', {
+                exact: true,
+            }),
+    ).toBeVisible();
+    await expect(dialog.getByRole('button', { name: 'Gå til LOS', exact: true })).toHaveCount(0);
+    await expect(dialog.locator('[data-test-id="klassifiserModalGåTilLos"]')).toHaveCount(0);
+    await expect(dialog.getByRole('button', { name: confirmLabel, exact: true })).toBeEnabled();
+    await expect(dialog.getByRole('button', { name: 'Avbryt', exact: true })).toBeEnabled();
+
+    await dialog.getByRole('button', { name: 'Avbryt', exact: true }).click();
+    await expect(dialog).toHaveCount(0);
+    await expect(page.getByLabel('Reserver saksnummer til ny fagsak')).toBeChecked();
+    await expect(page.getByLabel('Fødselsnummer annen part:', { exact: true })).toHaveValue(
+        MANUELL_ANNEN_PART_ID,
+    );
+    await expectPanelField(page, 'Søkers ID:', SØKER_ID);
+    await expectPanelField(page, 'Annen part ID:', MANUELL_ANNEN_PART_ID);
+    await expect(page.locator('[data-test-id="jornalførUtenFagsak"]')).toBeVisible();
+    await expect(fortsett(page)).toBeEnabled();
+    await expect(vent(page)).toBeEnabled();
+    expect(mutations).toEqual([]);
+};
+
 test('velger ordinær og reservert OMPMA-sak og fjerner foreldede detaljer', async ({ page }) => {
     const mutations = recordMutations(page);
     await openJournalpost(page);
@@ -204,6 +334,46 @@ test('velger ordinær og reservert OMPMA-sak og fjerner foreldede detaljer', asy
     await expect(journalpostpanel(page)).not.toContainText(ORDINÆR_SAK.fagsakId);
     expect(mutations).toEqual([]);
 });
+
+test('reserverer ny OMPMA-sak og registrerer manuell annen part', async ({ page }) => {
+    const mutations = recordMutations(page);
+    await openJournalpost(page);
+    await selectApplicantAndLoadCases(page);
+    await selectCase(page, RESERVERT_SAK);
+
+    await page.getByLabel('Reserver saksnummer til ny fagsak').check();
+    await expect(page.getByLabel('Reserver saksnummer til ny fagsak')).toBeChecked();
+    await expect(journalpostpanel(page).getByText('Saksnummer:', { exact: true })).toHaveCount(0);
+    await expect(journalpostpanel(page)).not.toContainText(RESERVERT_SAK.fagsakId);
+    await expect(journalpostpanel(page).getByText('Annen part ID:', { exact: true })).toHaveCount(0);
+    await expect(journalpostpanel(page)).not.toContainText(ANNEN_PART.identitetsnummer);
+    await expect(page.getByLabel('Fødselsnummer annen part:', { exact: true })).toBeVisible();
+    await expect(fortsett(page)).toBeDisabled();
+    await expect(vent(page)).toBeDisabled();
+
+    await enterManualOtherParty(page);
+    expect(mutations).toEqual([]);
+});
+
+test('viser manuell annen part når OMPMA-oppslaget ikke finner saker', async ({ page }) => {
+    await openJournalpost(page);
+    await selectApplicantWithNoCases(page);
+    await enterManualOtherParty(page);
+});
+
+for (const action of ['Fortsett', 'Vent'] as const) {
+    test(`avbryter ${action} for OMPMA uten valgt sak`, async ({ page }) => {
+        const mutations = recordMutations(page);
+        await openJournalpost(page);
+        await selectApplicantAndLoadCases(page);
+        await selectCase(page, RESERVERT_SAK);
+
+        await page.getByLabel('Reserver saksnummer til ny fagsak').check();
+        await enterManualOtherParty(page);
+
+        await expectAndCancelNoCaseModal(page, action, mutations);
+    });
+}
 
 for (const scenario of modalScenarios) {
     test(`avbryter ${scenario.action} for ${scenario.sak.reservert ? 'reservert' : 'ordinær'} OMPMA-sak`, async ({
