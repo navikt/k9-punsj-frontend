@@ -96,24 +96,6 @@ const MODAL_SCENARIO = [
         fagsak: ORDINÆR_SAK_MED_BARN,
         handling: 'Vent',
     },
-    {
-        navn: 'avbryter Fortsett-modal for reservert sak med barn',
-        kind: 'case',
-        fagsak: RESERVERT_SAK_MED_BARN,
-        handling: 'Fortsett',
-    },
-    {
-        navn: 'avbryter Vent-modal for reservert sak med barn',
-        kind: 'case',
-        fagsak: RESERVERT_SAK_MED_BARN,
-        handling: 'Vent',
-    },
-    {
-        navn: 'avbryter Vent-modal for reservert sak uten barn',
-        kind: 'case',
-        fagsak: RESERVERT_SAK_UTEN_BARN,
-        handling: 'Vent',
-    },
 ] satisfies (ModalScenario & { navn: string })[];
 
 const isResponse = (response: Response, method: string, path: string) =>

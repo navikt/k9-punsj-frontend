@@ -428,9 +428,6 @@ const modalScenarios: CaseModalScenario[] = [
     { kind: 'case', action: 'Vent', sak: ORDINÆR_SAK_UTEN_BARN },
     { kind: 'case', action: 'Fortsett', sak: ORDINÆR_SAK_MED_BARN },
     { kind: 'case', action: 'Vent', sak: ORDINÆR_SAK_MED_BARN },
-    { kind: 'case', action: 'Fortsett', sak: RESERVERT_SAK_MED_BARN },
-    { kind: 'case', action: 'Vent', sak: RESERVERT_SAK_MED_BARN },
-    { kind: 'case', action: 'Vent', sak: RESERVERT_SAK_UTEN_BARN },
 ];
 
 const expectAndCancelModal = async (

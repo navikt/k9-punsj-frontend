@@ -1115,6 +1115,12 @@ De siste 11 blokkene i `cypress/e2e/fordeling/OMPKS.cy.js` ved baseline `e21cd95
 
 Dette lukker avvikene i kontrollene for de 11 blokkene. Ingen uoverensstemmelser gjenstår i de kartlagte kontrollene. Den siste filen, `OMPKS.cy.js`, ble fjernet sammen med Cypress-kjøringene i CI da PR- og produksjons-workflowene gikk over til den delte Playwright-workflowen. Den uendrede Cypress-verdien `specPattern` matcher nå ingen filer. Delte fixtures og utsatt infrastruktur er beholdt; endelig revisjon av dekning og overlapp gjenstår.
 
+## Gjeldende eierskap for OMP-modalavbrudd med eksisterende sak
+
+De historiske tabellene over beskriver kartleggingen da reisene ble migrert. Nå kjører OMPUT, OMPMA, OMPKS og OMPAO bare modalavbrudd for ordinære eksisterende saker: Fortsett og Vent for OMPUT og OMPMA, og Fortsett og Vent med barn samt Vent uten barn for OMPKS og OMPAO. Disse reisene eier visningsnavn for sakstype, søkers ID, barnets ID eller annen parts ID, saksnummer, periode, overskrift og bekreftelsestekst, advarsel, fravær av LOS-knapp, bevart valg etter avbrudd og fravær av skrivekall.
+
+Reserverte saker eies av saksvalgsreisene: egen sak-ID, panelverdier, manglende K9-lenke, handlingsgating og fjerning av foreldede detaljer. `KlassifiserModal` og `KlassifiseringInfo` har ingen reservert-spesifikk gren før bekreftelse, og de reserverte og ordinære fixturene skiller seg bare i ID og `reservert`. Begrensning: saksnummeret til en reservert sak og bevart valg etter avbrudd kontrolleres ikke lenger direkte inne i dialogen. Avbruddstestene dekker heller ikke skriving eller navigasjon etter bekreftelse for reserverte saker. Ytterligere fjerning av ordinære par eller dialogtester per ytelse krever egen revisjon og tilleggsdekning, for eksempel enhetstester av OMP-visning og kartleggingen ved saksvalg.
+
 ## Fordeling PSB med to søkere
 
 `fordeling-psb-two-applicants.spec.ts` har to selvstendige reiser for scenario `930317`: avbrudd med to søkere og ny sak, og journalføring med kopiering til en annen søker. Personoppslaget for annen søker er lokalt i nettleserkonteksten. Bare kopieringsreisen installerer en blokkert kopieringsrespons.

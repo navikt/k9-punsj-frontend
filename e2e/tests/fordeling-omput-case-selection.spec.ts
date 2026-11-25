@@ -191,8 +191,6 @@ type ModalScenario = {
 const modalScenarios: ModalScenario[] = [
     { action: 'Fortsett', sak: ORDINÆR_SAK },
     { action: 'Vent', sak: ORDINÆR_SAK },
-    { action: 'Fortsett', sak: RESERVERT_SAK },
-    { action: 'Vent', sak: RESERVERT_SAK },
 ];
 
 const selectCase = async (page: Page, sak: OmputSak) => {

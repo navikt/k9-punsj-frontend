@@ -68,6 +68,12 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-25 — Fjernet reserverte modalavbrudd for eksisterende OMP-saker
+
+- Fjernet ti reserverte avbruddsreiser i OMPUT, OMPMA, OMPKS og OMPAO. De ordinære reisene for samme ytelse og handling beholder dialogkontrollene for sakstype, IDer, saksnummer, periode, advarsel, ingen LOS-knapp, bevart valg og ingen skrivekall. Saksvalgsreisene beholder reservert sak-ID, panelverdier, manglende K9-lenke, handlingsgating og foreldede detaljer.
+- Begrensning: saksnummeret til en reservert sak og bevart valg etter avbrudd kontrolleres ikke lenger direkte i dialogen. Testene bekrefter ikke dialogen og dekker ikke skriving eller navigasjon etter bekreftelse. Ingen tidsbesparelse er målt.
+- Validering: `yarn test:pw` for de fire OMP-saksvalgsspecene bestod med 38 tester (48 før; hele suiten 182 → 172, ti fjernede og ingen nye eller omdøpte titler); `yarn test src/test/components/fordeling/KlassifiserModal.spec.tsx` bestod med 21 tester; `yarn lint` og `git diff --check` bestod.
+
 #### 2026-11-25 — Fjernet gjentatte startkontroller i OMP-fordelingsreiser
 
 - OMPAO, OMPKS, OMPMA og OMPUT sjekker ikke lenger dokumentvalg, to-søkere-avkrysning og skjuling av PDF i første valgreise. `fordeling-psb.spec.ts` eier dokumentvalg og avkrysningen, og `journalpost-loader.spec.ts` eier PDF-visning og Skjul. Ytelseseffekt er ikke målt.
