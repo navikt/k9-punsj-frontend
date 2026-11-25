@@ -68,6 +68,12 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-25 — OMPUT-saksvalg og modalavbrudd
+
+- La til fem Playwright-tester for ordinært/reservert OMPUT-saksvalg og avbrudd av Fortsett- og Vent-modalene. Overgangen fra ordinær til reservert sak kontrollerer at foreldede detaljer forsvinner.
+- Fjernet bare de fire erstattede modalblokkene fra `OMPUT.cy.js`; saksvalg, stateful oppsett og resterende kontroller er beholdt. Cypress-testen bestod med 20 tester, og Cypress-mønsteret treffer fortsatt fire spesifikasjoner.
+- Validering: `yarn test:pw e2e/tests/fordeling-omput-case-selection.spec.ts` bestod med 5 tester; `yarn test:e2e --spec cypress/e2e/fordeling/OMPUT.cy.js` bestod med 20 tester; `yarn lint` og `git diff --check` bestod. `sif-code-scan` kjøres i CI.
+
 #### 2026-11-24 — Fullførte Korrigering IM Fordeling
 
 - Kartla de sju gjenværende Cypress-kontrollene mot Playwright. Papirreisen kontrollerer nå skjuling av dokumentpanelet, dokumentvalg, oppsummering, to-søkerfelt og deaktiverte handlinger før søker bekreftes.

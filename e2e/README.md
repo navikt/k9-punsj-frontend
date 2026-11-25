@@ -749,6 +749,21 @@ Runtime ble kontrollert separat i nettleserens Storybook Interactions-panel på 
 
 Ingen krav ble blokkert av en produksjonsfeil. Eksisterende fixtures gir React-advarsler om duplikat barne-ID som key; de er ikke endret. Testserverne ble startet bare på ledige porter og stoppet etter kontrollene. Ingen backend- eller full Cypress-kjøring er utført. Dette dekker bare de kartlagte delene av B25/B26/B34; øvrige to-søker-varianter, andre Fordeling-familier, full paritet og Cypress-sletting gjenstår.
 
+## Fordeling OMPUT-saksvalg og modalavbrudd
+
+`fordeling-omput-case-selection.spec.ts` erstatter de fire modalblokkene i `cypress/e2e/fordeling/OMPUT.cy.js` ved baseline `d8029a32`. Reisen går gjennom journalposten og direkte OMPUT-undertype, og installerer lokale MSW-svar for ordinær og reservert sak før oppslaget.
+
+| Baselineblokk | Playwright-dekning |
+| --- | --- |
+| 56–82: Bekreft søker og velg ordinær sak | `velger ordinær og reservert OMPUT-sak uten foreldede detaljer` sjekker valgt ID, behandlingsår, journalpostpanel, aktive handlinger og K9-lenke med ordinær ID. |
+| 85–113: Ordinær sak, Fortsett | `avbryter Fortsett for ordinær OMPUT-sak` kontrollerer Fortsett-overskrift og bekreftelsesetikett, sakstype, søker, saksnummer, periode, advarsel, fravær av LOS, aktive knapper og lukket modal etter avbrudd. Valgt sak og handlinger består uten skriving. |
+| 115–144: Ordinær sak, Vent | `avbryter Vent for ordinær OMPUT-sak` kontrollerer Vent-overskrift og bekreftelsesetikett, tilsvarende saksoppsummering, advarsel, fravær av LOS, aktive knapper og lukket modal etter avbrudd. Valgt sak og handlinger består uten skriving. |
+| 147–173: Velg reservert sak | Valgreisen velger reservert ID etter ordinær sak og kontrollerer behandlingsår, panel, aktive handlinger, fravær av K9-lenke og at ordinære saksdetaljer er borte. |
+| 174–202: Reservert sak, Fortsett | `avbryter Fortsett for reservert OMPUT-sak` kontrollerer Fortsett-overskrift og bekreftelsesetikett, reservert saksoppsummering, advarsel, fravær av LOS, aktive knapper og lukket modal etter avbrudd. Valgt sak og handlinger består uten klassifisering, Vent, behandlingsår- eller søknadsskriving. |
+| 204–233: Reservert sak, Vent | `avbryter Vent for reservert OMPUT-sak` kontrollerer Vent-overskrift og bekreftelsesetikett, tilsvarende saksoppsummering, advarsel, fravær av LOS, aktive knapper og lukket modal etter avbrudd. Valgt sak og handlinger består uten klassifisering, Vent, behandlingsår- eller søknadsskriving. |
+
+De to Cypress-valgblokkene er beholdt som oppsett for den stateful resten av testen. Dermed består også kontrollene for åpning, ny sak og behandlingsår, søkerbytte, tomt oppslag og to søkere. Playwright avbryter alle fire modalene; den utfører ikke bekreftelseshandlingene. MSW dekker frontendflyten, ikke backendens faktiske skriving.
+
 ## Fordeling PSB med to søkere
 
 `fordeling-psb-two-applicants.spec.ts` har to selvstendige reiser for scenario `930317`: avbrudd med to søkere og ny sak, og journalføring med kopiering til en annen søker. Personoppslaget for annen søker er lokalt i nettleserkonteksten. Bare kopieringsreisen installerer en blokkert kopieringsrespons.
