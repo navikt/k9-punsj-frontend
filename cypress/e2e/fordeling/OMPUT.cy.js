@@ -6,7 +6,6 @@ const dokumenttype = 'Omsorgspenger';
 const valgteDokumentType = 'Omsorgspenger: direkte utbetaling av omsorgspenger';
 const journalpostId = journalpost.journalpostId;
 const norskIdent = journalpost.norskIdent;
-const fnrNySøker = '12448325820';
 const annenSøkerFnr = '02918496664';
 const fagsak = fagsaker[1];
 const fagsakReservert = fagsaker[9];
@@ -106,100 +105,6 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false, viewportWidth: 128
 
         cy.get('[data-test-id="journalførOgFortsett"]').should('not.be.disabled');
         cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
-    });
-
-    it('Test Reserver saksnummer til ny fagsak', () => {
-        cy.findByLabelText('Reserver saksnummer til ny fagsak').check();
-
-        cy.get('[data-test-id="valgAvbehandlingsÅr"]').then(($select) => {
-            const freeYear = Array.from($select[0].options)
-                .map((option) => option.value)
-                .find((year) => year && year !== String(fagsakReservert.behandlingsår));
-            if (!freeYear) throw new Error('Et ledig behandlingsår mangler i valgene.');
-            cy.wrap($select).select(freeYear);
-        });
-    });
-
-    it('Test at state fjernet etter avbekreft søker', () => {
-        cy.findByText(/Nei/i).should('exist').click();
-        cy.findByLabelText('Velg fagsak').should('not.exist');
-        cy.findByLabelText('Reserver saksnummer til ny fagsak').should('not.exist');
-        cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
-        cy.get('[data-test-id="journalførOgVent"]').should('be.disabled');
-    });
-
-    it('Test ny søker', () => {
-        cy.findByLabelText('Søkers fødselsnummer eller D-nummer:').should('exist').type(fnrNySøker);
-        cy.get('.journalpostpanel').within(() => {
-            cy.findByText(/Søkers ID/i).should('exist');
-            cy.findByText(fnrNySøker).should('exist');
-        });
-        cy.findByLabelText('Velg fagsak').should('be.disabled');
-        cy.findByLabelText('Reserver saksnummer til ny fagsak').should('be.checked');
-
-        cy.get('[data-test-id="jornalførUtenFagsak"]').should('exist');
-
-        cy.get('[data-test-id="journalførOgFortsett"]').should('not.be.disabled');
-        cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
-    });
-
-    it('Åpne klassifiser modal med ny søker uten fagsak - fortsett', () => {
-        cy.get('[data-test-id="journalførOgFortsett"]').click();
-
-        cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderFortsett);
-        cy.get('[data-test-id="klassifiseringInfo"]')
-            .should('exist')
-            .within(() => {
-                cy.findByText(/Sakstype/i).should('exist');
-                cy.findByText(dokumenttype).should('exist');
-                cy.findByText(/Søkers ID/i).should('exist');
-                cy.findByText(fnrNySøker).should('exist');
-                cy.findByText(/Saksnummer/i).should('not.exist');
-                cy.findByText(/Periode/i).should('not.exist');
-            });
-
-        cy.get('[data-test-id="klassifiserModalAlertBlokk"]')
-            .should('exist')
-            .within(() => {
-                cy.findByText(klassifiserModalAlertInfoKanIkkeEndres).should('exist');
-            });
-
-        cy.get('[data-test-id="klassifiserModalGåTilLos"]').should('not.exist');
-
-        cy.get('[data-test-id="klassifiserModalJournalfør"]').should('not.be.disabled');
-        cy.get('[data-test-id="klassifiserModalJournalfør"]').should('contain', 'Journalfør journalposten');
-        cy.get('[data-test-id="klassifiserModalAvbryt"]').should('not.be.disabled').click();
-        cy.get('[data-test-id="klassifiserModal"]').should('not.exist');
-    });
-
-    it('Åpne klassifiser modal med ny søker uten fagsak - sett på vent', () => {
-        cy.get('[data-test-id="journalførOgVent"]').click();
-
-        cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderVent);
-        cy.get('[data-test-id="klassifiseringInfo"]')
-            .should('exist')
-            .within(() => {
-                cy.findByText(/Sakstype/i).should('exist');
-                cy.findByText(dokumenttype).should('exist');
-                cy.findByText(/Søkers ID/i).should('exist');
-                cy.findByText(fnrNySøker).should('exist');
-                cy.findByText(/Saksnummer/i).should('not.exist');
-                cy.findByText(/Periode/i).should('not.exist');
-            });
-
-        cy.get('[data-test-id="klassifiserModalAlertBlokk"]')
-            .should('exist')
-            .within(() => {
-                cy.findByText(klassifiserModalAlertInfoKanIkkeEndres).should('exist');
-            });
-
-        cy.get('[data-test-id="klassifiserModalGåTilLos"]').should('not.exist');
-
-        cy.get('[data-test-id="klassifiserModalJournalfør"]').should('not.be.disabled');
-        cy.get('[data-test-id="klassifiserModalJournalfør"]').should('contain', 'Journalfør og sett på vent');
-        cy.get('[data-test-id="klassifiserModalAvbryt"]').should('not.be.disabled').click();
-
-        cy.get('[data-test-id="klassifiserModal"]').should('not.exist');
     });
 });
 

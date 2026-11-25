@@ -774,7 +774,21 @@ Playwright erstatter ny-sak-årskontrollen, begge avbrutte modalene uten fagsak 
 | 142–200: Avbryt Fortsett- og Vent-modal uten fagsak | `avbryter Fortsett og Vent for ny OMPUT-sak uten fagsak` kontrollerer hvert sitt modalhode og bekreftelsesetikett, Omsorgspenger og søker, fravær av saksnummer/periode og LOS, irreversibilitetsvarsel og aktive knapper. Avbryt lukker modalene, beholder valgt år og handlinger og sender ingen klassifiserings-, Vent-, behandlingsår- eller søknadsskriving. |
 | 284–313: Tomt fagsaksoppslag | `fordeling-entry.spec.ts`, `viser tomt fagsaksoppslag og behandlingsår for direkte utbetaling` beholder kontroll av søkeravgrenset 200-svar med `[]`, ingen saksvelger og synlig årskontroll. Handlingene er først deaktivert, og blir aktive med reservasjonsteksten etter valg av et faktisk tilgjengelig år. |
 
-Cypress beholder bare reservasjon og valg av et ledig år i ny-sak-blokken fordi den senere stateful søkerresetten avhenger av denne tilstanden. Søkerresetten og den etterfølgende nye søkeren, begge saksvalgsblokkene, åpning og to-søkerkontrollene er urørt.
+Søkerresetten i Playwright er en isolert reise som selv velger reservert sak, reserverer ny sak og velger et ledig år. Dermed er det stateful Cypress-oppsettet og de fire etterfølgende søkerbytte-/modalblokkene fjernet. Oppstart, ordinært og reservert saksvalg, samt den separate to-søker-reisen er beholdt.
+
+### OMPUT søkerbytte (baseline `dd0431cc`)
+
+`nullstiller OMPUT-valg og avbryter begge modalene for ny søker` starter med valgt reservert sak, reserverer et nytt saksnummer og velger et ledig år fra de tilgjengelige valgene. Etter Nei installerer testen et lokalt, søkeravgrenset MSW-svar for den nye søkeren og kontrollerer status, service worker og faktisk svarinnhold.
+
+| Cypress-blokk ved `dd0431cc` | Playwright-dekning |
+| --- | --- |
+| 111–121: Reserver saksnummer og velg første ledige år som stateful oppsett | Den isolerte Playwright-reisen velger først reservert sak, reserverer nytt saksnummer og velger ledig år fra UI-valgene. Begge handlingene er aktive før Nei. Dette oppsettet er ikke lenger nødvendig i Cypress. |
+| 123–129: Avbekreft søker og nullstill | Samme reise klikker Nei og kontrollerer at saksvelger og reservasjon mangler, og at Fortsett og Vent er deaktivert. |
+| 131–144: Bytt søker | Kontrollerer 200-svar avgrenset til ny søkerident, svar fra service worker og den faktiske responsen med ny søkers reserverte OMPUT-sak. Panelet viser ny søker uten gammel identitet eller saksnummer; saksvelger er deaktivert, reservasjon og ledig år beholdes, og varsel samt handlinger vises. |
+| 146–173: Avbryt Fortsett for ny søker uten fagsak | Kontrollerer Fortsett-overskrift og bekreftelsesetikett, Omsorgspenger og ny søker, fravær av saksnummer/periode og LOS, irreversibilitetsvarsel og aktive knapper. Avbryt lukker modalvinduet og beholder søker, år, reservasjon og handlinger uten mutasjoner. |
+| 175–203: Avbryt Vent for ny søker uten fagsak | Kontrollerer tilsvarende Vent-overskrift og «Journalfør og sett på vent», resten av sammendraget og aktive knapper. Avbryt lukker modalvinduet og beholder ny søker uten klassifiserings-, Vent-, behandlingsår- eller søknadsskriving. |
+
+Bare disse fire Cypress-blokkene og det ubrukte reservasjon/år-oppsettet er fjernet. Begge saksvalgsblokkene og den separate to-søker-reisen er urørt.
 
 ## Fordeling PSB med to søkere
 
