@@ -925,6 +925,18 @@ Barnesakene i `fagsaker.json[15]` og `[16]` har samme navn og identitetsnummer; 
 
 Barnelisten kommer fra `barn.json`. `barn[2]` kobles til en av de fire OMPAO-sakene gjennom barnets identitet, mens `barn[0]` ikke finnes i sakene. Saks- og barneoppslagene er avgrenset til søkeren; Playwright kontrollerer faktisk request-header, 200-svar, MSW-service worker og response body.
 
+### Task 73 mapping at baseline `fc29431b`
+
+| Cypress-blokk | Playwright-dekning |
+| --- | --- |
+| 169–191: Bytt fra listebarn til «Det gjelder et annet barn» og legg inn ID | `reserverer ny OMPAO-sak, velger barn fra listen og avbryter modalene uten sak` kontrollerer at listebarnets ID forsvinner, manuelt ID-felt og deaktivert handlingsgating før inntasting. Et søkeravgrenset PERSON-svar for syntetisk ID `53488838241` verifiseres sammen med ID i input og panel, varsel om ny sak og aktiverte handlinger. Cypress beholder bare modusbryter og ID-inntasting som oppsett for søkerreset. |
+| 193–222: Avbryt Fortsett for manuelt barn uten valgt sak | Samme reise kontrollerer Fortsett-overskrift og bekreftelsesetikett, OMPAO-type, søker og manuell barn-ID, fravær av sak/periode og LOS, irreversibilitetsvarsel og aktive knapper. Avbryt lukker modalvinduet og beholder input, panel, reservasjon og handlinger uten skriving. Cypress-blokken er fjernet. |
+| 224–253: Avbryt Vent for manuelt barn uten valgt sak | Samme reise kontrollerer Vent-overskrift og bekreftelsesetikett med samme oppsummering og tilstand etter avbrudd. Cypress-blokken er fjernet. |
+| 255–267: Velg «Pleietrengende har ikke fødselsnummer» | Samme reise kontrollerer at barnets ID fjernes fra panelet, informasjonen vises og bare Vent er aktivert. Cypress beholder bare avkryssingen som oppsett for den påfølgende søkerreseten. |
+| 269–297: Avbryt Vent uten fødselsnummer | Samme reise kontrollerer Vent-overskrift og bekreftelsesetikett, OMPAO-type og søker, fravær av sak/periode og barn-ID, irreversibilitetsvarsel, fravær av LOS og aktive knapper. Avbryt beholder manglende-ID-modus, informasjon og handlingsgating uten skriving. Cypress-blokken er fjernet. |
+
+Reset-blokken fra linje 299 er beholdt og kontrollerer at «Nei» fjerner søker-, sak-, manuell-ID- og manglende-ID-kontroller. Den tidligere Task 71/72-mappingen for reservasjon, barnevalg og modalene uten valgt sak står uendret.
+
 ## Fordeling PSB med to søkere
 
 `fordeling-psb-two-applicants.spec.ts` har to selvstendige reiser for scenario `930317`: avbrudd med to søkere og ny sak, og journalføring med kopiering til en annen søker. Personoppslaget for annen søker er lokalt i nettleserkonteksten. Bare kopieringsreisen installerer en blokkert kopieringsrespons.
