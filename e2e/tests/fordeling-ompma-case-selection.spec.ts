@@ -6,6 +6,7 @@ import { ApiPath } from '../../src/app/apiConfig';
 
 const JOURNALPOST_ID = jpOMPMA304.journalpostId;
 const SØKER_ID = jpOMPMA304.norskIdent;
+const ANNEN_SØKER_ID = '02918496664';
 const NY_SØKER_ID = '12448325820';
 const MANUELL_ANNEN_PART_ID = '24420167209';
 const ORDINÆR_SAK = fagsaker[18];
@@ -136,6 +137,30 @@ const installPersonLookupHandler = async (page: Page) => {
             );
         },
         { personPath: ApiPath.PERSON, personId: MANUELL_ANNEN_PART_ID },
+    );
+};
+
+const installSecondApplicantPersonHandler = async (page: Page) => {
+    await page.evaluate(
+        ({ personPath, applicantId }) => {
+            const msw = window.msw;
+            if (!msw) throw new Error('MSW-testarbeideren er ikke tilgjengelig.');
+
+            msw.worker.use(
+                msw.http.get(personPath, ({ request }) => {
+                    if (request.headers.get('X-Nav-NorskIdent') !== applicantId) return;
+                    return msw.HttpResponse.json({
+                        etternavn: 'KAKE',
+                        fornavn: 'TUNGSINDIG',
+                        fødselsdato: '1981-12-18',
+                        identitetsnummer: applicantId,
+                        mellomnavn: null,
+                        sammensattNavn: 'TUNGSINDIG KAKE',
+                    });
+                }),
+            );
+        },
+        { personPath: ApiPath.PERSON, applicantId: ANNEN_SØKER_ID },
     );
 };
 
@@ -399,6 +424,57 @@ test('viser manuell annen part når OMPMA-oppslaget ikke finner saker', async ({
     await openJournalpost(page);
     await selectApplicantWithNoCases(page);
     await enterManualOtherParty(page);
+});
+
+test('avbryter Fortsett og Vent for OMPMA med to søkere og manuell annen part', async ({ page }) => {
+    const mutations = recordMutations(page);
+    await openJournalpost(page);
+    await selectApplicantAndLoadCases(page);
+
+    const twoApplicants = page.getByLabel(
+        'Det finnes informasjon om to søkere i journalposten (gjelder kun papirsøknad)',
+    );
+    await twoApplicants.check();
+    await expect(page.locator('[data-test-id="infoOmRegisteringAvToSokere"]')).toBeVisible();
+    await expect(page.locator('[data-test-id="toSøkereIngenAnnenSøker"]')).toBeVisible();
+    await expect(page.locator('[data-test-id="toSøkereIngenAnnenPartMA"]')).toHaveCount(0);
+    await expect(fortsett(page)).toBeDisabled();
+    await expect(vent(page)).toBeDisabled();
+
+    await installSecondApplicantPersonHandler(page);
+    const secondApplicantResponsePromise = page.waitForResponse(
+        (response) =>
+            isResponse(response, 'GET', ApiPath.PERSON) &&
+            response.request().headers()['x-nav-norskident'] === ANNEN_SØKER_ID,
+    );
+    const secondApplicant = page.getByLabel('Fødselsnummer annen søker:', { exact: true });
+    await secondApplicant.fill(ANNEN_SØKER_ID);
+    const secondApplicantResponse = await secondApplicantResponsePromise;
+    expect(secondApplicantResponse.status()).toBe(200);
+    expect(secondApplicantResponse.fromServiceWorker()).toBe(true);
+    expect(secondApplicantResponse.request().headers()['x-nav-norskident']).toBe(ANNEN_SØKER_ID);
+    expect(await secondApplicantResponse.json()).toMatchObject({
+        identitetsnummer: ANNEN_SØKER_ID,
+        fornavn: 'TUNGSINDIG',
+        etternavn: 'KAKE',
+    });
+    await expect(secondApplicant).toHaveValue(ANNEN_SØKER_ID);
+    await expect(page.locator('[data-test-id="toSøkereIngenAnnenSøker"]')).toHaveCount(0);
+    await expect(page.locator('[data-test-id="toSøkereIngenAnnenPartMA"]')).toBeVisible();
+    await expect(fortsett(page)).toBeDisabled();
+    await expect(vent(page)).toBeDisabled();
+
+    const reservation = page.getByLabel('Reserver saksnummer til ny fagsak');
+    await reservation.check();
+    await expect(reservation).toBeChecked();
+    await enterManualOtherParty(page);
+    await expect(page.locator('[data-test-id="toSøkereIngenAnnenPartMA"]')).toHaveCount(0);
+
+    for (const action of ['Fortsett', 'Vent'] as const) {
+        await expectAndCancelNoCaseModal(page, action, mutations, SØKER_ID);
+        await expect(twoApplicants).toBeChecked();
+        await expect(secondApplicant).toHaveValue(ANNEN_SØKER_ID);
+    }
 });
 
 for (const action of ['Fortsett', 'Vent'] as const) {

@@ -68,6 +68,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-25 — OMPMA med to søkere
+
+- La til én isolert Playwright-reise for papirsøker-gating, manuell annen part og avbrudd av Fortsett- og Vent-modalene. Fjernet bare den erstattede fireblokkbeskrivelsen og ubrukte konstanter fra `OMPMA.cy.js`; de ni øvrige blokkene er beholdt.
+- Validering: `yarn test:pw e2e/tests/fordeling-ompma-case-selection.spec.ts` bestod med 11 tester, også etter gjenbruk av eksisterende modalhjelper. `yarn test:e2e --spec cypress/e2e/fordeling/OMPMA.cy.js` bestod med 9 tester etter Cypress-oppryddingen; testen ble ikke kjørt på nytt etter den senere Playwright-refaktoreringen. `yarn lint` og `git diff --check` bestod. Cypress-mønsteret matcher OMPMA, OMPAO og OMPKS. `sif-code-scan` kjøres i CI.
+
 #### 2026-11-25 — OMPMA-saksvalg og modalavbrudd
 
 - La til Playwright-dekning for ordinært og reservert OMPMA-saksvalg og avbrudd av Fortsett- og Vent-modalene. Fjernet bare de fire erstattede modalblokkene fra `OMPMA.cy.js`; saksvalg og gjenværende stateful Cypress-dekning står igjen.

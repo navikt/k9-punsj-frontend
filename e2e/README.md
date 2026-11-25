@@ -219,7 +219,18 @@ Task 67 removed the two mapped no-case modal blocks and empty-lookup describe. T
 | 136–147: Enter replacement applicant | The same journey verifies the applicant-scoped case and person requests (200, MSW, request identity and response body), replacement identity, removal of old applicant/case details, retained manual party, reservation notice and enabled actions. The case response uses nonempty OMPMA fixtures. |
 | 149–178 and 180–209: Cancel Fortsett and Vent for the replacement applicant | The same journey checks each distinct heading and confirm label, OMPMA type, replacement applicant and manual party, absent case/period fields, irreversible-information warning, no LOS action, enabled controls, retained reservation/input/panel state after cancel, and no writes. Neither confirmation is executed. |
 
-Task 68 removed only those four applicant-switch/modal blocks and their two stateful setup blocks from `OMPMA.cy.js`. The earlier case-selection blocks and separate two-applicant describe remain. The Cypress file remains, and the unchanged configured pattern continues to match `OMPMA.cy.js`, `OMPAO.cy.js` and `OMPKS.cy.js`.
+Task 68 removed only those four applicant-switch/modal blocks and their two stateful setup blocks from `OMPMA.cy.js`. The earlier case-selection blocks and separate two-applicant describe remained at that point; Task 69 maps and removes the latter. The Cypress file remains, and the unchanged configured pattern continues to match `OMPMA.cy.js`, `OMPAO.cy.js` and `OMPKS.cy.js`.
+
+### Task 69 mapping at baseline `54d80ab2`
+
+| Cypress block | Playwright coverage |
+| --- | --- |
+| 114–120: Open journalpost and select OMPMA subtype | `avbryter Fortsett og Vent for OMPMA med to søkere og manuell annen part` opens the journalpost through the UI and checks the response, URL pathname and selected subtype. |
+| 122–149: Two-applicant and manual-party gating | The same journey confirms the primary applicant using the nonempty OMPMA case response, checks the paper two-applicant information and missing-applicant warning, then verifies the local PERSON response and retained second-applicant ID. The missing OMPMA other-party warning appears and keeps both actions disabled until new-case reservation and manual-party entry; the no-case notice and enabled actions then appear. |
+| 151–178: Cancel Fortsett | The journey verifies the distinct heading and confirm label, OMPMA type and primary applicant, absent case/period fields, irreversible-information warning, no LOS action and enabled controls. Cancel closes the dialog and retains both applicant IDs, reservation, manual-party input/panel and enabled actions without writes. |
+| 180–207: Cancel Vent | The same checks cover the Vent heading and confirm label. Neither modal is confirmed; no classification, hold, copy, treatment-year or application write occurs. |
+
+Task 69 removed only this four-block two-applicant describe and its now-unused constants. The nine main-describe case-selection and initial-state blocks remain. The Cypress file remains, and the unchanged configured pattern matches `OMPMA.cy.js`, `OMPAO.cy.js` and `OMPKS.cy.js`.
 
 ## OMPMA form saving and submission
 
