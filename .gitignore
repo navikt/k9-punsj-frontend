@@ -9,7 +9,6 @@
 /.uglify_plugin_cache/
 .env
 server/.env
-cypress.env.json
 /coverage/
 *.iml
 *.log*
@@ -31,7 +30,6 @@ tmp/
 node_modules_bak
 .eslintcache
 *.mp4
-cypress/screenshots/
 .pnp.*
 .yarn/*
 !.yarn/patches

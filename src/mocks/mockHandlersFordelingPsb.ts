@@ -1,8 +1,8 @@
 import { ApiPath } from 'app/apiConfig';
 import { http, HttpResponse } from 'msw/http';
-import journalpostFixture from '../../cypress/fixtures/jpPSB300.json';
-import completedJournalpostFixture from '../../cypress/fixtures/jpPSB312.json';
-import fagsaker from '../../cypress/fixtures/fagsaker.json';
+import journalpostFixture from './fixtures/jpPSB300.json';
+import completedJournalpostFixture from './fixtures/jpPSB312.json';
+import fagsaker from './fixtures/fagsaker.json';
 import { FORDELING_PSB_SCENARIOS } from './fordelingPsbTestScenarioIds';
 
 type TestJournalpost = {

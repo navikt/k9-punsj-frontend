@@ -1,8 +1,8 @@
 import { expect, test, type Response } from '@playwright/test';
 
-import barn from '../../cypress/fixtures/barn.json' with { type: 'json' };
-import fagsaker from '../../cypress/fixtures/fagsaker.json' with { type: 'json' };
-import journalpost from '../../cypress/fixtures/jpPSB312.json' with { type: 'json' };
+import barn from '../../src/mocks/fixtures/barn.json' with { type: 'json' };
+import fagsaker from '../../src/mocks/fixtures/fagsaker.json' with { type: 'json' };
+import journalpost from '../../src/mocks/fixtures/jpPSB312.json' with { type: 'json' };
 import { ApiPath } from '../../src/app/apiConfig';
 import { FORDELING_PSB_SCENARIOS } from '../../src/mocks/fordelingPsbTestScenarioIds';
 

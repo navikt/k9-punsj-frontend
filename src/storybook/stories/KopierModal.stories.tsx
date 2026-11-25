@@ -21,8 +21,8 @@ import { setIdentFellesAction } from 'app/state/actions/IdentActions';
 import { rootReducer } from 'app/state/RootState';
 import { setJournalpostAction } from 'app/state/reducers/FellesReducer';
 import { redirectToLos } from 'app/utils/envUtils';
-import fagsaker from '../../../cypress/fixtures/fagsaker.json';
-import journalpost from '../../../cypress/fixtures/jpPSB312.json';
+import fagsaker from '../../mocks/fixtures/fagsaker.json';
+import journalpost from '../../mocks/fixtures/jpPSB312.json';
 
 import '@navikt/ds-css/dist/index.css';
 import '../../app/styles/globals.css';

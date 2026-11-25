@@ -1,6 +1,6 @@
 import { expect, test, type Response } from '@playwright/test';
 
-import journalpost from '../../cypress/fixtures/jpOMPUT305.json' with { type: 'json' };
+import journalpost from '../../src/mocks/fixtures/jpOMPUT305.json' with { type: 'json' };
 import { ApiPath } from '../../src/app/apiConfig';
 
 const journalpostPath = ApiPath.JOURNALPOST_GET.replace('{journalpostId}', journalpost.journalpostId);

@@ -76,8 +76,6 @@ const store = configureStore({
         const defaultMiddleware = getDefaultMiddleware();
         return process.env.NODE_ENV !== 'production' ? defaultMiddleware.concat(logger) : defaultMiddleware;
     },
-    // @ts-ignore
-    preloadedState: window.Cypress ? window.__initialState__ : undefined,
     devTools: process.env.NODE_ENV !== 'production',
 });
 
@@ -126,9 +124,3 @@ const AppWithEnvVariables = withEnvVariables(App);
 prepare().then(() => {
     root.render(<AppWithEnvVariables />);
 });
-
-// @ts-ignore
-if (window.Cypress) {
-    // @ts-ignore
-    window.__store__ = store;
-}

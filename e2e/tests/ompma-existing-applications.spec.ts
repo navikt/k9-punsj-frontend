@@ -1,7 +1,7 @@
 import { expect, test, type Page, type Response } from '@playwright/test';
 
-import fagsaker from '../../cypress/fixtures/fagsaker.json' with { type: 'json' };
-import jpOMPMA304 from '../../cypress/fixtures/jpOMPMA304.json' with { type: 'json' };
+import fagsaker from '../../src/mocks/fixtures/fagsaker.json' with { type: 'json' };
+import jpOMPMA304 from '../../src/mocks/fixtures/jpOMPMA304.json' with { type: 'json' };
 import { ApiPath } from '../../src/app/apiConfig';
 
 const JOURNALPOST_ID = jpOMPMA304.journalpostId;

@@ -25,8 +25,8 @@ import type Fagsak from 'app/types/Fagsak';
 import { redirectToLos } from 'app/utils/envUtils';
 import messages from 'app/i18n/nb.json';
 import { createMockPdfBytes } from '../../mocks/mockPdf.js';
-import journalpostFixture from '../../../cypress/fixtures/jpPSB300.json';
-import fagsaker from '../../../cypress/fixtures/fagsaker.json';
+import journalpostFixture from '../../mocks/fixtures/jpPSB300.json';
+import fagsaker from '../../mocks/fixtures/fagsaker.json';
 
 import '@navikt/ds-css/dist/index.css';
 import '../../app/styles/globals.css';

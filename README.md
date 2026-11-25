@@ -45,10 +45,10 @@ Fullstendig oppsett med docker-innlogging, stopp-kommando og journalpostnumre fo
 Når du bare trenger frontend og mockdata, kan du jobbe uten å starte backend-repoet:
 
 ```bash
-yarn test:e2eUI
+yarn start:e2e
 ```
 
-Starter appen på `http://localhost:8080` med MSW-baserte testmocker og åpner Cypress UI for visuell debugging. Mockdata og scenarioliste ligger i [dev/README.md](dev/README.md).
+Starter appen på `http://localhost:8080` med MSW-baserte testmocker for visuell debugging i nettleseren. Mockdata og scenarioliste ligger i [dev/README.md](dev/README.md).
 
 ## Nyttige kommandoer
 
@@ -70,22 +70,22 @@ Alle enhetstester er plassert i [src/test](src/test).
 yarn test
 ```
 
-For headless e2e-kjøring med Cypress kan du bruke:
+For e2e-kjøring med Playwright kan du bruke:
 
 ```bash
-yarn test:e2e
+yarn test:pw
 ```
 
-`yarn test:e2e` og `yarn test:e2eUI` starter appen i testmodus automatisk før Cypress kjører scenariene.
+`yarn test:pw` starter appen i testmodus automatisk med `yarn start:e2e`. Bruk `yarn test:pw:ui` for interaktiv kjøring.
 
-Enhetstester, Cypress, lint og build valideres automatisk i GitHub Actions på pull requests og på pushes til [master](https://github.com/navikt/k9-punsj-frontend) som faktisk trigger workflowene.
+Enhetstester, Playwright, lint og build valideres automatisk i GitHub Actions på pull requests og på pushes til [master](https://github.com/navikt/k9-punsj-frontend) som faktisk trigger workflowene.
 
 ## Arbeidsflyt og deploy
 
 1. Lag en branch fra `master`.
 2. Gjør endringene og push branchen til GitHub.
 3. Opprett en pull request.
-4. Pull requesten valideres automatisk med lint, tester, Cypress og build i GitHub Actions.
+4. Pull requesten valideres automatisk med lint, tester, Playwright og build i GitHub Actions.
 5. For deploy til preprod, kjør workflowen `Deploy til preprod gcp` manuelt i GitHub Actions og velg branchen som skal deployes. Workflowen bygger og deployer til `dev-gcp`.
 6. For deploy til produksjon, merge pull requesten til `master`. Push til `master` trigger produksjonsworkflowen automatisk.
 

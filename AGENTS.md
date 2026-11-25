@@ -43,7 +43,7 @@ These instructions apply to agents working in this repository.
 - Run lint with `yarn lint`.
 - Run CSS lint with `yarn lint:css`.
 - Run TypeScript checks with `yarn tsc --noEmit`.
-- Run Cypress end to end tests with `yarn test:e2e` when end to end coverage is needed.
+- Run Playwright end to end tests with `yarn test:pw` when end to end coverage is needed.
 
 ## Package updates
 
@@ -55,14 +55,14 @@ These instructions apply to agents working in this repository.
 ## Test setup
 
 - Prefer the narrowest relevant validation before broader or backend dependent test runs.
-- `yarn test:e2e` and `yarn test:e2eUI` run the frontend in test mode with MSW based mocks and do not require the backend repo.
+- `yarn test:pw` and `yarn test:pw:ui` run the frontend in test mode with MSW based mocks and do not require the backend repo.
 - Use the backend integrated local flow only when the task depends on auth, proxy behavior, downstream contracts, or other full stack behavior that mocks do not cover.
 
 ## Testing and validation
 
 - Assess whether each code change needs a test or test update.
 - Prefer the smallest reliable test for the changed behavior or regression risk.
-- Use Vitest or Testing Library for localized logic and Cypress for end to end behavior.
+- Use Vitest or Testing Library for localized logic and Playwright for end to end behavior.
 - Run the most relevant checks before completion. If local checks cannot be run, state that clearly and explain why.
 - If a non trivial change ships without a new or updated test, call that out explicitly.
 - Summarize changed files and likely impact when handing work back.

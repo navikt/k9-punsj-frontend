@@ -15,7 +15,7 @@ import messages from 'app/i18n/nb.json';
 import { Home } from 'app/home/Home';
 import { rootReducer } from 'app/state/RootState';
 import { redirectToLos } from 'app/utils/envUtils';
-import journalpostFixture from '../../../cypress/fixtures/jpPSB300.json';
+import journalpostFixture from '../../mocks/fixtures/jpPSB300.json';
 import { JOURNALPOST_LOADER_TEST_SCENARIOS } from '../../mocks/journalpostLoaderTestScenarios';
 
 import '@navikt/ds-css/dist/index.css';

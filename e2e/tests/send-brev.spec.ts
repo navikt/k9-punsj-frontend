@@ -1,8 +1,8 @@
 import { expect, test } from '@playwright/test';
 
-import fagsaker from '../../cypress/fixtures/fagsaker.json' with { type: 'json' };
-import journalpost from '../../cypress/fixtures/jpPSB300.json' with { type: 'json' };
-import journalpostUavklart from '../../cypress/fixtures/jpUavklartSakstype315.json' with { type: 'json' };
+import fagsaker from '../../src/mocks/fixtures/fagsaker.json' with { type: 'json' };
+import journalpost from '../../src/mocks/fixtures/jpPSB300.json' with { type: 'json' };
+import journalpostUavklart from '../../src/mocks/fixtures/jpUavklartSakstype315.json' with { type: 'json' };
 import { ApiPath } from '../../src/app/apiConfig';
 import { createMockPdfBytes } from '../../src/mocks/mockPdf.js';
 import { installBrevHandlers } from './helpers/brev';

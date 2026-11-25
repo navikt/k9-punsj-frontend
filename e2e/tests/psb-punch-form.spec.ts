@@ -1,9 +1,9 @@
 import { expect, test, type Request } from '@playwright/test';
 
-import pleiepengerSoknadSomKanSendesInn from '../../cypress/fixtures/pleiepengerSoknadSomKanSendesInn.json' with {
+import pleiepengerSoknadSomKanSendesInn from '../../src/mocks/fixtures/pleiepengerSoknadSomKanSendesInn.json' with {
     type: 'json',
 };
-import pleiepengerSoknadValidering from '../../cypress/fixtures/pleiepengerSoknadValidering.json' with { type: 'json' };
+import pleiepengerSoknadValidering from '../../src/mocks/fixtures/pleiepengerSoknadValidering.json' with { type: 'json' };
 import { ApiPath } from '../../src/app/apiConfig';
 
 const JOURNALPOST_ID = '200';

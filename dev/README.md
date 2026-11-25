@@ -57,9 +57,9 @@ Andre nummer fungerer mot standard mock-responser.
 
 ## UI-utvikling uten backend (MSW-mocker)
 
-For ren frontend-utvikling med MSW-baserte mocker, se `yarn test:e2eUI` i [rot-README](../README.md).
+For ren frontend-utvikling med MSW-baserte mocker, se `yarn start:e2e` i [rot-README](../README.md).
 
-Mockdata ligger i [src/mocks/mockHandlersTest.ts](../src/mocks/mockHandlersTest.ts) og [cypress/fixtures](../cypress/fixtures).
+Mockdata ligger i [src/mocks/mockHandlersTest.ts](../src/mocks/mockHandlersTest.ts) og [src/mocks/fixtures](../src/mocks/fixtures).
 
 ### Journalpost-scenarier i mockmodus
 

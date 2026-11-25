@@ -24,8 +24,8 @@ export const localServer = () => ({
     name: 'k9-punsj:local-server',
     apply: 'serve',
     transformIndexHtml() {
-        // Statisk modulscript holder load-hendelsen tilbake, slik at Cypress finner window.msw etter cy.visit
-        // Bruk samme /@fs-URL som appimporten, ellers får Cypress en annen MSW-instans.
+        // Statisk modulscript holder load-hendelsen tilbake, slik at testene finner window.msw etter sidelasting
+        // Bruk samme /@fs-URL som appimporten, ellers får testene en annen MSW-instans.
         return [
             {
                 tag: 'script',

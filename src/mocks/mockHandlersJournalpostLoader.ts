@@ -1,6 +1,6 @@
 import { HttpResponse, http } from 'msw/http';
 import { ApiPath } from 'app/apiConfig';
-import journalpost from '../../cypress/fixtures/jpPSB300.json';
+import journalpost from './fixtures/jpPSB300.json';
 import { JOURNALPOST_LOADER_TEST_SCENARIOS } from './journalpostLoaderTestScenarios';
 
 const journalpostUrl = (journalpostId: string) =>

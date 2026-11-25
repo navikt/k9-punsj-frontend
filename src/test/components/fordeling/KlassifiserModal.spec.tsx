@@ -28,8 +28,8 @@ import { rootReducer } from 'app/state/RootState';
 import type Fagsak from 'app/types/Fagsak';
 import messages from 'app/i18n/nb.json';
 import { setJournalpostAction } from 'app/state/reducers/FellesReducer';
-import fagsaker from '../../../../cypress/fixtures/fagsaker.json';
-import journalpostFixture from '../../../../cypress/fixtures/jpPSB300.json';
+import fagsaker from '../../../mocks/fixtures/fagsaker.json';
+import journalpostFixture from '../../../mocks/fixtures/jpPSB300.json';
 
 vi.mock('app/api/api', async (importOriginal) => {
     const actual = await importOriginal<typeof import('app/api/api')>();

@@ -9,7 +9,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router';
-import journalpostFixture from '../../../cypress/fixtures/jpPSB300.json';
+import journalpostFixture from '../../mocks/fixtures/jpPSB300.json';
 
 const JOURNALPOST_ID = journalpostFixture.journalpostId;
 const journalpostPath = ApiPath.JOURNALPOST_GET.replace('{journalpostId}', JOURNALPOST_ID);

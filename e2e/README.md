@@ -4,7 +4,7 @@ The Chromium Playwright suite runs the frontend with its existing MSW test handl
 
 PR- og produksjons-workflowene kjører hele suiten gjennom den samme gjenbrukbare Playwright-workflowen med to shards og to workers per shard. PR-kjøringen starter når en pull request åpnes eller oppdateres. Begge caller-workflowene beholder en egen `Playwright`-sjekk som bare lykkes når shardene lykkes; feil, avbrudd eller hoppet over kjøring gir ikke en vellykket sjekk. Produksjonsdeploy krever at denne sjekken og lint, enhetstester og bygg lykkes. Hver runner gjentar installasjon og serveroppstart, så oppdelingen garanterer ikke halvert CI-tid.
 
-Ingen Cypress-spesifikasjoner gjenstår, og CI starter ikke lenger Cypress. Delte fixtures brukes fortsatt av Playwright, MSW, Vitest og Storybook. Cypress-konfigurasjon, support, verktøy, avhengigheter og `run-e2e`-skript med livssyklustester er beholdt til senere infrastrukturfjerning. Den endelige revisjonen av dekning og overlapp gjenstår. Paritetskartene nedenfor dokumenterer tidligere migreringssteg; antall gjenværende Cypress-filer i disse stegene er historiske.
+Ingen Cypress-spesifikasjoner gjenstår, og Cypress-oppsett, avhengigheter og `run-e2e`-skript er fjernet. Delte fixtures ligger i `src/mocks/fixtures` og brukes av Playwright, MSW, Vitest og Storybook. Den endelige revisjonen av dekning og overlapp gjenstår. Paritetskartene nedenfor dokumenterer tidligere migreringssteg; antall gjenværende Cypress-filer i disse stegene er historiske.
 
 To inspect a shard, download its `playwright-<run-id>-<attempt>-shard-<index>` artifact from the Actions run summary. Each artifact contains that shard's HTML report and failure results, including traces and screenshots when available. Extract the artifacts into separate directories and run `yarn exec playwright show-report <extracted-directory>/playwright-report` for each report.
 
@@ -39,7 +39,7 @@ yarn test:pw -g "viser inngangen"
 yarn test:pw:ui
 ```
 
-Playwright starts `yarn start:e2e`, waits for `/health/isReady`, and stops the server after the run. The app uses port 8080, which it shares with local development and Cypress; only one server can use that port at a time. If the port is occupied, stop the server you started before running the suite.
+Playwright starts `yarn start:e2e`, waits for `/health/isReady`, and stops the server after the run. The app uses port 8080, which it shares with local development; only one server can use that port at a time. If the port is occupied, stop the server you started before running the suite.
 
 Run both CI shards locally in sequence because they use the same port:
 
@@ -1227,7 +1227,7 @@ yarn storybook
 
 After a Playwright run, open its HTML report with `yarn exec playwright show-report`. Stop Playwright UI and Storybook with Ctrl+C in the terminals running those commands.
 
-The Playwright journey uses existing applicant `08438323288` and complete case `1DQBDDC` from `cypress/fixtures/fagsaker.json` (PSB, not reserved, child `24420167209`, period `2024-04-15`–`2024-04-15`). A test-only MSW override fails the first creation attempt with 500 and returns only `{ journalpostId: "920001" }` on the retry. Before opening the result, the journey installs an exact-ID GET override with completed status `FERDIGSTILT`, `erFerdigstilt: true`, and populated case data. The generic handler, shared journalpost `200`, and shared fixtures remain unchanged.
+The Playwright journey uses existing applicant `08438323288` and complete case `1DQBDDC` from `src/mocks/fixtures/fagsaker.json` (PSB, not reserved, child `24420167209`, period `2024-04-15`–`2024-04-15`). A test-only MSW override fails the first creation attempt with 500 and returns only `{ journalpostId: "920001" }` on the retry. Before opening the result, the journey installs an exact-ID GET override with completed status `FERDIGSTILT`, `erFerdigstilt: true`, and populated case data. The generic handler, shared journalpost `200`, and shared fixtures remain unchanged.
 
 These overrides are installed only in the test's browser context. Opening the destination URL separately does not install this scenario; use the test's Playwright UI snapshot to review the completed screen.
 

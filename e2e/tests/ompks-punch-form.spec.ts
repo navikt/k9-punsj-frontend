@@ -1,7 +1,7 @@
 import { expect, test, type Page, type Request, type Response } from '@playwright/test';
 
-import fagsaker from '../../cypress/fixtures/fagsaker.json' with { type: 'json' };
-import journalpost from '../../cypress/fixtures/jpOMPKS302.json' with { type: 'json' };
+import fagsaker from '../../src/mocks/fixtures/fagsaker.json' with { type: 'json' };
+import journalpost from '../../src/mocks/fixtures/jpOMPKS302.json' with { type: 'json' };
 import { ApiPath } from '../../src/app/apiConfig';
 
 const JOURNALPOST_ID = journalpost.journalpostId;

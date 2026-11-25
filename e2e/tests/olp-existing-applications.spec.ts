@@ -1,8 +1,8 @@
 import { expect, test, type Page, type Response } from '@playwright/test';
 
-import fagsaker from '../../cypress/fixtures/fagsaker.json' with { type: 'json' };
-import jpPILS301 from '../../cypress/fixtures/jpPILS301.json' with { type: 'json' };
-import olpSoknad from '../../cypress/fixtures/olp/olpSoknad.json' with { type: 'json' };
+import fagsaker from '../../src/mocks/fixtures/fagsaker.json' with { type: 'json' };
+import jpPILS301 from '../../src/mocks/fixtures/jpPILS301.json' with { type: 'json' };
+import olpSoknad from '../../src/mocks/fixtures/olp/olpSoknad.json' with { type: 'json' };
 import { ApiPath } from '../../src/app/apiConfig';
 
 const JOURNALPOST_ID = jpPILS301.journalpostId;

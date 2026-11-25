@@ -68,6 +68,12 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-25 — Fjernet Cypress-infrastruktur
+
+- Flyttet delte fixtures uendret fra `cypress/fixtures` til `src/mocks/fixtures` (33 filer, identiske blob-hasher mot 848cef15) og oppdaterte importene i e2e, MSW, Vitest og Storybook.
+- Fjernet `cypress/`, `cypress.config.ts`, Cypress-avhengigheter og -skript, ubrukt `glob`, `run-e2e`-skriptet med test og tilhørende steg i `test.yml`, samt Cypress-hooks i `App.tsx`. `start:e2e` og Playwright `webServer` er beholdt.
+- Oppdaterte gjeldende dokumentasjon til Playwright-kommandoer.
+
 #### 2026-11-25 — Playwright i PR- og produksjons-CI
 
 - Delte den eksisterende Playwright-kjøringen med to shards og to workers mellom PR og produksjon. Begge caller-workflowene beholder `Playwright`-sjekken som krever vellykkede shards; produksjonsdeploy krever også at sjekken lykkes.

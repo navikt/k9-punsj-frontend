@@ -1,6 +1,6 @@
 import { expect, test, type Page, type Response } from '@playwright/test';
 
-import pleiepengerSoknadSomKanSendesInn from '../../cypress/fixtures/pleiepengerSoknadSomKanSendesInn.json' with {
+import pleiepengerSoknadSomKanSendesInn from '../../src/mocks/fixtures/pleiepengerSoknadSomKanSendesInn.json' with {
     type: 'json',
 };
 import { ApiPath } from '../../src/app/apiConfig';
