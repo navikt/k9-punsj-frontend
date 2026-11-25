@@ -2,7 +2,9 @@
 
 The Chromium Playwright suite runs the frontend with its existing MSW test handlers. It does not call the backend.
 
-The PR workflow runs the full suite when a pull request is opened or synchronized. To inspect a run, download its `playwright-<run-id>-<attempt>` artifact from the Actions run summary. It contains the HTML report and failure results, including traces and screenshots when available. Run `yarn exec playwright show-report playwright-report` after extracting the artifact to view the report locally.
+The PR workflow runs the full suite in two Playwright shards with two workers each when a pull request is opened or synchronized. The `Playwright` check succeeds only if both shards succeed. Each runner repeats installation and server startup, so splitting the suite does not guarantee halving CI time.
+
+To inspect a shard, download its `playwright-<run-id>-<attempt>-shard-<index>` artifact from the Actions run summary. Each artifact contains that shard's HTML report and failure results, including traces and screenshots when available. Extract the artifacts into separate directories and run `yarn exec playwright show-report <extracted-directory>/playwright-report` for each report.
 
 ## Storybook browser tests
 
@@ -36,6 +38,15 @@ yarn test:pw:ui
 ```
 
 Playwright starts `yarn start:e2e`, waits for `/health/isReady`, and stops the server after the run. The app uses port 8080, which it shares with local development and Cypress; only one server can use that port at a time. If the port is occupied, stop the server you started before running the suite.
+
+Run both CI shards locally in sequence because they use the same port:
+
+```sh
+yarn test:pw --workers=2 --shard=1/2
+yarn test:pw --workers=2 --shard=2/2
+```
+
+Each run overwrites `playwright-report/` and `test-results/`; open or save the first shard's report before starting the second. Open the current report with `yarn exec playwright show-report playwright-report`.
 
 ## PSB form save and submission
 

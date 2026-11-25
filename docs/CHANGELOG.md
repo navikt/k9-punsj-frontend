@@ -68,6 +68,10 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-25 — Delte Playwright i to CI-sharder
+
+- PR-workflowen kjører hele Playwright-suiten i to sharder med separate rapporter og en felles `Playwright`-kontroll. CI-tidsbesparelsen er ikke målt.
+
 #### 2026-11-25 — OMPUT søkerbytte og modalavbrudd
 
 - La til en isolert Playwright-reise for nullstilling, søkerbytte og avbrudd av Fortsett- og Vent-modalene. Fjernet bare de fire dekkede Cypress-blokkene og deres ubrukte reservasjon/år-oppsett; de øvrige OMPUT-kontrollene og alle fire Cypress-spesifikasjonene står igjen.
