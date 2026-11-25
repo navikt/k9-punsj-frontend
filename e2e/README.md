@@ -232,6 +232,22 @@ Task 68 removed only those four applicant-switch/modal blocks and their two stat
 
 Task 69 removed only this four-block two-applicant describe and its now-unused constants. The nine main-describe case-selection and initial-state blocks remain. The Cypress file remains, and the unchanged configured pattern matches `OMPMA.cy.js`, `OMPAO.cy.js` and `OMPKS.cy.js`.
 
+### Task 70 mapping at baseline `3277a93b`
+
+| Cypress block | Playwright coverage |
+| --- | --- |
+| 14–16: Open journalpost from the real route | `velger ordinær og reservert OMPMA-sak og fjerner foreldede detaljer` enters `/journalpost/304`; `openJournalpost` verifies the pathname, MSW response status `201` and complete `jpOMPMA304` fixture. It also checks the automatically selected OMPMA subtype before any input. |
+| 18–20: Hide the document | The same journey verifies the PDF is visible, clicks **Skjul** and verifies the PDF is hidden. |
+| 22–31: Initial journalpost panel | The same journey checks journalpost number, applicant ID and OMPMA case type before applicant confirmation. |
+| 33–39: Document choices | The same journey checks the **Dette gjelder:** heading and the four visible choices: Pleiepenger sykt barn, Omsorgspenger/omsorgsdager, Pleiepenger i livets sluttfase and Annet. |
+| 41–44: Selected OMPMA subtype | `openJournalpost` asserts the OMPMA subtype is checked immediately after loading the journalpost, without selecting the parent or subtype in test setup. |
+| 46–48: Two-applicant checkbox | The same journey checks that the paper two-applicant checkbox is visible before applicant confirmation. |
+| 50–53: Initially disabled journal actions | The same journey checks that both **Journalfør og fortsett** and **Journalfør og vent** are disabled before applicant confirmation. |
+| 55–80: Confirm applicant and select ordinary case | The same journey verifies the applicant-scoped lookup response, selected ordinary case ID, related-person name and ID, K9 link, journalpost-panel case and related-person ID, manual-input absence, and enabled actions. |
+| 82–103: Select reserved case | The same journey verifies the reserved case ID and related-person details, absence of the K9 link, removal of ordinary-case details, and enabled actions. |
+
+Task 70 removed only `OMPMA.cy.js` after the two required Playwright specs passed. Shared fixtures and Cypress utilities remain unchanged. The configured Cypress pattern now matches exactly `OMPAO.cy.js` and `OMPKS.cy.js`.
+
 ## OMPMA form saving and submission
 
 `ompma-punch-form.spec.ts` replaces the abandoned checks in `cypress/e2e/omsorgspenger-midlertidig-alene/omsorgspengerMidlertidigAlene.cy.js`. The former Cypress file was commented out. B46's `ompma-existing-applications.spec.ts` continues to cover the journalpost and application-list journeys.
