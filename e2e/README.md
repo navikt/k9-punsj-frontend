@@ -1015,7 +1015,7 @@ Alle seks Playwright-modalreisene avbryter og kontrollerer at klassifisering, Ve
 
 ### Task 79 mapping at baseline `8f16966c`
 
-`reserverer ny OMPKS-sak, velger barn fra listen og avbryter modalene uten sak` bruker de fire uendrede OMPKS-sakene og `barn.json`. Søkeravgrensede MSW-handlere installeres før søkerbekreftelse; testen kontrollerer søker-ID, status, service worker og hele svaret for både saks- og barnoppslaget.
+`reserverer ny OMPKS-sak, velger barn og avbryter modalene for listebarn og manuelt barn` bruker de fire uendrede OMPKS-sakene og `barn.json`. Søkeravgrensede MSW-handlere installeres før søkerbekreftelse; testen kontrollerer søker-ID, status, service worker og hele svaret for både saks- og barnoppslaget.
 
 | Cypress-blokk ved baseline | Playwright-dekning |
 | --- | --- |
@@ -1025,7 +1025,21 @@ Alle seks Playwright-modalreisene avbryter og kontrollerer at klassifisering, Ve
 | 206–236: Avbryt Fortsett uten sak | Kontrollerer Fortsett-overskrift og bekreftelsesetikett, OMPKS-type, søker og barn, fravær av sak og periode, varsel, fravær av LOS og aktive knapper. Avbryt lukker modalvinduet og beholder reservasjon, barn, panel og aktive handlinger uten skriving. |
 | 237–267: Avbryt Vent uten sak | Kontrollerer tilsvarende innhold og tilstand med egen Vent-overskrift og bekreftelsesetikett. Ingen bekreftelse utføres. |
 
-Testen observerer ingen klassifiserings-, Vent-, kopierings-, behandlingsårs- eller OMPKS-søknadsskriving. De erstattede konflikt- og modalblokkene er fjernet. Med `testIsolation: false` må reservasjon og valg av det frie listebarnet beholdes i Cypress: neste manuelle barn-blokk kontrollerer at dette valget fjernes. Saksvalg, manuelle barn, søkerbytte, tomme oppslag og to søkere er beholdt. `OMPKS.cy.js` er fortsatt den eneste spesifikasjonen som treffes av det uendrede Cypress-mønsteret; endelig fjerning krever et separat CI-steg.
+Testen observerer ingen klassifiserings-, Vent-, kopierings-, behandlingsårs- eller OMPKS-søknadsskriving. De erstattede konflikt- og modalblokkene er fjernet. Med `testIsolation: false` beholdes reservasjon og valg av det frie listebarnet i Cypress som oppsett for manuell registrering; kontrollen av at valget fjernes ble senere migrert i Task 80. Saksvalg, manuelle barn, søkerbytte, tomme oppslag og to søkere er beholdt. `OMPKS.cy.js` er fortsatt den eneste spesifikasjonen som treffes av det uendrede Cypress-mønsteret; endelig fjerning krever et separat CI-steg.
+
+### Task 80 mapping at baseline `65fccf3f`
+
+Den samme OMPKS-reisen fortsetter fra reservert ny sak med valgt listebarn. Et personoppslag for det manuelle barnet får en ID-avgrenset MSW-handler; eventuelle faktiske oppslag kontrolleres med ID, status, service worker og svar uten å kreve at et oppslag skjer.
+
+| Cypress-blokk ved baseline | Playwright-dekning |
+| --- | --- |
+| 165–187: Annet barn | Bytter fra listebarn til manuell registrering, kontrollerer fjernet barn-ID, tomt input og deaktiverte handlinger. Etter inntasting kontrolleres input, panel, informasjon om journalføring uten sak og aktiverte handlinger. |
+| 189–218: Avbryt Fortsett med manuelt barn | Kontrollerer Fortsett-overskrift og bekreftelsesetikett, OMPKS-type, søker og manuell barn-ID, fravær av sak og periode, varsel, fravær av LOS og aktive knapper. Avbryt lukker modalvinduet og beholder manuell modus, input, reservasjon, panel og aktive handlinger. |
+| 220–249: Avbryt Vent med manuelt barn | Kontrollerer tilsvarende innhold og tilstand med egen Vent-overskrift og bekreftelsesetikett. |
+| 251–263: Barn uten fødselsnummer | Velger manglende fødselsnummer etter manuell ID og kontrollerer fjernet barn-ID, informasjon, deaktivert Fortsett og aktivert Vent. |
+| 265–293: Avbryt Vent uten barnets ID | Kontrollerer Vent-sammendrag uten barn-ID, sak og periode, varsel og knapper. Avbryt beholder manglende-ID-modus, informasjon og handlingsstatus. |
+
+Ingen modal bekreftes, og testen observerer ingen klassifiserings-, Vent-, kopierings-, behandlingsårs- eller OMPKS-søknadsskriving. De tre erstattede modalblokkene er fjernet. På grunn av `testIsolation: false` beholdes valget av manuelt barn, inntastingen og avkryssingen for manglende fødselsnummer som oppsett: den neste Cypress-blokken kontrollerer at disse kontrollene og informasjonen fjernes når søker avbekreftes. Reservasjon og listebarn fra det tidligere oppsettet er også beholdt. Øvrige søker- og tomlisteflyter er uendret; endelig fjerning av siste Cypress-fil krever et separat CI-steg.
 
 ## Fordeling PSB med to søkere
 

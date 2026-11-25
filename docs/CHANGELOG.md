@@ -68,6 +68,12 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-25 — OMPKS manuelt barn og manglende fødselsnummer
+
+- Utvidet OMPKS-reisen med manuell barn-ID, manglende fødselsnummer og tre modalavbrudd uten sak eller skriving.
+- Fjernet de erstattede Cypress-kontrollene og beholdt manuell registrering og manglende fødselsnummer som oppsett for nullstilling av søker.
+- Validering: `yarn test:pw e2e/tests/fordeling-ompks-case-selection.spec.ts` bestod før opprydding og på sluttkoden med 11 tester hver gang (0 feil, 0 hoppet over). `yarn test:e2e --spec cypress/e2e/fordeling/OMPKS.cy.js` bestod etter opprydding med 32 tester (0 feil, 0 hoppet over); `yarn lint`, `yarn tsc --noEmit` og `git diff --check` bestod. Det uendrede Cypress-mønsteret matcher bare `cypress/e2e/fordeling/OMPKS.cy.js`.
+
 #### 2026-11-25 — OMPKS ny sak og barn fra liste
 
 - Utvidet `fordeling-ompks-case-selection.spec.ts` med reservasjon, konflikt og fritt barn fra liste samt avbrudd av begge modalene uten sak.
