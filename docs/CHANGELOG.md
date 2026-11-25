@@ -68,6 +68,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-25 — Fjernet gjentatte startkontroller i OMP-fordelingsreiser
+
+- OMPAO, OMPKS, OMPMA og OMPUT sjekker ikke lenger dokumentvalg, to-søkere-avkrysning og skjuling av PDF i første valgreise. `fordeling-psb.spec.ts` eier dokumentvalg og avkrysningen, og `journalpost-loader.spec.ts` eier PDF-visning og Skjul. Ytelseseffekt er ikke målt.
+- Validering: `yarn test:pw` for de fire OMP-specene, `fordeling-psb.spec.ts` og `journalpost-loader.spec.ts` bestod med 54 tester; `yarn lint` og `git diff --check` bestod.
+
 #### 2026-11-25 — Krever annen søker ved kopiering for alle ytelser
 
 - Fortsett og Vent er nå sperret når journalposten kan kopieres, to søkere er valgt og annen søker mangler eller er ugyldig, uavhengig av ytelse. Tidligere gjaldt kontrollen bare ytelser med pleietrengende, så OMPUT og OMPMA kunne åpne dialogene uten annen søker.

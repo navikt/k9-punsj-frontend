@@ -393,28 +393,8 @@ test('avbryter Fortsett og Vent med to OMPUT-søkere og ny sak', async ({ page }
     await expectPanelField(page, 'Søkers ID:', SØKER_ID);
     await expectPanelField(page, 'Sakstype:', DOKUMENTTYPE);
 
-    const documentHeading = page.getByRole('heading', { name: 'Dette gjelder:', exact: true });
-    await expect(documentHeading).toBeVisible();
-    const documentChoices = documentHeading.locator('../..').getByRole('radiogroup');
-    for (const name of [
-        'Pleiepenger sykt barn',
-        'Omsorgspenger/omsorgsdager',
-        'Pleiepenger i livets sluttfase',
-        'Annet',
-    ]) {
-        await expect(documentChoices.getByRole('radio', { name, exact: true })).toBeVisible();
-    }
-
-    await expect(
-        page.getByLabel('Det finnes informasjon om to søkere i journalposten (gjelder kun papirsøknad)'),
-    ).toBeVisible();
     await expect(fortsett(page)).toBeDisabled();
     await expect(vent(page)).toBeDisabled();
-
-    const pdf = page.getByTitle('pdf');
-    await expect(pdf).toBeVisible();
-    await page.getByRole('button', { name: 'Skjul', exact: true }).click();
-    await expect(pdf).toBeHidden();
 
     const currentYear = await page.evaluate(() => new Date().getFullYear());
     const controlledCases = OMPUT_SAKER.map((sak) => ({ ...sak, behandlingsår: currentYear }));
