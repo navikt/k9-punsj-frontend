@@ -6,6 +6,8 @@ PR- og produksjons-workflowene kjører hele suiten gjennom den samme gjenbrukbar
 
 Ingen Cypress-spesifikasjoner gjenstår, og Cypress-oppsett, avhengigheter og `run-e2e`-skript er fjernet. Delte fixtures ligger i `src/mocks/fixtures` og brukes av Playwright, MSW, Vitest og Storybook. Den endelige revisjonen av dekning og overlapp gjenstår. Paritetskartene nedenfor dokumenterer tidligere migreringssteg; antall gjenværende Cypress-filer i disse stegene er historiske.
 
+OMPAO-reisen `refetcher tom OMPAO-barneliste etter Nei og Ja med tom fagsaksliste` eier nå også kontrollene for tom fagsaksliste med listebarn, manuell ID og manglende ID før refetch. Refetch og en ny manuell ID-syklus kontrolleres i samme reise uten skrivekall.
+
 To inspect a shard, download its `playwright-<run-id>-<attempt>-shard-<index>` artifact from the Actions run summary. Each artifact contains that shard's HTML report and failure results, including traces and screenshots when available. Extract the artifacts into separate directories and run `yarn exec playwright show-report <extracted-directory>/playwright-report` for each report.
 
 ## Storybook browser tests

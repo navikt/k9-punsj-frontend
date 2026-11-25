@@ -68,6 +68,10 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-25 — Samlet OMPAO-kontroller for tom fagsaksliste
+
+- Reisen med Nei → Ja og refetch av tom barneliste kontrollerer også listebarn, manuell ID og manglende ID før refetch. Den separate duplikatreisen er fjernet; svar, handlingsgating og fravær av skrivekall beholdes.
+
 #### 2026-11-25 — Fjernet reserverte modalavbrudd for eksisterende OMP-saker
 
 - Fjernet ti reserverte avbruddsreiser i OMPUT, OMPMA, OMPKS og OMPAO. De ordinære reisene for samme ytelse og handling beholder dialogkontrollene for sakstype, IDer, saksnummer, periode, advarsel, ingen LOS-knapp, bevart valg og ingen skrivekall. Saksvalgsreisene beholder reservert sak-ID, panelverdier, manglende K9-lenke, handlingsgating og foreldede detaljer.
