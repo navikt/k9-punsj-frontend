@@ -946,7 +946,18 @@ Barnelisten kommer fra `barn.json`. `barn[2]` kobles til en av de fire OMPAO-sak
 | 241–270: Avbryt Vent for erstattet søker | Samme kontroller med Vent-overskrift og «Journalfør og sett på vent». Avbryt beholder valg og panel; ingen klassifiserings-, Vent-, kopierings-, behandlingsårs- eller søknadsskriving skjer. |
 | 272–288: Bekreft opprinnelig søker på nytt | Samme reise klikker «Ja» og kontrollerer at panelet igjen viser opprinnelig søker, men ikke erstattet søker eller valgt listebarn; begge handlinger er deaktivert. Kildekoden bruker samme `journalførKnapperDisabled` for begge knapper, og ugyldig manglende barn-ID deaktiverer knappen når manglende-ID-valget er av. Vent-påstanden er derfor dekket av Playwright, ikke gjeninnført i Cypress. |
 
-Etter oppryddingen starter den påfølgende Cypress-blokken for to søkere med opprinnelig søker bekreftet, reservasjon valgt og ingen valgt barn. Reservasjonen og barnelasten beholdes; blokken velger barnet etter at listen er tilgjengelig. OMPAO- og OMPKS-filene er fortsatt de eneste som treffes av det uendrede `OMP*.cy.js`-mønsteret.
+Etter Task 74 startet den påfølgende Cypress-blokken for to søkere med opprinnelig søker bekreftet, reservasjon valgt og ingen valgt barn. Task 75 migrerer denne blokken og reservasjonsoppsettet; de to etterfølgende beskrivelsene for tomme saks- og barnelister står uendret. OMPAO- og OMPKS-filene er fortsatt de eneste som treffes av det uendrede `OMP*.cy.js`-mønsteret.
+
+### Task 75 mapping at baseline `804b0784`
+
+| Cypress-blokk | Playwright-dekning |
+| --- | --- |
+| 159–161: Reserver nytt saksnummer | `kontrollerer OMPAO-gating med to søkere og avbryter begge modalene` starter med opprinnelig søker bekreftet, installerer søkeravgrensede ikke-tomme OMPAO-saks- og barnesvar, reserverer ny sak og kontrollerer at ingen barn er valgt. Oppsettblokken er fjernet. |
+| 163–193: Registrer to søkere og velg barn | Samme reise kontrollerer papirsøker-avkryssingen og informasjonsvarselet, faktisk PERSON-forespørsel og svar for annen søker, varsler om manglende søker og barn, deaktiverte handlinger før barnevalg og aktiverte handlinger og barnets ID i panelet etter valg av fritt listebarn. |
+| 195–224: Avbryt Fortsett-modal for to søkere | Samme reise gjenbruker de lokale modalassertene for Fortsett-overskrift og bekreftelsesetikett, OMPAO-type, opprinnelig søker og barnets ID, fravær av sak/periode, irreversibilitetsvarsel, fravær av LOS-handling og aktiverte knapper. Avbryt beholder valgene uten skriving. |
+| 226–255: Avbryt Vent-modal for to søkere | Samme reise gjenbruker de lokale modalassertene for den særskilte Vent-overskriften og bekreftelsesetiketten. Avbryt beholder annen søker, avkryssinger, valgt barn og aktive handlinger; ingen klassifiserings-, Vent-, kopierings-, behandlingsårs- eller søknadsskriving skjer. |
+
+De to beskrivelsene for tomme lister og de elleve tidligere saksvalgblokkene står igjen i Cypress. Cypress-filen beholdes fordi tomme lister er en egen migreringsetappe.
 
 ## Fordeling PSB med to søkere
 

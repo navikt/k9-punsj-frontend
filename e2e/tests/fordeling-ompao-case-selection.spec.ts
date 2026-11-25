@@ -9,6 +9,7 @@ const JOURNALPOST_ID = jpOMPAO303.journalpostId;
 const SØKER_ID = jpOMPAO303.norskIdent;
 const DOKUMENTTYPE = 'Alene om omsorgen';
 const OMPAO_UNDERTYPE = 'Ekstra omsorgsdager når du er alene om omsorgen';
+const ANNEN_SØKER_ID = '02918496664';
 const NY_SØKER_ID = '12448325820';
 const ORDINÆR_SAK_UTEN_BARN = fagsaker[14];
 const ORDINÆR_SAK_MED_BARN = fagsaker[15];
@@ -38,6 +39,14 @@ const NY_SØKER_PERSON = {
     identitetsnummer: NY_SØKER_ID,
     mellomnavn: '',
     sammensattNavn: 'Ny søker Test',
+};
+const ANNEN_SØKER_PERSON = {
+    etternavn: 'KAKE',
+    fornavn: 'TUNGSINDIG',
+    fødselsdato: '1981-12-18',
+    identitetsnummer: ANNEN_SØKER_ID,
+    mellomnavn: null,
+    sammensattNavn: 'TUNGSINDIG KAKE',
 };
 const MUTATION_PATHS = new Set([
     ApiPath.JOURNALPOST_MOTTAK,
@@ -208,6 +217,23 @@ const installReplacementApplicantPersonHandler = async (page: Page) => {
             );
         },
         { personPath: ApiPath.PERSON, applicantId: NY_SØKER_ID, person: NY_SØKER_PERSON },
+    );
+};
+
+const installSecondApplicantPersonHandler = async (page: Page) => {
+    await page.evaluate(
+        ({ personPath, applicantId, person }) => {
+            const msw = window.msw;
+            if (!msw) throw new Error('MSW-testarbeideren er ikke tilgjengelig.');
+
+            msw.worker.use(
+                msw.http.get(personPath, ({ request }) => {
+                    if (request.headers.get('X-Nav-NorskIdent') !== applicantId) return;
+                    return msw.HttpResponse.json(person, { status: 200 });
+                }),
+            );
+        },
+        { personPath: ApiPath.PERSON, applicantId: ANNEN_SØKER_ID, person: ANNEN_SØKER_PERSON },
     );
 };
 
@@ -567,6 +593,76 @@ test('reserverer ny OMPAO-sak, velger barn fra listen og avbryter modalene uten 
     await page.getByLabel('Pleietrengende har ikke fødselsnummer').check();
     await expectMissingChildId(page);
     await expectAndCancelModal(page, { kind: 'missing-id', action: 'Vent' }, mutations);
+
+    expect(mutations).toEqual([]);
+});
+
+test('kontrollerer OMPAO-gating med to søkere og avbryter begge modalene', async ({ page }) => {
+    const mutations = recordMutations(page);
+    await openJournalpost(page);
+    await installChildrenLookupHandler(page);
+    await selectApplicantAndLoadCases(page);
+
+    const reservation = page.getByLabel('Reserver saksnummer til ny fagsak');
+    const childSelect = page.getByLabel('Velg hvilket barn det gjelder');
+    const twoApplicants = page.getByLabel(
+        'Det finnes informasjon om to søkere i journalposten (gjelder kun papirsøknad)',
+    );
+    const secondApplicant = page.getByLabel('Fødselsnummer annen søker:', { exact: true });
+
+    const childrenResponsePromise = waitForChildrenLookup(page);
+    await reservation.check();
+    await expectChildrenLookupResponse(await childrenResponsePromise);
+    await expect(reservation).toBeChecked();
+    await expect(childSelect).toHaveValue('');
+    await expect(journalpostpanel(page).getByText('Barnets ID:', { exact: true })).toHaveCount(
+        0,
+    );
+    await expect(fortsett(page)).toBeDisabled();
+    await expect(vent(page)).toBeDisabled();
+
+    await twoApplicants.check();
+    await expect(twoApplicants).toBeChecked();
+    await expect(page.locator('[data-test-id="infoOmRegisteringAvToSokere"]')).toBeVisible();
+    await expect(page.locator('[data-test-id="toSøkereIngenAnnenSøker"]')).toBeVisible();
+
+    await installSecondApplicantPersonHandler(page);
+    const secondApplicantResponsePromise = page.waitForResponse(
+        (response) =>
+            isResponse(response, 'GET', ApiPath.PERSON) &&
+            response.request().headers()['x-nav-norskident'] === ANNEN_SØKER_ID,
+    );
+    await secondApplicant.fill(ANNEN_SØKER_ID);
+    const secondApplicantResponse = await secondApplicantResponsePromise;
+    expect(secondApplicantResponse.status()).toBe(200);
+    expect(secondApplicantResponse.fromServiceWorker()).toBe(true);
+    expect(secondApplicantResponse.request().headers()['x-nav-norskident']).toBe(ANNEN_SØKER_ID);
+    expect(await secondApplicantResponse.json()).toEqual(ANNEN_SØKER_PERSON);
+    await expect(secondApplicant).toHaveValue(ANNEN_SØKER_ID);
+    await expect(page.getByText('Navn: TUNGSINDIG KAKE', { exact: true })).toBeVisible();
+    await expect(page.locator('[data-test-id="toSøkereIngenAnnenSøker"]')).toHaveCount(0);
+    await expect(page.locator('[data-test-id="toSøkereIngenPleietrengende"]')).toBeVisible();
+    await expect(fortsett(page)).toBeDisabled();
+    await expect(vent(page)).toBeDisabled();
+
+    await childSelect.selectOption(BARN_UTEN_FAGSAK.identitetsnummer);
+    await expectNewCaseWithListedChild(page, BARN_UTEN_FAGSAK);
+    await expect(page.locator('[data-test-id="toSøkereIngenPleietrengende"]')).toHaveCount(0);
+
+    for (const action of ['Fortsett', 'Vent'] as const) {
+        await expectAndCancelModal(
+            page,
+            { kind: 'new-case', action, barn: BARN_UTEN_FAGSAK },
+            mutations,
+        );
+        await expect(twoApplicants).toBeChecked();
+        await expect(secondApplicant).toHaveValue(ANNEN_SØKER_ID);
+        await expect(reservation).toBeChecked();
+        await expect(childSelect).toHaveValue(BARN_UTEN_FAGSAK.identitetsnummer);
+        await expectPanelField(page, 'Barnets ID:', BARN_UTEN_FAGSAK.identitetsnummer);
+        await expect(fortsett(page)).toBeEnabled();
+        await expect(vent(page)).toBeEnabled();
+    }
 
     expect(mutations).toEqual([]);
 });
