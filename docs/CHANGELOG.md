@@ -68,6 +68,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-25 — OMPAO ny sak og barn fra liste
+
+- La til en Playwright-reise for ny OMPAO-sak, konflikt- og barnevalg uten fagsak fra listen og avbrudd av Fortsett- og Vent-modal uten valgt sak. Testen kontrollerer søkeravgrensede MSW-svar og fravær av skrivekall. Fjernet bare erstattede Cypress-påstander og modalblokker; reservasjon og barnevalg står igjen som oppsett for senere kontroller av manuell barneregistrering.
+- Validering: `yarn test:pw e2e/tests/fordeling-ompao-case-selection.spec.ts` bestod med 8 tester; `yarn test:e2e --spec cypress/e2e/fordeling/OMPAO.cy.js` bestod med 36 tester etter opprydding; `yarn lint` og `git diff --check` bestod. Cypress-konfigurasjonen er uendret, og Fordeling-mønsteret matcher fortsatt `OMPAO.cy.js` og `OMPKS.cy.js`. `sif-code-scan` kjøres i CI.
+
 #### 2026-11-25 — OMPAO-saksvalg og modalavbrudd
 
 - La til Playwright-dekning for ordinære og reserverte OMPAO-saker med og uten barn, og avbrøt de seks tilhørende modalbanene. Fjernet bare de seks erstattede Cypress-modalblokkene; saksvalgene og øvrige stateful kontroller står igjen.

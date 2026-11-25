@@ -1,5 +1,6 @@
 import { expect, test, type Page, type Response } from '@playwright/test';
 
+import barnFixture from '../../cypress/fixtures/barn.json' with { type: 'json' };
 import fagsaker from '../../cypress/fixtures/fagsaker.json' with { type: 'json' };
 import jpOMPAO303 from '../../cypress/fixtures/jpOMPAO303.json' with { type: 'json' };
 import { ApiPath } from '../../src/app/apiConfig';
@@ -19,6 +20,13 @@ const OMPAO_SAKER = [
     RESERVERT_SAK_MED_BARN,
     RESERVERT_SAK_UTEN_BARN,
 ];
+const BARNELISTE = barnFixture.barn;
+const BARN_MED_FAGSAK = BARNELISTE[2];
+const BARN_UTEN_FAGSAK = BARNELISTE[0];
+const SAK_FOR_BARN = OMPAO_SAKER.find(
+    (sak) => sak.pleietrengende?.identitetsnummer === BARN_MED_FAGSAK.identitetsnummer,
+);
+if (!SAK_FOR_BARN) throw new Error('Fant ikke OMPAO-saken som tilhører barnet i barn.json.');
 const PERIODE = '31.12.2021 - 31.12.2039';
 const JOURNALPOST_PATH = ApiPath.JOURNALPOST_GET.replace('{journalpostId}', JOURNALPOST_ID);
 const MUTATION_PATHS = new Set([
@@ -33,10 +41,10 @@ const MUTATION_PATHS = new Set([
 ]);
 
 type OMPAOSak = (typeof OMPAO_SAKER)[number];
-type ModalScenario = {
-    action: 'Fortsett' | 'Vent';
-    sak: OMPAOSak;
-};
+type CaseModalScenario = { kind: 'case'; action: 'Fortsett' | 'Vent'; sak: OMPAOSak };
+type ModalScenario =
+    | CaseModalScenario
+    | { kind: 'new-case'; action: 'Fortsett' | 'Vent'; barn: (typeof BARNELISTE)[number] };
 
 const isResponse = (response: Response, method: string, path: string) =>
     response.request().method() === method && new URL(response.url()).pathname === path;
@@ -109,6 +117,41 @@ const selectApplicantAndLoadCases = async (page: Page) => {
     expect(await response.json()).toEqual(OMPAO_SAKER);
     await expect(page.getByLabel('Velg fagsak')).toBeEnabled();
 };
+
+const installChildrenLookupHandler = async (page: Page) => {
+    await page.evaluate(
+        ({ childPath, applicantId, children }) => {
+            const msw = window.msw;
+            if (!msw) throw new Error('MSW-testarbeideren er ikke tilgjengelig.');
+
+            msw.worker.use(
+                msw.http.get(childPath, ({ request }) => {
+                    if (request.headers.get('X-Nav-NorskIdent') !== applicantId) return;
+                    return msw.HttpResponse.json(children, { status: 200 });
+                }),
+            );
+        },
+        {
+            childPath: ApiPath.BARN_GET,
+            applicantId: SØKER_ID,
+            children: barnFixture,
+        },
+    );
+};
+
+const expectChildrenLookupResponse = async (response: Response) => {
+    expect(response.status()).toBe(200);
+    expect(response.fromServiceWorker()).toBe(true);
+    expect(response.request().headers()['x-nav-norskident']).toBe(SØKER_ID);
+    expect(await response.json()).toEqual(barnFixture);
+};
+
+const waitForChildrenLookup = (page: Page) =>
+    page.waitForResponse(
+        (response) =>
+            isResponse(response, 'GET', ApiPath.BARN_GET) &&
+            response.request().headers()['x-nav-norskident'] === SØKER_ID,
+    );
 
 const expectPanelField = async (page: Page, label: string, value: string) => {
     const field = journalpostpanel(page).getByText(label, { exact: true });
@@ -188,13 +231,36 @@ const selectCase = async (
     await expectSelectedCase(page, sak, staleCase, staleChildId);
 };
 
-const modalScenarios: ModalScenario[] = [
-    { action: 'Vent', sak: ORDINÆR_SAK_UTEN_BARN },
-    { action: 'Fortsett', sak: ORDINÆR_SAK_MED_BARN },
-    { action: 'Vent', sak: ORDINÆR_SAK_MED_BARN },
-    { action: 'Fortsett', sak: RESERVERT_SAK_MED_BARN },
-    { action: 'Vent', sak: RESERVERT_SAK_MED_BARN },
-    { action: 'Vent', sak: RESERVERT_SAK_UTEN_BARN },
+const expectNewCaseWithListedChild = async (
+    page: Page,
+    barn: (typeof BARNELISTE)[number],
+) => {
+    await expect(page.getByLabel('Reserver saksnummer til ny fagsak')).toBeChecked();
+    await expect(page.getByLabel('Velg fagsak')).toBeDisabled();
+    await expect(page.getByLabel('Velg fagsak')).toHaveValue('');
+    await expect(page.getByLabel('Velg hvilket barn det gjelder')).toHaveValue(
+        barn.identitetsnummer,
+    );
+    await expectPanelField(page, 'Søkers ID:', SØKER_ID);
+    await expectPanelField(page, 'Sakstype:', DOKUMENTTYPE);
+    await expectPanelField(page, 'Barnets ID:', barn.identitetsnummer);
+    await expect(journalpostpanel(page).getByText('Saksnummer:', { exact: true })).toHaveCount(0);
+    await expect(journalpostpanel(page)).not.toContainText(RESERVERT_SAK_UTEN_BARN.fagsakId);
+    await expect(journalpostpanel(page)).not.toContainText(SAK_FOR_BARN.fagsakId);
+    await expect(journalpostpanel(page)).not.toContainText(BARN_MED_FAGSAK.identitetsnummer);
+    await expect(page.locator('[data-test-id="pleietrengendeHarFagsak"]')).toHaveCount(0);
+    await expect(page.locator('[data-test-id="jornalførUtenFagsak"]')).toBeVisible();
+    await expect(fortsett(page)).toBeEnabled();
+    await expect(vent(page)).toBeEnabled();
+};
+
+const modalScenarios: CaseModalScenario[] = [
+    { kind: 'case', action: 'Vent', sak: ORDINÆR_SAK_UTEN_BARN },
+    { kind: 'case', action: 'Fortsett', sak: ORDINÆR_SAK_MED_BARN },
+    { kind: 'case', action: 'Vent', sak: ORDINÆR_SAK_MED_BARN },
+    { kind: 'case', action: 'Fortsett', sak: RESERVERT_SAK_MED_BARN },
+    { kind: 'case', action: 'Vent', sak: RESERVERT_SAK_MED_BARN },
+    { kind: 'case', action: 'Vent', sak: RESERVERT_SAK_UTEN_BARN },
 ];
 
 const expectAndCancelModal = async (
@@ -218,15 +284,21 @@ const expectAndCancelModal = async (
     await expect(info.getByText(DOKUMENTTYPE, { exact: true })).toBeVisible();
     await expect(info.getByText('Søkers ID:', { exact: true })).toBeVisible();
     await expect(info.getByText(SØKER_ID, { exact: true })).toBeVisible();
-    await expect(info.getByText('Saksnummer:', { exact: true })).toBeVisible();
-    await expect(info.getByText(scenario.sak.fagsakId, { exact: true })).toBeVisible();
-    await expect(info.getByText('Periode:', { exact: true })).toBeVisible();
-    await expect(info.getByText(PERIODE, { exact: true })).toBeVisible();
-    if (scenario.sak.pleietrengende) {
+
+    if (scenario.kind === 'case') {
+        await expect(info.getByText('Saksnummer:', { exact: true })).toBeVisible();
+        await expect(info.getByText(scenario.sak.fagsakId, { exact: true })).toBeVisible();
+        await expect(info.getByText('Periode:', { exact: true })).toBeVisible();
+        await expect(info.getByText(PERIODE, { exact: true })).toBeVisible();
+    } else {
+        await expect(info.getByText('Saksnummer:', { exact: true })).toHaveCount(0);
+        await expect(info.getByText('Periode:', { exact: true })).toHaveCount(0);
+    }
+
+    const barn = scenario.kind === 'case' ? scenario.sak.pleietrengende : scenario.barn;
+    if (barn) {
         await expect(info.getByText('Pleietrengendes ID:', { exact: true })).toBeVisible();
-        await expect(
-            info.getByText(scenario.sak.pleietrengende.identitetsnummer, { exact: true }),
-        ).toBeVisible();
+        await expect(info.getByText(barn.identitetsnummer, { exact: true })).toBeVisible();
     } else {
         await expect(info.getByText('Pleietrengendes ID:', { exact: true })).toHaveCount(0);
         await expect(info).not.toContainText(
@@ -247,7 +319,11 @@ const expectAndCancelModal = async (
 
     await dialog.getByRole('button', { name: 'Avbryt', exact: true }).click();
     await expect(dialog).toHaveCount(0);
-    await expectSelectedCase(page, scenario.sak);
+    if (scenario.kind === 'case') {
+        await expectSelectedCase(page, scenario.sak);
+    } else {
+        await expectNewCaseWithListedChild(page, scenario.barn);
+    }
     expect(mutations).toEqual([]);
 };
 
@@ -273,6 +349,50 @@ test('velger OMPAO-saker med og uten barn og fjerner foreldede detaljer', async 
         RESERVERT_SAK_MED_BARN,
         RESERVERT_SAK_MED_BARN.pleietrengende!.identitetsnummer,
     );
+
+    expect(mutations).toEqual([]);
+});
+
+test('reserverer ny OMPAO-sak, velger barn fra listen og avbryter modalene uten sak', async ({
+    page,
+}) => {
+    const mutations = recordMutations(page);
+    await openJournalpost(page);
+    await installChildrenLookupHandler(page);
+    await selectApplicantAndLoadCases(page);
+    await selectCase(page, RESERVERT_SAK_UTEN_BARN);
+
+    const childrenResponsePromise = waitForChildrenLookup(page);
+    await page.getByLabel('Reserver saksnummer til ny fagsak').check();
+    await expectChildrenLookupResponse(await childrenResponsePromise);
+    await expect(page.getByLabel('Velg fagsak')).toBeDisabled();
+    await expect(page.getByLabel('Velg fagsak')).toHaveValue('');
+    await expect(journalpostpanel(page).getByText('Saksnummer:', { exact: true })).toHaveCount(0);
+    await expect(journalpostpanel(page)).not.toContainText(RESERVERT_SAK_UTEN_BARN.fagsakId);
+    await expect(fortsett(page)).toBeDisabled();
+    await expect(vent(page)).toBeDisabled();
+
+    const childSelect = page.getByLabel('Velg hvilket barn det gjelder');
+    await childSelect.selectOption(BARN_MED_FAGSAK.identitetsnummer);
+    await expect(childSelect).toHaveValue(BARN_MED_FAGSAK.identitetsnummer);
+    await expectPanelField(page, 'Barnets ID:', BARN_MED_FAGSAK.identitetsnummer);
+    const conflictWarning = page.locator('[data-test-id="pleietrengendeHarFagsak"]');
+    await expect(conflictWarning).toBeVisible();
+    await expect(conflictWarning).toContainText(SAK_FOR_BARN.fagsakId);
+    await expect(conflictWarning).toContainText(BARN_MED_FAGSAK.identitetsnummer);
+    await expect(fortsett(page)).toBeDisabled();
+    await expect(vent(page)).toBeDisabled();
+
+    await childSelect.selectOption(BARN_UTEN_FAGSAK.identitetsnummer);
+    await expectNewCaseWithListedChild(page, BARN_UTEN_FAGSAK);
+
+    for (const action of ['Fortsett', 'Vent'] as const) {
+        await expectAndCancelModal(
+            page,
+            { kind: 'new-case', action, barn: BARN_UTEN_FAGSAK },
+            mutations,
+        );
+    }
 
     expect(mutations).toEqual([]);
 });

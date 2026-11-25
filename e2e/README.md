@@ -911,7 +911,19 @@ De sju gjenværende blokkene i `cypress/e2e/fordeling/OMPUT.cy.js` er erstattet 
 | 300–319: Velg reservert sak uten barn | Valgreisen kontrollerer «Barn: ikke satt», fravær av K9-lenke og barnets ID i panelet, deaktivert Fortsett og aktivert Vent. Overgangen fra reservert sak med barn fjerner barnedetaljene. |
 | 321–351: Avbryt Vent for reservert sak uten barn | `avbryter Vent for reservert OMPAO-sak uten barn` kontrollerer Vent-overskrift og bekreftelsesetikett, OMPAO-type, søker, saksnummer, periode, fravær av barn og LOS, advarsel og aktive knapper. Avbryt beholder valgt sak og handlingsgating uten skriving. |
 
-Barnesakene i `fagsaker.json[15]` og `[16]` har samme navn og identitetsnummer; testen leser barnedata fra hver sak separat. Den nye reisen avbryter alle seks modalene og verifiserer fravær av klassifisering, Vent, kopiering, behandlingsår og søknadsskriving. Bare modalblokkene er fjernet fra `OMPAO.cy.js`. De fire saksvalgsblokkene og alt øvrig stateful oppsett, inkludert ny sak, barn fra liste, manglende ID, søkerbytte, tomt oppslag og to søkere, er beholdt. De eksisterende OMPAO-applikasjons- og skjema-spesifikasjonene er uendret.
+Barnesakene i `fagsaker.json[15]` og `[16]` har samme navn og identitetsnummer; testen leser barnedata fra hver sak separat. Den tidligere migreringen avbrøt alle seks modalene og verifiserte fravær av klassifisering, Vent, kopiering, behandlingsår og søknadsskriving. Da ble saksvalgene og øvrig stateful oppsett beholdt. Task 72-mappingen nedenfor dokumenterer den senere Cypress-oppryddingen av konfliktvarselet og valget av barn uten fagsak, samtidig som oppsettet for manuell barneregistrering står igjen. De eksisterende OMPAO-applikasjons- og skjema-spesifikasjonene er uendret.
+
+### Task 72 mapping at baseline `61d3da91`
+
+| Cypress-blokk | Playwright-dekning |
+| --- | --- |
+| 161–172: Reserver nytt saksnummer | `reserverer ny OMPAO-sak, velger barn fra listen og avbryter modalene uten sak` kontrollerer at valgt reservert saksnummer forsvinner fra panelet, fagsakvelgeren deaktiveres og begge handlingene deaktiveres. Reservasjonshandlingen står igjen i Cypress som oppsett for påfølgende kontroller av manuell barneregistrering. |
+| 173–190: Velg barn fra liste som finnes i en fagsak | Samme reise kontrollerer valgt barn, barnets ID i panelet, varsel med den faktiske eksisterende saks-ID-en og barnets ID, samt deaktiverte handlinger. Cypress-blokken er fjernet. |
+| 191–205: Velg barn fra liste uten eksisterende fagsak | Samme reise kontrollerer valgt barn, panel-ID, fravær av konfliktvarsel og saksdetaljer, ny-sak-varsel og aktive handlinger. Selve valget står igjen som oppsett for påfølgende kontroller av manuell barneregistrering. |
+| 206–235: Avbryt Fortsett uten valgt sak | Samme reise kontrollerer Fortsett-overskrift og bekreftelsesetikett, OMPAO-type, søker og barn, fravær av sak/periode og LOS, irreversibilitetsvarsel og aktive knapper. Avbryt beholder reservasjon, valgt barn, panel og aktive handlinger uten skriving. Cypress-blokken er fjernet. |
+| 237–266: Avbryt Vent uten valgt sak | Samme reise kontrollerer Vent-overskrift og bekreftelsesetikett med samme saksoppsummering. Avbryt beholder reservasjon, valgt barn, panel og aktive handlinger; ingen klassifiserings-, Vent-, kopierings-, behandlingsårs- eller søknadsskriving skjer. Cypress-blokken er fjernet. |
+
+Barnelisten kommer fra `barn.json`. `barn[2]` kobles til en av de fire OMPAO-sakene gjennom barnets identitet, mens `barn[0]` ikke finnes i sakene. Saks- og barneoppslagene er avgrenset til søkeren; Playwright kontrollerer faktisk request-header, 200-svar, MSW-service worker og response body.
 
 ## Fordeling PSB med to søkere
 
