@@ -343,9 +343,11 @@ describe('BrevComponent', () => {
         await user.type(screen.getByRole('textbox', { name: 'Organisasjonsnummer' }), ORGNUMMER);
         expect(await screen.findByTitle('venter...')).toBeInTheDocument();
         expect(screen.getByRole('textbox', { name: 'Organisasjonsnummer' })).toHaveAttribute('readonly');
+        expect(screen.getByRole('button', { name: /Send brev$/ })).toBeDisabled();
         expect(requestsFor(ApiPath.BREV_BESTILL)).toHaveLength(0);
         resolveOrg(jsonResponse({ navn: 'Test Navn' }));
         expect(await screen.findByText('Test Navn')).toBeVisible();
+        await waitFor(() => expect(screen.getByRole('button', { name: 'Send brev' })).toBeEnabled());
     });
 
     it.each([400, 500])('beholder brevverdier etter HTTP %s og sender på nytt ved 200', async (status) => {

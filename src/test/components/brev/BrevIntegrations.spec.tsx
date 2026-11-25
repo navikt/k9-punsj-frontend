@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { act, fireEvent, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Provider } from 'react-redux';
@@ -99,7 +99,9 @@ const renderWithStore = (
     state: Record<string, unknown>,
     initialPath = '/',
     withQueryClient = false,
+    previousEntries: string[] = [],
 ) => {
+    const initialEntries = [...previousEntries, initialPath];
     const store = createStore(() => state);
     const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false }, mutations: { retry: false } } });
     const dialogRoot = document.createElement('div');
@@ -110,13 +112,13 @@ const renderWithStore = (
             <PunsjDialogProvider rootElement={dialogRoot}>
                 {withQueryClient ? (
                     <QueryClientProvider client={queryClient}>
-                        <MemoryRouter initialEntries={[initialPath]}>
+                        <MemoryRouter initialEntries={initialEntries} initialIndex={initialEntries.length - 1}>
                             <Location />
                             {element}
                         </MemoryRouter>
                     </QueryClientProvider>
                 ) : (
-                    <MemoryRouter initialEntries={[initialPath]}>
+                    <MemoryRouter initialEntries={initialEntries} initialIndex={initialEntries.length - 1}>
                         <Location />
                         {element}
                     </MemoryRouter>
@@ -385,8 +387,12 @@ describe('brevtilkoblinger', () => {
             <SendBrevBehandletJp />,
             state,
             `/journalpost/${JOURNALPOST_ID}/brev-behandlet-journalpost/`,
+            false,
+            [`/journalpost/${JOURNALPOST_ID}/`],
         );
 
+        const adresse = () => screen.getByRole('status', { name: 'Gjeldende adresse' }).textContent;
+        expect(adresse()).toBe(`/journalpost/${JOURNALPOST_ID}/brev-behandlet-journalpost/`);
         await sendLetter(user);
         await user.click(screen.getByRole('button', { name: 'Send brev' }));
         await user.click(await screen.findByRole('button', { name: 'Fortsett' }));
@@ -398,9 +404,7 @@ describe('brevtilkoblinger', () => {
         });
 
         await user.click(screen.getByRole('button', { name: 'Tilbake' }));
-        expect(screen.getByRole('status', { name: 'Gjeldende adresse' })).toHaveTextContent(
-            `/journalpost/${JOURNALPOST_ID}/`,
-        );
+        expect(adresse()).toBe(`/journalpost/${JOURNALPOST_ID}/`);
     });
 
     it('viser guard uten brevform når sakstype er uavklart', () => {
@@ -557,6 +561,8 @@ describe('brevtilkoblinger', () => {
 
         await user.click(screen.getByRole('radio', { name: 'Ferdigstill journalpost' }));
         await user.click(screen.getByRole('button', { name: 'Ferdigstill journalpost' }));
-        expect(screen.queryByText(/påbegynt brev som ikke er sendt/)).not.toBeInTheDocument();
+        const bekreftelse = await screen.findByRole('dialog', { name: 'erdusikker.ferdigstill' });
+        expect(within(bekreftelse).getByText('Er du sikker på at du vil ferdigstille journalposten?')).toBeVisible();
+        expect(within(bekreftelse).queryByText(/påbegynt brev som ikke er sendt/)).not.toBeInTheDocument();
     });
 });

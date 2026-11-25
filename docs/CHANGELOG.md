@@ -68,6 +68,13 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-25 — Styrket tre brevkontroller i Vitest
+
+- Tilbake-knappen på behandlet journalpost testes nå med en reell forrige historikkoppføring og eksakte stier før og etter klikket.
+- Organisasjonsoppslaget i brevskjemaet kontrollerer at Send brev er deaktivert mens svaret venter og aktivert etter svaret.
+- Varselet om usendt brev kontrolleres mot den åpne ferdigstillingsdialogen etter vellykket sending.
+- Validering: `yarn test src/test/components/brev/BrevIntegrations.spec.tsx src/test/components/brev/BrevComponent.spec.tsx` (35 bestod), `yarn lint` og `git diff --check`.
+
 #### 2026-11-25 — Fjernet Cypress-infrastruktur
 
 - Flyttet delte fixtures uendret fra `cypress/fixtures` til `src/mocks/fixtures` (33 filer, identiske blob-hasher mot 848cef15) og oppdaterte importene i e2e, MSW, Vitest og Storybook.
