@@ -210,6 +210,17 @@ Task 66 removed only the four mapped modal blocks; both case-selection blocks re
 
 Task 67 removed the two mapped no-case modal blocks and empty-lookup describe. The reservation and manual-entry actions remain for applicant-switch tests. `OMPMA.cy.js` remains, and the configured Cypress pattern still matches `OMPMA.cy.js`, `OMPAO.cy.js` and `OMPKS.cy.js`.
 
+### Task 68 mapping at baseline `283e769c`
+
+| Cypress block | Playwright coverage |
+| --- | --- |
+| 113–119: Reserve a new case and enter a manual other party as stateful setup | `reserverer ny OMPMA-sak og registrerer manuell annen part` independently covers reservation, manual entry and enabled actions; the Cypress setup blocks are no longer needed. |
+| 121–134: Reset applicant while retaining the manual other party | `nullstiller og erstatter OMPMA-søker med manuell annen part` checks that the case controls disappear, the manual ID remains in the input and journalpost panel, and both actions are disabled. |
+| 136–147: Enter replacement applicant | The same journey verifies the applicant-scoped case and person requests (200, MSW, request identity and response body), replacement identity, removal of old applicant/case details, retained manual party, reservation notice and enabled actions. The case response uses nonempty OMPMA fixtures. |
+| 149–178 and 180–209: Cancel Fortsett and Vent for the replacement applicant | The same journey checks each distinct heading and confirm label, OMPMA type, replacement applicant and manual party, absent case/period fields, irreversible-information warning, no LOS action, enabled controls, retained reservation/input/panel state after cancel, and no writes. Neither confirmation is executed. |
+
+Task 68 removed only those four applicant-switch/modal blocks and their two stateful setup blocks from `OMPMA.cy.js`. The earlier case-selection blocks and separate two-applicant describe remain. The Cypress file remains, and the unchanged configured pattern continues to match `OMPMA.cy.js`, `OMPAO.cy.js` and `OMPKS.cy.js`.
+
 ## OMPMA form saving and submission
 
 `ompma-punch-form.spec.ts` replaces the abandoned checks in `cypress/e2e/omsorgspenger-midlertidig-alene/omsorgspengerMidlertidigAlene.cy.js`. The former Cypress file was commented out. B46's `ompma-existing-applications.spec.ts` continues to cover the journalpost and application-list journeys.

@@ -6,6 +6,7 @@ import { ApiPath } from '../../src/app/apiConfig';
 
 const JOURNALPOST_ID = jpOMPMA304.journalpostId;
 const SØKER_ID = jpOMPMA304.norskIdent;
+const NY_SØKER_ID = '12448325820';
 const MANUELL_ANNEN_PART_ID = '24420167209';
 const ORDINÆR_SAK = fagsaker[18];
 const RESERVERT_SAK = fagsaker[19];
@@ -65,25 +66,33 @@ const openJournalpost = async (page: Page) => {
     await expect(subtype).toBeChecked();
 };
 
-const selectApplicantAndLoadCases = async (page: Page) => {
+const installCasesLookupHandler = async (
+    page: Page,
+    applicantId: string,
+    cases: typeof OMPMA_SAKER,
+) => {
     await page.evaluate(
-        ({ casesPath, applicantId, cases }) => {
+        ({ casesPath, applicantId: lookupApplicantId, cases: responseCases }) => {
             const msw = window.msw;
             if (!msw) throw new Error('MSW-testarbeideren er ikke tilgjengelig.');
 
             msw.worker.use(
                 msw.http.get(casesPath, ({ request }) => {
-                    if (request.headers.get('X-Nav-NorskIdent') !== applicantId) return;
-                    return msw.HttpResponse.json(cases, { status: 200 });
+                    if (request.headers.get('X-Nav-NorskIdent') !== lookupApplicantId) return;
+                    return msw.HttpResponse.json(responseCases, { status: 200 });
                 }),
             );
         },
         {
             casesPath: ApiPath.HENT_FAGSAK_PÅ_IDENT,
-            applicantId: SØKER_ID,
-            cases: OMPMA_SAKER,
+            applicantId,
+            cases,
         },
     );
+};
+
+const selectApplicantAndLoadCases = async (page: Page) => {
+    await installCasesLookupHandler(page, SØKER_ID, OMPMA_SAKER);
 
     const lookupPromise = page.waitForResponse(
         (response) =>
@@ -127,6 +136,30 @@ const installPersonLookupHandler = async (page: Page) => {
             );
         },
         { personPath: ApiPath.PERSON, personId: MANUELL_ANNEN_PART_ID },
+    );
+};
+
+const installReplacementApplicantPersonHandler = async (page: Page) => {
+    await page.evaluate(
+        ({ personPath, applicantId }) => {
+            const msw = window.msw;
+            if (!msw) throw new Error('MSW-testarbeideren er ikke tilgjengelig.');
+
+            msw.worker.use(
+                msw.http.get(personPath, ({ request }) => {
+                    if (request.headers.get('X-Nav-NorskIdent') !== applicantId) return;
+                    return msw.HttpResponse.json({
+                        etternavn: 'Test',
+                        fornavn: 'Ny søker',
+                        fødselsdato: '1981-12-18',
+                        identitetsnummer: applicantId,
+                        mellomnavn: '',
+                        sammensattNavn: 'Ny søker Test',
+                    });
+                }),
+            );
+        },
+        { personPath: ApiPath.PERSON, applicantId: NY_SØKER_ID },
     );
 };
 
@@ -276,7 +309,12 @@ const expectAndCancelModal = async (
 
 type NoCaseModalAction = 'Fortsett' | 'Vent';
 
-const expectAndCancelNoCaseModal = async (page: Page, action: NoCaseModalAction, mutations: string[]) => {
+const expectAndCancelNoCaseModal = async (
+    page: Page,
+    action: NoCaseModalAction,
+    mutations: string[],
+    applicantId: string,
+) => {
     const isFortsett = action === 'Fortsett';
     await (isFortsett ? fortsett(page) : vent(page)).click();
 
@@ -292,7 +330,7 @@ const expectAndCancelNoCaseModal = async (page: Page, action: NoCaseModalAction,
     await expect(info.getByText('Sakstype:', { exact: true })).toBeVisible();
     await expect(info.getByText(DOKUMENTTYPE, { exact: true })).toBeVisible();
     await expect(info.getByText('Søkers ID:', { exact: true })).toBeVisible();
-    await expect(info.getByText(SØKER_ID, { exact: true })).toBeVisible();
+    await expect(info.getByText(applicantId, { exact: true })).toBeVisible();
     await expect(info.getByText('Annen part ID:', { exact: true })).toBeVisible();
     await expect(info.getByText(MANUELL_ANNEN_PART_ID, { exact: true })).toBeVisible();
     await expect(info.getByText('Saksnummer:', { exact: true })).toHaveCount(0);
@@ -312,10 +350,12 @@ const expectAndCancelNoCaseModal = async (page: Page, action: NoCaseModalAction,
     await dialog.getByRole('button', { name: 'Avbryt', exact: true }).click();
     await expect(dialog).toHaveCount(0);
     await expect(page.getByLabel('Reserver saksnummer til ny fagsak')).toBeChecked();
+    await expect(page.getByLabel('Velg fagsak')).toBeDisabled();
+    await expect(page.getByLabel('Velg fagsak')).toHaveValue('');
     await expect(page.getByLabel('Fødselsnummer annen part:', { exact: true })).toHaveValue(
         MANUELL_ANNEN_PART_ID,
     );
-    await expectPanelField(page, 'Søkers ID:', SØKER_ID);
+    await expectPanelField(page, 'Søkers ID:', applicantId);
     await expectPanelField(page, 'Annen part ID:', MANUELL_ANNEN_PART_ID);
     await expect(page.locator('[data-test-id="jornalførUtenFagsak"]')).toBeVisible();
     await expect(fortsett(page)).toBeEnabled();
@@ -371,7 +411,7 @@ for (const action of ['Fortsett', 'Vent'] as const) {
         await page.getByLabel('Reserver saksnummer til ny fagsak').check();
         await enterManualOtherParty(page);
 
-        await expectAndCancelNoCaseModal(page, action, mutations);
+        await expectAndCancelNoCaseModal(page, action, mutations, SØKER_ID);
     });
 }
 
@@ -387,3 +427,78 @@ for (const scenario of modalScenarios) {
         await expectAndCancelModal(page, scenario, mutations);
     });
 }
+
+test('nullstiller og erstatter OMPMA-søker med manuell annen part', async ({ page }) => {
+    const mutations = recordMutations(page);
+    await openJournalpost(page);
+    await selectApplicantAndLoadCases(page);
+    await selectCase(page, RESERVERT_SAK);
+
+    await page.getByLabel('Reserver saksnummer til ny fagsak').check();
+    await expect(page.getByLabel('Reserver saksnummer til ny fagsak')).toBeChecked();
+    await enterManualOtherParty(page);
+
+    await page.getByRole('radio', { name: 'Nei', exact: true }).check();
+    await expect(page.getByLabel('Velg fagsak')).toHaveCount(0);
+    await expect(page.getByLabel('Reserver saksnummer til ny fagsak')).toHaveCount(0);
+    await expect(page.getByLabel('Fødselsnummer annen part:', { exact: true })).toHaveValue(
+        MANUELL_ANNEN_PART_ID,
+    );
+    await expectPanelField(page, 'Annen part ID:', MANUELL_ANNEN_PART_ID);
+    await expect(fortsett(page)).toBeDisabled();
+    await expect(vent(page)).toBeDisabled();
+
+    await installCasesLookupHandler(page, NY_SØKER_ID, OMPMA_SAKER);
+    await installReplacementApplicantPersonHandler(page);
+
+    const casesResponsePromise = page.waitForResponse(
+        (response) =>
+            isResponse(response, 'GET', ApiPath.HENT_FAGSAK_PÅ_IDENT) &&
+            response.request().headers()['x-nav-norskident'] === NY_SØKER_ID,
+    );
+    const personResponsePromise = page.waitForResponse(
+        (response) =>
+            isResponse(response, 'GET', ApiPath.PERSON) &&
+            response.request().headers()['x-nav-norskident'] === NY_SØKER_ID,
+    );
+    const applicantInput = page.getByLabel('Søkers fødselsnummer eller D-nummer:', { exact: true });
+    await applicantInput.fill(NY_SØKER_ID);
+    const [casesResponse, personResponse] = await Promise.all([
+        casesResponsePromise,
+        personResponsePromise,
+    ]);
+
+    expect(casesResponse.status()).toBe(200);
+    expect(casesResponse.fromServiceWorker()).toBe(true);
+    expect(casesResponse.request().headers()['x-nav-norskident']).toBe(NY_SØKER_ID);
+    expect(await casesResponse.json()).toEqual(OMPMA_SAKER);
+    expect(personResponse.status()).toBe(200);
+    expect(personResponse.fromServiceWorker()).toBe(true);
+    expect(personResponse.request().headers()['x-nav-norskident']).toBe(NY_SØKER_ID);
+    expect(await personResponse.json()).toMatchObject({
+        identitetsnummer: NY_SØKER_ID,
+        sammensattNavn: 'Ny søker Test',
+    });
+
+    await expect(page.getByLabel('Søkers fødselsnummer eller D-nummer:', { exact: true })).toHaveValue(
+        NY_SØKER_ID,
+    );
+    await expect(page.getByLabel('Velg fagsak')).toBeDisabled();
+    await expect(page.getByLabel('Reserver saksnummer til ny fagsak')).toBeChecked();
+    await expect(journalpostpanel(page)).not.toContainText(SØKER_ID);
+    await expect(journalpostpanel(page)).not.toContainText(RESERVERT_SAK.fagsakId);
+    await expectPanelField(page, 'Søkers ID:', NY_SØKER_ID);
+    await expect(page.getByLabel('Fødselsnummer annen part:', { exact: true })).toHaveValue(
+        MANUELL_ANNEN_PART_ID,
+    );
+    await expectPanelField(page, 'Annen part ID:', MANUELL_ANNEN_PART_ID);
+    await expect(page.locator('[data-test-id="jornalførUtenFagsak"]')).toBeVisible();
+    await expect(fortsett(page)).toBeEnabled();
+    await expect(vent(page)).toBeEnabled();
+
+    await expectAndCancelNoCaseModal(page, 'Fortsett', mutations, NY_SØKER_ID);
+    await expect(applicantInput).toHaveValue(NY_SØKER_ID);
+    await expectAndCancelNoCaseModal(page, 'Vent', mutations, NY_SØKER_ID);
+    await expect(applicantInput).toHaveValue(NY_SØKER_ID);
+    expect(mutations).toEqual([]);
+});
