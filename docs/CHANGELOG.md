@@ -68,6 +68,12 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-25 — Endelig paritet for OMPKS
+
+- Fylte de gjenstående hullene i OMPKS-dekningen i Playwright: startpanelet, dokumentvalgene, avkryssingsboksen for to søkere på papirsøknad, deaktiverte handlinger og skjuling av PDF i en eksisterende saksvalgsreise.
+- Dokumenterte mappingen for de 11 gjenværende Cypress-blokkene. Lot `OMPKS.cy.js` stå uendret fram til den samordnede CI-overgangen.
+- Validering: Den påkrevde Playwright-kommandoen bestod med 27 tester. `yarn lint`, `git diff --check`, kontroll av Cypress-baselinen og inventarkontroll av konfigurert `specPattern` bestod.
+
 #### 2026-11-25 — OMPKS tomme saks- og barnelister
 
 - Migrerte tomlisteflytene med manuell ID, manglende fødselsnummer og Nei → Ja-refetch til Playwright.

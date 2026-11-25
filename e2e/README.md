@@ -1089,6 +1089,26 @@ Ingen modal bekreftes, og testen observerer ingen klassifiserings-, Vent-, kopie
 
 Reisene observerer ingen klassifiserings-, Vent-, kopierings-, behandlingsårs- eller OMPKS-søknadsskriving. De to tomlistebeskrivelsene er fjernet etter at erstatningene bestod; alle elleve opprinnelige oppstarts- og saksvalgsblokker er beholdt. `OMPKS.cy.js` er fortsatt eneste Cypress-spesifikasjon; endelig fjerning krever separat koordinering med CI.
 
+### Task 84 – endelig OMPKS-paritet
+
+De siste 11 blokkene i `cypress/e2e/fordeling/OMPKS.cy.js` ved baseline `e21cd954` erstattes av Playwright-reisene nedenfor. Kontrollene av starttilstanden og PDF-visningen kjører nå i én eksisterende reise før den bekrefter Ja. Det er ikke lagt til en ny suksessreise eller endret oppførselen til delte hjelpere.
+
+| Cypress-blokk ved baseline | Playwright-erstatning |
+| --- | --- |
+| 16–18: Åpne journalpost fra LOS | `openJournalpost` i reisene `velger ordinær OMPKS-sak uten barn og fjerner foreldede barnedetaljer`, `velger ordinær OMPKS-sak med barn`, `velger reservert OMPKS-sak med barn` og `velger reservert OMPKS-sak uten barn og fjerner foreldede barnedetaljer` kontrollerer journalpostruten, 201-svaret fra service worker og hele `jpOMPKS302`-svaret. |
+| 20–22: Skjul dokumentvinduet | `velger ordinær OMPKS-sak uten barn og fjerner foreldede barnedetaljer` kontrollerer at PDF-en vises, klikker **Skjul** og kontrollerer at PDF-en skjules. |
+| 24–33: Første journalpostpanel | Den samme reisen kontrollerer journalpostnummer, søker-ID og dokumenttype før Ja bekreftes. |
+| 35–41: Dokumentvalg | Den samme reisen kontrollerer overskriften **Dette gjelder:** og at alle fire valgene vises: Pleiepenger sykt barn, Omsorgspenger/omsorgsdager, Pleiepenger i livets sluttfase og Annet. |
+| 43–46: Automatisk valgt OMPKS-undertype | `openJournalpost` i de samme fire saksvalgsreisene kontrollerer at undertyperadioen og `OMSORGSPENGER_KS`-verdien er valgt, uten å velge dem i testen. |
+| 48–50: Avkryssingsboks for to søkere på papirsøknad | Den samme reisen kontrollerer at avkryssingsboksen for to søkere på papirsøknad vises før Ja. |
+| 52–55: Deaktiverte journalføringshandlinger ved start | Den samme reisen kontrollerer at **Fortsett** og **Vent** er deaktivert før Ja. |
+| 57–78: Ordinær sak uten barn | `velger ordinær OMPKS-sak uten barn og fjerner foreldede barnedetaljer` kontrollerer valgt sak, `ikke satt`, K9-lenken, panelverdier, at foreldede barnedetaljer fjernes og handlingsgatingen. |
+| 80–102: Ordinær sak med barn | `velger ordinær OMPKS-sak med barn` kontrollerer valgt sak, barnets navn og ID fra fixturen, K9-lenken, panelverdier og at begge handlingene er aktive. |
+| 104–125: Reservert sak med barn | `velger reservert OMPKS-sak med barn` kontrollerer valgt sak, barnets navn og ID fra fixturen, manglende K9-lenke, panelverdier og at begge handlingene er aktive. |
+| 127–146: Reservert sak uten barn | `velger reservert OMPKS-sak uten barn og fjerner foreldede barnedetaljer` kontrollerer `ikke satt`, manglende K9-lenke, panelverdier, at foreldede barnedetaljer fjernes og handlingsgatingen. |
+
+Dette lukker avvikene i kontrollene for de 11 blokkene. Ingen uoverensstemmelser gjenstår i de kartlagte kontrollene. `OMPKS.cy.js` er uendret og er fortsatt det eneste treffet for den uendrede Cypress-verdien `specPattern`. Ikke slett filen før den samordnede CI-overgangen endrer Cypress-kjøringene og produksjons-workflowen.
+
 ## Fordeling PSB med to søkere
 
 `fordeling-psb-two-applicants.spec.ts` har to selvstendige reiser for scenario `930317`: avbrudd med to søkere og ny sak, og journalføring med kopiering til en annen søker. Personoppslaget for annen søker er lokalt i nettleserkonteksten. Bare kopieringsreisen installerer en blokkert kopieringsrespons.

@@ -548,7 +548,37 @@ test('dekker OMPKS med fagsaker og tom barneliste ved reservasjon av ny sak', as
 });
 
 test('velger ordinær OMPKS-sak uten barn og fjerner foreldede barnedetaljer', async ({ page }) => {
-    const mutations = await startCaseSelection(page);
+    const mutations = recordMutations(page);
+    await openJournalpost(page);
+
+    await expectPanelField(page, 'Journalpostnummer:', JOURNALPOST_ID);
+    await expectPanelField(page, 'Søkers ID:', SØKER_ID);
+    await expectPanelField(page, 'Sakstype:', DOKUMENTTYPE);
+
+    const documentHeading = page.getByRole('heading', { name: 'Dette gjelder:', exact: true });
+    await expect(documentHeading).toBeVisible();
+    const documentChoices = documentHeading.locator('../..').getByRole('radiogroup');
+    for (const name of [
+        'Pleiepenger sykt barn',
+        'Omsorgspenger/omsorgsdager',
+        'Pleiepenger i livets sluttfase',
+        'Annet',
+    ]) {
+        await expect(documentChoices.getByRole('radio', { name, exact: true })).toBeVisible();
+    }
+
+    await expect(
+        page.getByLabel('Det finnes informasjon om to søkere i journalposten (gjelder kun papirsøknad)'),
+    ).toBeVisible();
+    await expect(fortsett(page)).toBeDisabled();
+    await expect(vent(page)).toBeDisabled();
+
+    const pdf = page.getByTitle('pdf');
+    await expect(pdf).toBeVisible();
+    await page.getByRole('button', { name: 'Skjul', exact: true }).click();
+    await expect(pdf).toBeHidden();
+
+    await selectApplicantAndLoadCases(page);
     const barnId = ORDINÆR_SAK_MED_BARN.pleietrengende!.identitetsnummer;
 
     await selectCase(page, ORDINÆR_SAK_MED_BARN);
