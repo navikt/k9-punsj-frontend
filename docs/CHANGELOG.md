@@ -68,6 +68,12 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-25 — OMPKS ny sak og barn fra liste
+
+- Utvidet `fordeling-ompks-case-selection.spec.ts` med reservasjon, konflikt og fritt barn fra liste samt avbrudd av begge modalene uten sak.
+- Fjernet de erstattede Cypress-kontrollene, men beholdt reservasjon og barnvalg som oppsett for kontrollen av manuelt barn. Den siste Cypress-filen og CI-konfigurasjonen er beholdt.
+- Validering: `yarn test:pw e2e/tests/fordeling-ompks-case-selection.spec.ts` bestod før opprydding med 11 tester (0 feil, 0 hoppet over). `yarn test:e2e --spec cypress/e2e/fordeling/OMPKS.cy.js` bestod etter opprydding med 35 tester (0 feil, 0 hoppet over); `yarn lint`, `yarn tsc --noEmit` og `git diff --check` bestod. Det uendrede Cypress-mønsteret matcher bare `cypress/e2e/fordeling/OMPKS.cy.js`.
+
 #### 2026-11-25 — OMPKS-saksvalg og modalavbrudd
 
 - La til `fordeling-ompks-case-selection.spec.ts` med dekning for ordinære og reserverte OMPKS-saker med og uten barn, foreldede saks-/barnedetaljer og de seks modalavbruddene.

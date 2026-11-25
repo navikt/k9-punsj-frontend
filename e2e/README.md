@@ -1013,6 +1013,20 @@ Alle elleve blokkene er mappet. Playwright-spesifikasjonene `fordeling-ompao-cas
 
 Alle seks Playwright-modalreisene avbryter og kontrollerer at klassifisering, Vent, kopiering, behandlingsår og OMPKS-søknader ikke skrives. Fortsett testes bare for saker med barn; ingen modal bekreftes. I Cypress er de fire saksvalgsblokkene og all øvrig flyt beholdt. Med `testIsolation: false` gir saksvalget uten barn fortsatt oppsett for reservasjon av ny sak og etterfølgende barnvalg. Testfilen `OMPKS.cy.js` og Cypress-konfigurasjonen er beholdt.
 
+### Task 79 mapping at baseline `8f16966c`
+
+`reserverer ny OMPKS-sak, velger barn fra listen og avbryter modalene uten sak` bruker de fire uendrede OMPKS-sakene og `barn.json`. Søkeravgrensede MSW-handlere installeres før søkerbekreftelse; testen kontrollerer søker-ID, status, service worker og hele svaret for både saks- og barnoppslaget.
+
+| Cypress-blokk ved baseline | Playwright-dekning |
+| --- | --- |
+| 161–172: Reserver ny sak | Starter med reservert sak uten barn, reserverer ny sak og kontrollerer at saksnummeret fjernes og begge handlingene deaktiveres. |
+| 173–190: Velg barn med sak | Velger `barn[2]` og kontrollerer valgt ID, panelet, varsel med barnets ID og den tilhørende saks-ID-en fra fixturen, samt deaktiverte handlinger. |
+| 191–205: Velg barn uten sak | Velger `barn[0]` og kontrollerer valgt ID, panelet, fjernet konflikt og gamle detaljer, informasjon om journalføring uten sak og aktiverte handlinger. |
+| 206–236: Avbryt Fortsett uten sak | Kontrollerer Fortsett-overskrift og bekreftelsesetikett, OMPKS-type, søker og barn, fravær av sak og periode, varsel, fravær av LOS og aktive knapper. Avbryt lukker modalvinduet og beholder reservasjon, barn, panel og aktive handlinger uten skriving. |
+| 237–267: Avbryt Vent uten sak | Kontrollerer tilsvarende innhold og tilstand med egen Vent-overskrift og bekreftelsesetikett. Ingen bekreftelse utføres. |
+
+Testen observerer ingen klassifiserings-, Vent-, kopierings-, behandlingsårs- eller OMPKS-søknadsskriving. De erstattede konflikt- og modalblokkene er fjernet. Med `testIsolation: false` må reservasjon og valg av det frie listebarnet beholdes i Cypress: neste manuelle barn-blokk kontrollerer at dette valget fjernes. Saksvalg, manuelle barn, søkerbytte, tomme oppslag og to søkere er beholdt. `OMPKS.cy.js` er fortsatt den eneste spesifikasjonen som treffes av det uendrede Cypress-mønsteret; endelig fjerning krever et separat CI-steg.
+
 ## Fordeling PSB med to søkere
 
 `fordeling-psb-two-applicants.spec.ts` har to selvstendige reiser for scenario `930317`: avbrudd med to søkere og ny sak, og journalføring med kopiering til en annen søker. Personoppslaget for annen søker er lokalt i nettleserkonteksten. Bare kopieringsreisen installerer en blokkert kopieringsrespons.
