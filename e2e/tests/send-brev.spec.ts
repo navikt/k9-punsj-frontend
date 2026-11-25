@@ -36,7 +36,7 @@ test('hindrer brev for uavklart ytelse til PSB er valgt på journalposten', asyn
     await expect(page.getByText(/Journalposten mangler avklart ytelsestype/i)).toBeVisible();
     await expect(page.getByRole('combobox', { name: 'Velg mal' })).toHaveCount(0);
     await page.getByRole('button', { name: 'Tilbake' }).click();
-    await expect(page).toHaveURL(new RegExp(`/journalpost/${journalpostId}/?$`));
+    await expect(page).toHaveURL((url) => url.pathname.replace(/\/$/, '') === `/journalpost/${journalpostId}`);
 
     await expect(page.getByText(/Ytelsestypen på journalposten er ikke avklart/i)).toBeVisible();
     const sendBrevButton = page.getByRole('button', { name: 'Send brev', exact: true });
@@ -48,7 +48,9 @@ test('hindrer brev for uavklart ytelse til PSB er valgt på journalposten', asyn
         (request) => request.method() === 'GET' && requestPath(request.url()) === ApiPath.BREV_MALER,
     );
     await sendBrevButton.click();
-    await expect(page).toHaveURL(new RegExp(`/journalpost/${journalpostId}/brev-behandlet-journalpost/?$`));
+    await expect(page).toHaveURL(
+        (url) => url.pathname.replace(/\/$/, '') === `/journalpost/${journalpostId}/brev-behandlet-journalpost`,
+    );
     await expect(page.getByRole('combobox', { name: 'Velg mal' })).toBeVisible();
 
     const templateRequest = await templateRequestPromise;
@@ -242,7 +244,7 @@ test('bestiller brev fra hovedsiden med PDF-forhåndsvisning og nytt forsøk', a
 
     await test.step('Åpne brev i avsluttet sak og velge fagsak', async () => {
         await page.getByTestId('brev-avsluttet-sak-inngang').click();
-        await expect(page).toHaveURL(/\/brev-avsluttet-sak/);
+        await expect(page).toHaveURL((url) => url.pathname.replace(/\/$/, '') === '/brev-avsluttet-sak');
         await expect(page.getByRole('heading', { name: 'Send brev i avsluttet sak' })).toBeVisible();
 
         const fagsakRequest = page.waitForRequest(
@@ -476,7 +478,9 @@ test('sender brev på valgt fagsak, hindrer duplikat og lukker oppgaven etter ny
         await page.getByRole('radio', { name: 'Send brev og lukk oppgave i LOS', exact: true }).check();
         await page.locator('[data-test-id="bekreftKnapp"]').click();
         await expect(page).toHaveURL(
-            new RegExp(`/journalpost/${JOURNALPOST_ID}/pleiepenger-sykt-barn/send-brev-fagsak/?$`),
+            (url) =>
+                url.pathname.replace(/\/$/, '') ===
+                `/journalpost/${JOURNALPOST_ID}/pleiepenger-sykt-barn/send-brev-fagsak`,
         );
     });
 
