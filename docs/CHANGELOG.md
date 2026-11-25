@@ -68,6 +68,12 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-25 — OMPAO tomme saks- og barnelister
+
+- La til tre isolerte Playwright-reiser for tomme og ikke-tomme OMPAO-saks-/barnelister, manuell barn-ID, manglende-ID-gating og Nei → Ja-refetch. Saks-, barn- og PERSON-svar kontrollerer søkerheader og body; reisene sender ingen skrivekall.
+- Fjernet bare de to tomlistebeskrivelsene og ubrukte Cypress-importer/konstanter. Beholdt alle elleve tidligere blokkene i `OMPAO.cy.js`; OMPKS og testkonfigurasjonen er uendret.
+- Validering: `yarn test:pw e2e/tests/fordeling-ompao-case-selection.spec.ts` bestod med 13 tester før opprydding og på sluttkoden (0 feil, 0 hoppet over). `yarn test:e2e --spec cypress/e2e/fordeling/OMPAO.cy.js` bestod med 11 tester (0 feil, 0 hoppet over); `yarn lint` og `git diff --check` bestod. Fordeling-mønsteret `OMP*.cy.js` matcher bare `OMPAO.cy.js` og `OMPKS.cy.js`; `sif-code-scan` kjøres i CI.
+
 #### 2026-11-25 — OMPAO to søkere og barn fra liste
 
 - La til en isolert Playwright-reise for OMPAO-gating med to søkere og listebarn, inkludert avbrudd av Fortsett- og Vent-modalene. Den kontrollerer det faktiske PERSON-oppslaget og fravær av skriving. Fjernet bare de tre erstattede Cypress-blokkene, reservasjonsoppsettet og ubrukte konstanter; beholdt de elleve tidligere saksvalgblokkene og begge tomlistebeskrivelsene.

@@ -957,7 +957,24 @@ Etter Task 74 startet den påfølgende Cypress-blokken for to søkere med opprin
 | 195–224: Avbryt Fortsett-modal for to søkere | Samme reise gjenbruker de lokale modalassertene for Fortsett-overskrift og bekreftelsesetikett, OMPAO-type, opprinnelig søker og barnets ID, fravær av sak/periode, irreversibilitetsvarsel, fravær av LOS-handling og aktiverte knapper. Avbryt beholder valgene uten skriving. |
 | 226–255: Avbryt Vent-modal for to søkere | Samme reise gjenbruker de lokale modalassertene for den særskilte Vent-overskriften og bekreftelsesetiketten. Avbryt beholder annen søker, avkryssinger, valgt barn og aktive handlinger; ingen klassifiserings-, Vent-, kopierings-, behandlingsårs- eller søknadsskriving skjer. |
 
-De to beskrivelsene for tomme lister og de elleve tidligere saksvalgblokkene står igjen i Cypress. Cypress-filen beholdes fordi tomme lister er en egen migreringsetappe.
+De ti blokkene for tomme lister er erstattet av de tre reisene i Task 76-mappingen nedenfor. De elleve tidligere saksvalgblokkene er beholdt i Cypress-filen.
+
+### Task 76 mapping at baseline `68a33bc8`
+
+| Cypress-blokk | Playwright-dekning |
+| --- | --- |
+| 156: Intercept hent fagsaker | `dekker OMPAO uten fagsaker med listebarn, manuell ID og manglende-ID-gating` kontrollerer søkerheader, 200-status, MSW-svar med `[]` og at saksvelgeren mangler. |
+| 171: Velg barn fra liste uten fagsaker | Samme reise kontrollerer `barn[0]`, barnets ID i panelet, varsel om journalføring uten fagsak og aktive handlinger. |
+| 187: Bytt til annet barn og skriv ID | Samme reise kontrollerer at listebarnets ID fjernes, handlingene deaktiveres før manuell ID, PERSON-svaret og at panel, varsel og handlinger oppdateres etter inntasting. |
+| 211: Velg manglende fødselsnummer uten fagsaker | Samme reise kontrollerer at manuell ID fjernes, informasjonen vises, Fortsett deaktiveres og Vent forblir aktivert. |
+| 225: Intercept tom barneliste og refetch | `refetcher tom OMPAO-barneliste etter Nei og Ja med tom fagsaksliste` starter i manglende-ID-modus, installerer søkeravgrenset `{ barn: [] }` og kontrollerer Nei → Ja-refetch med case- og BARN_GET-svar. |
+| 236: Skriv ID uten barneliste og fagsaker | Samme reise kontrollerer at refetchen nullstiller manglende-ID-valget og viser tomt, aktivt ID-felt; PERSON-svaret, panel, varsel og aktive handlinger kontrolleres etter inntasting. |
+| 251: Velg manglende fødselsnummer uten barneliste og fagsaker | Samme reise kontrollerer at ID og panelverdi fjernes, informasjonen vises, Fortsett deaktiveres og Vent forblir aktivert. |
+| 267: Intercept tom barneliste med fagsaker | `dekker OMPAO reservert ny sak med tom barneliste, manuell ID og manglende-ID-gating` kontrollerer ikke-tom saksrespons, eksisterende saksvelger og søkeravgrenset BARN_GET-svar `{ barn: [] }` etter reservasjon. |
+| 286: Skriv ID uten barneliste med fagsaker | Samme reise kontrollerer fravær av barnvelger, aktivt manuelt ID-felt, PERSON-svar, panel og aktive handlinger. |
+| 298: Velg manglende fødselsnummer uten barneliste med fagsaker | Samme reise kontrollerer at ID og panelverdi fjernes, informasjonen vises, Fortsett deaktiveres og Vent forblir aktivert. |
+
+Alle tre reisene kontrollerer at de ikke sender klassifiserings-, Vent-, kopierings-, behandlingsårs- eller søknadsskriving. `OMPAO.cy.js` beholdes med de elleve tidligere blokkene; OMPKS er uendret.
 
 ## Fordeling PSB med to søkere
 
