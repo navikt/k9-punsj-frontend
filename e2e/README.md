@@ -1041,6 +1041,22 @@ Den samme OMPKS-reisen fortsetter fra reservert ny sak med valgt listebarn. Et p
 
 Ingen modal bekreftes, og testen observerer ingen klassifiserings-, Vent-, kopierings-, behandlingsårs- eller OMPKS-søknadsskriving. De tre erstattede modalblokkene er fjernet. På grunn av `testIsolation: false` beholdes valget av manuelt barn, inntastingen og avkryssingen for manglende fødselsnummer som oppsett: den neste Cypress-blokken kontrollerer at disse kontrollene og informasjonen fjernes når søker avbekreftes. Reservasjon og listebarn fra det tidligere oppsettet er også beholdt. Øvrige søker- og tomlisteflyter er uendret; endelig fjerning av siste Cypress-fil krever et separat CI-steg.
 
+### Task 81 mapping at baseline `3d4ee337`
+
+`nullstiller OMPKS, bytter søker og bekrefter opprinnelig søker på nytt` starter med en reservert ny sak, en utfylt manuell barn-ID og manglende fødselsnummer. Saker, barn og personoppslag bruker ID-avgrensede MSW-svar og kontrolleres med ident, status, service worker og svarinnhold. Begge søkerne får de fire eksisterende sakene og barnelisten; det frie listebarnet har ingen tilhørende sak i fixturen.
+
+| Cypress-blokk ved baseline | Playwright-dekning |
+| --- | --- |
+| 174–183: Avbekreft søker | Nei fjerner saksvalg, reservasjon, manuell ID, manglende-ID-valg og informasjon; begge handlingene er deaktivert. |
+| 185–204: Ny søker og barn | Kontrollerer ny søker i input og panel, fravær av tidligere søker og sak, valgt fritt barn, informasjon om journalføring uten sak og aktive handlinger. |
+| 206–235: Avbryt Fortsett | Kontrollerer Fortsett-overskrift og bekreftelsesetikett, OMPKS-type, ny søker og barn, fravær av sak, periode og LOS, varsel og aktive knapper. Avbryt beholder reservasjon, barn, panel og aktive handlinger uten skriving. |
+| 237–266: Avbryt Vent | Kontrollerer tilsvarende innhold og tilstand med egen Vent-overskrift og bekreftelsesetikett, uten skriving. |
+| 268–285: Bekreft opprinnelig søker | Ja gjenoppretter opprinnelig søker, fjerner ny søker og barnets ID fra panelet og deaktiverer Fortsett. Vent-kontrollen i baseline var kommentert, ikke aktiv Cypress-dekning. |
+
+**Vent-observasjon:** I denne OMPKS-reisen er også Vent deaktivert etter at det opprinnelige saksoppslaget er fullført, før flere barnevalg. `SokersIdent.tsx` fjerner barnets ID ved Ja; `fordelingUtils.ts` beregner felles journalføringsgating, mens `Fordeling.tsx` bruker den direkte for Vent. Den tidligere reset-feilen omtalt i changelog 2026-11-06 ble ikke gjenskapt her. Testen beviser ikke tilstanden under et forsinket oppslag eller for andre reiser; årsaken til den gamle Cypress-TODO-en er ikke fastslått.
+
+De fem blokkene og det ubrukte manuelle oppsettet er fjernet. Cypress beholder opprinnelig bekreftet søker og reserverer ny sak, venter på listebarnet og kontrollerer at ingen barn er valgt før to-søkerflyten. Saksvalg, to søkere og tomme lister er beholdt. `OMPKS.cy.js` er fortsatt eneste treff i uendret Cypress-konfigurasjon; endelig fjerning krever et separat CI-steg.
+
 ## Fordeling PSB med to søkere
 
 `fordeling-psb-two-applicants.spec.ts` har to selvstendige reiser for scenario `930317`: avbrudd med to søkere og ny sak, og journalføring med kopiering til en annen søker. Personoppslaget for annen søker er lokalt i nettleserkonteksten. Bare kopieringsreisen installerer en blokkert kopieringsrespons.

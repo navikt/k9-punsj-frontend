@@ -68,6 +68,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-25 — OMPKS søkerbytte
+
+- Migrerte nullstilling, søkerbytte, modalavbrudd og ny bekreftelse til en isolert Playwright-reise.
+- Beholdt Cypress-reservasjon og innlasting av barn uten barnevalg som oppsett for to søkere.
+
 #### 2026-11-25 — OMPKS manuelt barn og manglende fødselsnummer
 
 - Utvidet OMPKS-reisen med manuell barn-ID, manglende fødselsnummer og tre modalavbrudd uten sak eller skriving.
